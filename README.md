@@ -32,7 +32,7 @@ edit ./NvCloth/scripts/locate_cuda.bat to point to the CUDA installation folder 
 edit ./NvCloth/scripts/locate_win8sdk.bat to point to the windows SDK (C:\Program Files (x86)\Windows Kits\8.1 by default)
 
 Run ./CmakeGenerateAll.bat to generate the visual studio solution files in ./compiler/vcXXwinXX-cmake/
-
+Run ./samples/CmakeGenerateProjects.bat to generate the visual studio solution files in ./samples/compiler/vcXXwinXX-cmake/
 
 For osx:
 Download and install cmake 3.4 and add the cmake binary to your path.
