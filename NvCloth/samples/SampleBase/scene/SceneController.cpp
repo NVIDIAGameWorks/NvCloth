@@ -40,6 +40,8 @@
 #include "scene/scenes/SimpleScene.h"
 #include "scene/scenes/WindScene.h"
 
+#include "utils/DebugLineRenderBuffer.h"
+
 JobManager SceneController::sJobManager;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,6 +53,9 @@ SceneController::SceneController() : mTimeScale(1.0f), mStartDelay(0.f)
 	mActivePlatform = (int)nv::cloth::Platform::CPU;
 	mCUDAInitialized = false;
 	mDXInitialized = false;
+	mLeftOverTime = 0.0;
+	mPaused = false;
+	mSingleStep = 0;
 }
 
 SceneController::~SceneController()
@@ -137,6 +142,8 @@ void SceneController::onInitialize()
 		mFactories[(int)nv::cloth::Platform::DX11] = NvClothCreateFactoryDX11(mGraphicsContextManager);
 		mDXInitialized &= mFactories[(int)nv::cloth::Platform::DX11] != nullptr;
 	} while(false);
+
+	mDebugLineRenderBuffer = new DebugLineRenderBuffer;
 }
 
 void SceneController::onSampleStop()
@@ -181,16 +188,38 @@ void SceneController::changeScene(int index)
 
 void SceneController::Animate(double dt)
 {
-	double simulationStep = dt * mTimeScale;
-	if(simulationStep > 1.0 / 60.0)
+	if(mPaused && (mSingleStep <= 0))
+	{
+		//Re render debug lines from last frame
+		getRenderer().queueRenderBuffer(mDebugLineRenderBuffer);
+		return;
+	}
+	if(mSingleStep > 0)
+	{
+		mSingleStep--;
+		dt = 1.0 / 60.0;
+	}
+
+	mDebugLineRenderBuffer->clear();
+
+	mLeftOverTime += dt * mTimeScale;
+
+	double simulationStep = 0.0;
+	while(mLeftOverTime > 1.0 / 60.0)
+		simulationStep += 1.0 / 60.0, mLeftOverTime -= 1.0 / 60.0;
+	if(simulationStep >= 1.0 / 60.0)
 		simulationStep = 1.0 / 60.0;
 
 	mActiveScene->Animate(simulationStep);
 
+	getRenderer().queueRenderBuffer(mDebugLineRenderBuffer);
 }
 
 LRESULT SceneController::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if(mActiveScene->HandleEvent(uMsg, wParam, lParam))
+		return 1;
+
 	if (uMsg == WM_KEYDOWN)
 	{
 		int iKeyPressed = static_cast<int>(wParam);
@@ -202,10 +231,12 @@ LRESULT SceneController::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 		switch (iKeyPressed)
 		{
-		case 'R':
-			return 0;
-		case 'F':
-			return 0;
+		case 'P':
+			mPaused = !mPaused;
+			break;
+		case 'O':
+			mSingleStep++;
+			break;
 		default:
 			break; 
 		}

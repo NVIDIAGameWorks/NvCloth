@@ -65,6 +65,8 @@ class SwSolver : public Solver
 
 	virtual void addCloth(Cloth*) override;
 	virtual void removeCloth(Cloth*) override;
+	virtual int getNumCloths() const override;
+	virtual Cloth * const * getClothList() const override;
 
 	// functions executing the simulation work.
 	virtual bool beginSimulation(float dt) override;
@@ -117,6 +119,8 @@ class SwSolver : public Solver
 
   private:
 	Vector<SimulatedCloth>::Type mSimulatedCloths;
+	typedef Vector<SwCloth*>::Type ClothVector;
+	ClothVector mCloths;
 
 	
 	float mInterCollisionDistance;

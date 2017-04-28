@@ -46,7 +46,7 @@ typedef unsigned int uint32_t;
 typedef int int32_t;
 #endif
 
-static const uint32_t MaxParticlesInSharedMem = 1975;
+static const uint32_t MaxParticlesInSharedMem = 1972;
 
 
 struct DxPhaseConfig
@@ -106,6 +106,9 @@ struct DxClothData
 	uint32_t mTetherOffset;
 	float mTetherConstraintScale;
 
+	uint32_t mNumTriangles;
+	uint32_t mStartTriangleOffset;
+
 	// motion constraint data
 	float mMotionConstraintScale;
 	float mMotionConstraintBias;
@@ -161,6 +164,11 @@ struct DxFrameData
 
 	float mTetherConstraintStiffness;
 
+	// wind data
+	float mDragCoefficient;
+	float mLiftCoefficient;
+	float mRotation[9];
+
 	// motion constraint data
 	float mMotionConstraintStiffness;
 	uint32_t mStartMotionConstrainsOffset;
@@ -206,6 +214,7 @@ struct DxIterationData
 	explicit DxIterationData(const IterationState<Simd4f>&);
 #endif
 	float mIntegrationTrafo[24];
+	float mWind[3];
 	uint32_t mIsTurning;
 };
 

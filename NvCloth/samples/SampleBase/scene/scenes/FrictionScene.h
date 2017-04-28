@@ -24,9 +24,9 @@ public:
 	virtual void onInitialize() override;
 
 private:
-	nv::cloth::Fabric* mFabric[4];
+	nv::cloth::Fabric* mFabric[5];
 	nv::cloth::Solver* mSolver;
-	ClothActor* mClothActor[4];
+	ClothActor* mClothActor[5];
 };
 
 

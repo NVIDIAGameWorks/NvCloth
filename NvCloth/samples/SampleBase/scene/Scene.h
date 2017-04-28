@@ -14,6 +14,7 @@
 #include <vector>
 #include <map>
 #include "scene/SceneController.h"
+#include "foundation/PxMat44.h"
 namespace nv
 {
 	namespace cloth
@@ -33,7 +34,7 @@ struct SceneFactory
 	const char* mName;
 };
 
-#define DECLARE_SCENE_NAME(classname, name) static int classname##id = Scene::AddSceneFactory([](SceneController* c) {return (Scene*)new classname(c); }, name);
+#define DECLARE_SCENE_NAME(classname, name) static int classname##id = Scene::AddSceneFactory([](SceneController* c) {return static_cast<Scene*>(new classname(c)); }, name);
 #define DECLARE_SCENE(classname) DECLARE_SCENE_NAME(classname,#classname)
 
 class Scene
@@ -43,9 +44,13 @@ public:
 	Scene(SceneController* sceneController):mSceneController(sceneController) {}
 	virtual ~Scene();
 
-	virtual void Animate(double dt) { doSimulationStep(dt); }
-	virtual void drawUI() {}
+	virtual void Animate(double dt) { doSimulationStep(dt); drawDebugVisualization(); }
+	void UpdateParticleDragging(float dt);
+	virtual bool HandleEvent(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	bool HandlePickingEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, physx::PxMat44 viewProjectionMatrix);
+	virtual void drawUI();
 	virtual void drawStatsUI() {}
+	virtual void drawDebugVisualization();
 
 	virtual void onInitialize() = 0;
 	virtual void onTerminate() { autoDeinitialize(); }
@@ -86,6 +91,15 @@ protected:
 private:
 	Scene& operator= (Scene&); // not implemented
 
+	physx::PxMat44 GetDebugDrawTransform(const ClothActor& actor);
+	void DebugRenderDistanceConstraints();
+	void DebugRenderTethers();
+	void DebugRenderConstraints();
+	void DebugRenderConstraintStiffness();
+	void DebugRenderConstraintError();
+	void DebugRenderPositionDelta();
+	void DebugRenderBoundingBox();
+
 private:
 	SceneController* mSceneController;
 
@@ -98,6 +112,43 @@ private:
 
 	static std::vector<SceneFactory> sSceneFactories;
 
+	enum
+	{
+		DEBUG_VIS_DISTANCE_CONSTRAINTS = 1,
+		DEBUG_VIS_TETHERS = 2,
+		DEBUG_VIS_CONSTRAINTS = 4,
+		DEBUG_VIS_CONSTRAINTS_STIFFNESS = 8,
+		DEBUG_VIS_NORMALS = 16,
+		DEBUG_VIS_TANGENTS = 32,
+		DEBUG_VIS_BITANGENTS = 64,
+		DEBUG_VIS_CONSTRAINT_ERROR = 128,
+		DEBUG_VIS_POSITION_DELTA = 256,
+		DEBUG_VIS_ACCELERATION = 512,
+		DEBUG_VIS_BOUNDING_BOX = 1024,
+		DEBUG_VIS_LAST
+	};
+
+	static unsigned int mDebugVisualizationFlags;
+
+	struct SceneDebugRenderParams
+	{
+		//Constraint render params
+		int mVisiblePhaseRangeBegin;
+		int mVisiblePhaseRangeEnd;
+	};
+
+	static SceneDebugRenderParams sSceneDebugRenderParams;
+
+	//Particle dragging
+	struct DraggingParticle
+	{
+		DraggingParticle() { mTrackedCloth = nullptr; }
+		ClothActor* mTrackedCloth;
+		float mDist;
+		float mOffset;
+		int mParticleIndex;
+	};
+	DraggingParticle mDraggingParticle;
 };
 
 

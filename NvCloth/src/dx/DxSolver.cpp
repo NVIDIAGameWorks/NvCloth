@@ -36,7 +36,6 @@
 #include "../IterationState.h"
 #include <PsSort.h>
 #include <foundation/PxProfiler.h>
-#include <PsFoundation.h>
 
 #if NV_CLOTH_ENABLE_DX11
 
@@ -114,7 +113,7 @@ struct ClothSimCostGreater
 
 void cloth::DxSolver::addCloth(Cloth* cloth)
 {
-	DxCloth& dxCloth = static_cast<DxClothImpl&>(*cloth).mCloth;
+	DxCloth& dxCloth = static_cast<DxCloth&>(*cloth);
 
 	NV_CLOTH_ASSERT(mCloths.find(&dxCloth) == mCloths.end());
 
@@ -211,10 +210,10 @@ void cloth::DxSolver::addCloth(Cloth* cloth)
 
 void cloth::DxSolver::removeCloth(Cloth* cloth)
 {
-	DxCloth& cuCloth = static_cast<DxClothImpl&>(*cloth).mCloth;
+	DxCloth& dxCloth = static_cast<DxCloth&>(*cloth);
 
 	ClothVector::Iterator begin = mCloths.begin(), end = mCloths.end();
-	ClothVector::Iterator it = mCloths.find(&cuCloth);
+	ClothVector::Iterator it = mCloths.find(&dxCloth);
 
 	if (it == end)
 		return; // not found
@@ -225,6 +224,18 @@ void cloth::DxSolver::removeCloth(Cloth* cloth)
 	mClothDataHostCopy.remove(index);
 	mClothData.resize(mCloths.size());
 	mClothDataDirty = true;
+}
+
+int cloth::DxSolver::getNumCloths() const
+{
+	return mCloths.size();
+}
+cloth::Cloth * const * cloth::DxSolver::getClothList() const
+{
+	if(getNumCloths())
+		return reinterpret_cast<Cloth* const*>(&mCloths[0]);
+	else
+		return nullptr;
 }
 
 bool cloth::DxSolver::beginSimulation(float dt)
@@ -340,24 +351,25 @@ void cloth::DxSolver::executeKernel()
 	{
 		context->CSSetShader(mFactory.mSolverKernelComputeShader, NULL, 0);
 
-		ID3D11ShaderResourceView* resourceViews[17] = {
+		ID3D11ShaderResourceView* resourceViews[18] = {
 			mClothData.mBuffer.resourceView(), /*mFrameData.mBuffer.resourceView()*/NULL,
 			mIterationData.mBuffer.resourceView(), mFactory.mPhaseConfigs.mBuffer.resourceView(),
 			mFactory.mConstraints.mBuffer.resourceView(), mFactory.mTethers.mBuffer.resourceView(),
 			mFactory.mCapsuleIndicesDeviceCopy.resourceView(), mFactory.mCollisionSpheresDeviceCopy.resourceView(),
 			mFactory.mConvexMasksDeviceCopy.resourceView(), mFactory.mCollisionPlanesDeviceCopy.resourceView(),
-			mFactory.mCollisionTriangles.mBuffer.resourceView(),
+			mFactory.mCollisionTrianglesDeviceCopy.resourceView(),
 			mFactory.mMotionConstraints.mBuffer.resourceView(),
 			mFactory.mSeparationConstraints.mBuffer.resourceView(),
 			mFactory.mParticleAccelerations.mBuffer.resourceView(),
 			mFactory.mRestPositionsDeviceCopy.resourceView(),
 			mFactory.mSelfCollisionIndices.mBuffer.resourceView(),
-			mFactory.mStiffnessValues.mBuffer.resourceView()
+			mFactory.mStiffnessValues.mBuffer.resourceView(),
+			mFactory.mTriangles.mBuffer.resourceView()
 		};
-		context->CSSetShaderResources(0, 17, resourceViews);
+		context->CSSetShaderResources(0, 18, resourceViews);
 
 		ID3D11UnorderedAccessView* accessViews[4] = {
-			mFactory.mParticles.mBuffer.accessView(),
+			mFactory.mParticles.mBuffer.accessViewRaw(),
 			mFactory.mSelfCollisionParticles.mBuffer.accessView(),
 			mFactory.mSelfCollisionData.mBuffer.accessView(),
 			mFrameData.mBuffer.accessView()

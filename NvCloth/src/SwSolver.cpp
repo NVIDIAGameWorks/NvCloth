@@ -93,27 +93,55 @@ void sortTasks(shdfnd::Array<T, cloth::NonTrackingAllocator>& tasks)
 
 void cloth::SwSolver::addCloth(Cloth* cloth)
 {
-	SwCloth& swCloth = static_cast<SwClothImpl&>(*cloth).mCloth;
+	SwCloth& swCloth = *static_cast<SwCloth*>(cloth);
 
 	mSimulatedCloths.pushBack(SimulatedCloth(swCloth, this));
 	sortTasks(mSimulatedCloths);
+
+	mCloths.pushBack(&swCloth);
 }
 
 void cloth::SwSolver::removeCloth(Cloth* cloth)
 {
-	SwCloth& swCloth = static_cast<SwClothImpl&>(*cloth).mCloth;
+	SwCloth& swCloth = *static_cast<SwCloth*>(cloth);
 
-	Vector<SimulatedCloth>::Type::Iterator tIt = mSimulatedCloths.begin();
-	Vector<SimulatedCloth>::Type::Iterator tEnd = mSimulatedCloths.end();
-	while (tIt != tEnd && tIt->mCloth != &swCloth)
-		++tIt;
-
-	if (tIt != tEnd)
+	//Remove from mSimulatedCloths
 	{
-		NV_CLOTH_FREE(tIt->mScratchMemory);
-		mSimulatedCloths.replaceWithLast(tIt);
-		sortTasks(mSimulatedCloths);
+		Vector<SimulatedCloth>::Type::Iterator tIt = mSimulatedCloths.begin();
+		Vector<SimulatedCloth>::Type::Iterator tEnd = mSimulatedCloths.end();
+		while(tIt != tEnd && tIt->mCloth != &swCloth)
+			++tIt;
+
+		if(tIt != tEnd)
+		{
+			NV_CLOTH_FREE(tIt->mScratchMemory);
+			mSimulatedCloths.replaceWithLast(tIt);
+			sortTasks(mSimulatedCloths);
+		}
 	}
+
+	//Remove from mCloths
+	{
+		ClothVector::Iterator tEnd = mCloths.end();
+		ClothVector::Iterator it = mCloths.find(&swCloth);
+
+		if(it != tEnd)
+		{
+			mCloths.replaceWithLast(it);
+		}
+	}
+}
+
+int cloth::SwSolver::getNumCloths() const
+{
+	return mCloths.size();
+}
+cloth::Cloth * const * cloth::SwSolver::getClothList() const
+{
+	if(getNumCloths())
+		return reinterpret_cast<Cloth* const*>(&mCloths[0]);
+	else
+		return nullptr;
 }
 
 bool cloth::SwSolver::beginSimulation(float dt)

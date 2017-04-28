@@ -26,9 +26,9 @@ void SimpleScene::onInitialize()
 	///////////////////////////////////////////////////////////////////////
 	ClothMeshData clothMesh;
 
-	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 13.f, 0.f), PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
-	clothMesh.GeneratePlaneCloth(6.f, 7.f, 59, 69, false, transform);
-	clothMesh.AttachClothPlaneByAngles(59, 69);
+	physx::PxMat44 transform = PxTransform(PxVec3(-2.f, 13.f, 0.f), PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
+	clothMesh.GeneratePlaneCloth(6.f, 7.f, 49, 59, false, transform);
+	clothMesh.AttachClothPlaneByAngles(49, 59);
 
 	mClothActor = new ClothActor;
 	nv::cloth::ClothMeshDesc meshDesc = clothMesh.GetClothMeshDesc();
@@ -48,11 +48,11 @@ void SimpleScene::onInitialize()
 	particlesCopy.resize(clothMesh.mVertices.size());
 
 	physx::PxVec3 center = transform.transform(physx::PxVec3(0.0f, 0.0f, 0.0f));
-	for(int i = 0; i < (int)clothMesh.mVertices.size(); i++)
+	for (int i = 0; i < (int)clothMesh.mVertices.size(); i++)
 	{
 		// To put attachment point closer to each other
 		if(clothMesh.mInvMasses[i] < 1e-6)
-			clothMesh.mVertices[i] = (clothMesh.mVertices[i] - center)*0.85f + center;
+			clothMesh.mVertices[i] = (clothMesh.mVertices[i] - center) * 0.85f + center;
 
 		particlesCopy[i] = physx::PxVec4(clothMesh.mVertices[i], clothMesh.mInvMasses[i]); // w component is 1/mass, or 0.0f for anchored/fixed particles
 	}
@@ -65,7 +65,7 @@ void SimpleScene::onInitialize()
 
 	// Setup phase configs
 	std::vector<nv::cloth::PhaseConfig> phases(mFabric->getNumPhases());
-	for(int i = 0; i < (int)phases.size(); i++)
+	for (int i = 0; i < (int)phases.size(); i++)
 	{
 		phases[i].mPhaseIndex = i;
 		phases[i].mStiffness = 1.0f;
@@ -74,8 +74,8 @@ void SimpleScene::onInitialize()
 		phases[i].mStretchLimit = 1.0f;
 	}
 	mClothActor->mCloth->setPhaseConfig(nv::cloth::Range<nv::cloth::PhaseConfig>(&phases.front(), &phases.back()));
-	mClothActor->mCloth->setDragCoefficient(0.5f);
-	mClothActor->mCloth->setDragCoefficient(0.5f);
+	mClothActor->mCloth->setDragCoefficient(0.1f);
+	mClothActor->mCloth->setDragCoefficient(0.1f);
 
 	mSolver = getSceneController()->getFactory()->createSolver();
 	trackSolver(mSolver);

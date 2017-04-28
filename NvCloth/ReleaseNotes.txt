@@ -1,20 +1,35 @@
 NvCloth Release notes.
-[1.0.0]
+
+[1.1.0]
 Supported platforms:
 * Windows (CPU, CUDA, DX11, RenderCloth)
 * Mac (beta, tested on Sierra, RenderCloth)
 * Linux (beta, tested on Ubuntu 16.04.1 LTS x64)
-* Playstation 4 (beta)
-* XBox one (CPU, DX11, beta)
+* PlayStation 4 (beta) with PS4 SDK 4.5
+* Xbox one (CPU, DX11, beta)
 Note: beta platforms are not yet optimized.
 
 Supported compilers (via cmake 3.7)
 * Windows: Visual Studio 12, 14 (2013, 2015)
 * Linux: gcc (only x64)
-* Mac: xcode
-* Playstation 4: Visual studio 14 (2015)
-* XBox one: Visual studio 14 (2015)
+* Mac: xcode 
+* PlayStation 4: Visual studio 14 (2015)
+* Xbox one: Visual studio 14 (2015)
 
+Fixed:
+DirectX 11 solver now supports triangle collision shapes and air drag/lift.
+Fixed bug where changing friction on cloth already in simulation would cause assert or crash.
+Optimization flag now working on PS4 release build.
+
+New:
+Solver::getNumCloths and Solver::getClothList interface.
+Improved samples (new scenes and debug visualization)
+
+
+Known issues:
+DirectX 11 solver has issues with ccd sphere/capsule collision.
+
+[1.0.0]
 Known issues:
 DirectX 11 solver doesn’t support triangle collision shapes and air drag/lift
 

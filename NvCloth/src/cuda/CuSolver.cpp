@@ -326,7 +326,7 @@ struct ClothSimCostGreater
 
 void cloth::CuSolver::addCloth(Cloth* cloth)
 {
-	CuCloth& cuCloth = static_cast<CuClothImpl&>(*cloth).mCloth;
+	CuCloth& cuCloth = *static_cast<CuCloth*>(cloth);
 
 	NV_CLOTH_ASSERT(mCloths.find(&cuCloth) == mCloths.end());
 
@@ -348,7 +348,7 @@ void cloth::CuSolver::addCloth(Cloth* cloth)
 
 void cloth::CuSolver::removeCloth(Cloth* cloth)
 {
-	CuCloth& cuCloth = static_cast<CuClothImpl&>(*cloth).mCloth;
+	CuCloth& cuCloth = static_cast<CuCloth&>(*cloth);
 
 	ClothVector::Iterator begin = mCloths.begin(), end = mCloths.end();
 	ClothVector::Iterator it = mCloths.find(&cuCloth);
@@ -362,6 +362,18 @@ void cloth::CuSolver::removeCloth(Cloth* cloth)
 	mClothDataHostCopy.remove(index);
 	mClothData.resize(mCloths.size());
 	mClothDataDirty = true;
+}
+
+int cloth::CuSolver::getNumCloths() const
+{
+	return mCloths.size();
+}
+cloth::Cloth * const * cloth::CuSolver::getClothList() const
+{
+	if(getNumCloths())
+		return reinterpret_cast<Cloth* const*>(&mCloths[0]);
+	else
+		return nullptr;
 }
 
 bool cloth::CuSolver::beginSimulation(float dt)

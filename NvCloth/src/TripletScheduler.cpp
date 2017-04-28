@@ -207,7 +207,10 @@ void cloth::TripletScheduler::warp(uint32_t numParticles, uint32_t warpWidth)
 				numReplays += set.mNumReplays[i] == set.mNumConflicts[i][warpMask & (*tIt)[i]];
 
 			if (minReplays > numReplays)
-				minReplays = numReplays, bestIndex = setIndex;
+			{
+				minReplays = numReplays;
+				bestIndex = setIndex;
+			}
 		}
 
 		// add new set if none found

@@ -18,6 +18,7 @@
 #include <NvCloth/Factory.h>
 #include "Renderer.h"
 #include "renderer/RenderUtils.h"
+#include "windows.h"
 
 DECLARE_SCENE_NAME(WindScene, "Wind Scene")
 
@@ -27,17 +28,19 @@ void WindScene::Animate(double dt)
 
 	if(mTime > 3.7f)
 	{
-		float dvx = 3.f * cos(25.f * mTime);
-		float vy = max(0.f, 0.9f * cos(11.f * mTime));
-		float dvz = 1.5f * sin(19.f * mTime);
+		float dvx = 6.0f * sin((1.f + sinf(mTime) * 0.5f) * mTime);
+		float vy = 0;
+		float dvz = 50.0f + 7.0f * sin((9.f + sinf(mTime + 2.0f) * 0.5f) * mTime) 
+						+ 4.0f * sin((7.f + sinf(mTime * 0.9f) * 0.5f) * mTime);
+
 		for(int i = 0; i < 3; i++)
 		{
-			physx::PxVec3 wind = physx::PxVec3(2.5f + dvx, vy, 15.f + dvz);
+			physx::PxVec3 wind = physx::PxVec3(dvx, vy, dvz);
 			mClothActor[i]->mCloth->setWindVelocity(wind);
 		}
 	}
 
-	doSimulationStep(dt); 
+	Scene::Animate(dt);
 }
 
 void WindScene::initializeCloth(int index, physx::PxVec3 offset)
@@ -45,17 +48,23 @@ void WindScene::initializeCloth(int index, physx::PxVec3 offset)
 	///////////////////////////////////////////////////////////////////////
 	ClothMeshData clothMesh;
 
-	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 13.f, 0.f)+ offset, PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
-	clothMesh.GeneratePlaneCloth(5.f, 6.f, 49, 59, false, transform);
-	clothMesh.AttachClothPlaneByAngles(49, 59);
-	clothMesh.SetInvMasses(0.2f + (float)index * 1.4f);
+	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 13.f, 0.f) + offset, PxQuat(PxPi / 2.0f, PxVec3(1.f, 0.f, 0.f)));
+	clothMesh.GeneratePlaneCloth(5.f, 6.f, 69, 79, false, transform);
+	clothMesh.AttachClothPlaneByAngles(69, 79);
+	clothMesh.SetInvMasses(0.5f + (float)index * 2.0f);
 
 	mClothActor[index] = new ClothActor;
 	nv::cloth::ClothMeshDesc meshDesc = clothMesh.GetClothMeshDesc();
 	{
 		mClothActor[index]->mClothRenderMesh = new ClothRenderMesh(meshDesc);
 		mClothActor[index]->mClothRenderable = getSceneController()->getRenderer().createRenderable(*(static_cast<IRenderMesh*>(mClothActor[index]->mClothRenderMesh)), *getSceneController()->getDefaultMaterial());
-		mClothActor[index]->mClothRenderable->setColor(getRandomPastelColor());
+
+		float r, g, b;
+		r = index == 0 ? 1.0f : 0.3f;
+		g = index == 1 ? 1.0f : 0.3f;
+		b = index == 2 ? 1.0f : 0.3f;
+
+		mClothActor[index]->mClothRenderable->setColor(DirectX::XMFLOAT4(r, g, b, 1.0f));
 	}
 
 	nv::cloth::Vector<int32_t>::Type phaseTypeInfo;
@@ -68,11 +77,11 @@ void WindScene::initializeCloth(int index, physx::PxVec3 offset)
 	particlesCopy.resize(clothMesh.mVertices.size());
 
 	physx::PxVec3 clothOffset = transform.getPosition();
-	for(int i = 0; i < (int)clothMesh.mVertices.size(); i++)
+	for (int i = 0; i < (int)clothMesh.mVertices.size(); i++)
 	{
 		// To put attachment point closer to each other
 		if(clothMesh.mInvMasses[i] < 1e-6)
-			clothMesh.mVertices[i] = (clothMesh.mVertices[i] - clothOffset)*0.9f + clothOffset;
+			clothMesh.mVertices[i] = (clothMesh.mVertices[i] - clothOffset)*0.95f + clothOffset;
 
 		particlesCopy[i] = physx::PxVec4(clothMesh.mVertices[i], clothMesh.mInvMasses[i]); // w component is 1/mass, or 0.0f for anchored/fixed particles
 	}
@@ -85,7 +94,7 @@ void WindScene::initializeCloth(int index, physx::PxVec3 offset)
 
 	// Setup phase configs
 	std::vector<nv::cloth::PhaseConfig> phases(mFabric[index]->getNumPhases());
-	for(int i = 0; i < (int)phases.size(); i++)
+	for (int i = 0; i < (int)phases.size(); i++)
 	{
 		phases[i].mPhaseIndex = i;
 		phases[i].mStiffness = 1.0f;
@@ -94,11 +103,9 @@ void WindScene::initializeCloth(int index, physx::PxVec3 offset)
 		phases[i].mStretchLimit = 1.0f;
 	}
 	mClothActor[index]->mCloth->setPhaseConfig(nv::cloth::Range<nv::cloth::PhaseConfig>(&phases.front(), &phases.back()));
-	mClothActor[index]->mCloth->setDragCoefficient(0.5f);
-	mClothActor[index]->mCloth->setLiftCoefficient(0.6f);
+	mClothActor[index]->mCloth->setDragCoefficient(0.4f);
+	mClothActor[index]->mCloth->setLiftCoefficient(0.25f);
 
-	mSolver = getSceneController()->getFactory()->createSolver();
-	trackSolver(mSolver);
 	trackClothActor(mClothActor[index]);
 
 	// Add the cloth to the solver for simulation
@@ -107,10 +114,12 @@ void WindScene::initializeCloth(int index, physx::PxVec3 offset)
 
 void WindScene::onInitialize()
 {
+	mSolver = getSceneController()->getFactory()->createSolver();
+	trackSolver(mSolver);
 
-	initializeCloth(2,physx::PxVec3(-9.0f,0.0f,0.0f));
-	initializeCloth(1, physx::PxVec3(-2.0f, 0.0f, 0.0f));
-	initializeCloth(0, physx::PxVec3(5.0f, 0.0f, 0.0f));
+	initializeCloth(2,physx::PxVec3(-11.0f, 0.0f,0.0f));
+	initializeCloth(1, physx::PxVec3(-4.0f, 0.0f, 0.0f));
+	initializeCloth(0, physx::PxVec3(3.0f, 0.0f, 0.0f));
 
 	mTime = 0.0f;
 

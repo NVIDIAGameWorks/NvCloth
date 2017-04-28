@@ -63,7 +63,7 @@ protected:
 
   public:
 	typedef DxFabric FabricType;
-	typedef ClothImpl<DxCloth> ImplType;
+	typedef DxCloth ClothType;
 
 	explicit DxFactory(DxContextManagerCallback*);
 	virtual ~DxFactory();
@@ -155,6 +155,8 @@ protected:
 	DxBatchedStorage<uint32_t> mSelfCollisionIndices;
 	DxBatchedStorage<physx::PxVec4> mSelfCollisionParticles;
 	DxBatchedStorage<uint32_t> mSelfCollisionData;
+
+	DxBatchedStorage<uint32_t> mTriangles;
 };
 }
 }

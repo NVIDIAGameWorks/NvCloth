@@ -388,7 +388,12 @@ class Cloth : public UserAllocated
 	///Returns value set with setSelfCollisionStiffness().
 	virtual float getSelfCollisionStiffness() const = 0;
 
+	/** \brief Set self collision indices.
+		Each index in the range indicates that the particle at that index should be used for self collision.
+		If set to an empty range (default) all particles will be used.
+	*/
 	virtual void setSelfCollisionIndices(Range<const uint32_t>) = 0;
+	///Returns the number of self collision indices set.
 	virtual uint32_t getNumSelfCollisionIndices() const = 0;
 
 	/* rest positions */

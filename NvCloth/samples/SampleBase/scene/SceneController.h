@@ -37,6 +37,7 @@ namespace nv
 
 class RenderMaterial;
 class Renderable;
+class DebugLineRenderBuffer;
 
 struct ClothActor 
 {
@@ -91,6 +92,10 @@ public:
 		return mPhysXPlaneRenderMaterial;
 	}
 
+	DebugLineRenderBuffer* getDebugLineRenderBuffer()
+	{
+		return mDebugLineRenderBuffer;
+	}
 
 private:
 	SceneController& operator= (SceneController&); // not implemented
@@ -104,6 +109,7 @@ private:
 
 	Renderable*					mPlane;
 	std::vector<Renderable*>	mBoxes;
+	DebugLineRenderBuffer*		mDebugLineRenderBuffer;
 
 	float						mTimeScale;
 	float						mStartDelay;
@@ -121,8 +127,13 @@ private:
 	ID3D11DeviceContext*		mDXDeviceContext;
 	nv::cloth::DxContextManagerCallback* mGraphicsContextManager;
 
-	Scene* mActiveScene;
-	int mActiveSceneIndex;
+	Scene*						mActiveScene;
+	int							mActiveSceneIndex;
+	double						mLeftOverTime;
+
+	bool						mPaused;
+	int						mSingleStep;
+
 };
 
 #endif

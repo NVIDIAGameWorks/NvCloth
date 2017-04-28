@@ -84,6 +84,32 @@ SET(SCENES_FILES
 	${SB_SCENE_SOURCE_DIR}/scenes/FrictionScene.cpp
 	${SB_SCENE_SOURCE_DIR}/scenes/FreeFallScene.h
 	${SB_SCENE_SOURCE_DIR}/scenes/FreeFallScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/SphereScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/SphereScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/StiffnessPerConstraintScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/StiffnessPerConstraintScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/GeodesicScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/GeodesicScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/LocalGlobalScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/LocalGlobalScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/DistanceConstraintScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/DistanceConstraintScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/InterCollisionScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/InterCollisionScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/SelfCollisionScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/SelfCollisionScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/TriangleScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/TriangleScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/ConvexCollisionScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/ConvexCollisionScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/PlaneCollisionScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/PlaneCollisionScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/CapsuleScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/CapsuleScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/MultiSolverScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/MultiSolverScene.h
 )
 
 SET(UI_FILES
@@ -106,6 +132,11 @@ SET(UTIL_FILES
 	${SB_UTILS_SOURCE_DIR}/CallbackImplementations.h
 	${SB_UTILS_SOURCE_DIR}/JobManager.cpp
 	${SB_UTILS_SOURCE_DIR}/JobManager.h
+	${SB_UTILS_SOURCE_DIR}/DebugLineRenderBuffer.cpp
+	${SB_UTILS_SOURCE_DIR}/DebugLineRenderBuffer.h
+	${SB_UTILS_SOURCE_DIR}/MeshGenerator.cpp
+	${SB_UTILS_SOURCE_DIR}/MeshGenerator.h
+	
 )
 
 SET(ROOT_FILES

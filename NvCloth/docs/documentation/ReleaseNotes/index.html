@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+    
+    <title>Release Notes &mdash; NvCloth 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/breathe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/application.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styleguide.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/jquery.storageapi.js"></script>
+    <link rel="top" title="NvCloth 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="Modules" href="../Modules/Index.html" />
+    <link rel="prev" title="NvCloth" href="../index.html" /> 
+  </head>
+  <body>
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="row">
+      <div class="navbar-brand">
+             <img class="logo" src="../_static/developerzone_gameworks_logo.png" alt="Logo"/>
+      </div>
+<div id="searchbox" style="display: none; float:right; padding-top:4px; padding-right:4px">
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</nav>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.0.0 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-3 bs-sidenav" style="white-space: nowrap; overflow: auto;">
+<div class="bs-sidebar">
+  <div id="sidebar_toc">
+  <h4>Table Of Contents</h4>
+  <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fixes">Fixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#new-features">New Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-platforms">Supported Platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-compilers">Supported Compilers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#known-issues">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Modules/Index.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth">NvCloth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth-extensions">NvCloth extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide/Index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#initializing-the-library">Initializing the Library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#factory">Factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#fabric-cloth">Fabric &amp; Cloth</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../UserGuide/Index.html#fabric">Fabric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../UserGuide/Index.html#cloth">Cloth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#solver">Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#retrieving-simulation-data">Retrieving simulation data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#common-cloth-properties">Common cloth properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#tethers">Tethers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#collision-detection">Collision detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#local-space-simulation">Local space simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#drag-lift-and-wind">Drag lift and wind</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">NvCloth</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../Modules/Index.html"
+                        title="next chapter">Modules</a></p>
+<div id="searchbox" style="display: none">
+  <h4>Quick search</h4>
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+  </div>
+    <div class="document col-md-8">
+          <div class="body">
+            
+  <div class="section" id="release-notes">
+<h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fixes">
+<h2>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.1.0</strong></p>
+<ul class="simple">
+<li>DirectX 11 solver now supports triangle collision shapes and air drag/lift.</li>
+<li>Fixed bug where changing friction on cloth already in simulation would cause assert or crash.</li>
+<li>Optimization flag now working on PS4 release build.</li>
+</ul>
+</div>
+<div class="section" id="new-features">
+<h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.1.0</strong></p>
+<ul class="simple">
+<li>Solver::getNumCloths and Solver::getClothList interface.</li>
+<li>Improved samples (new scenes and debug visualization)</li>
+</ul>
+<p><strong>1.0.0</strong></p>
+<ul class="simple">
+<li>Initial release of NvCloth</li>
+<li>Stiffness per constraint feature</li>
+<li>New wind (air drag/lift) implementation</li>
+</ul>
+</div>
+<div class="section" id="supported-platforms">
+<h2>Supported Platforms<a class="headerlink" href="#supported-platforms" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.1.0</strong></p>
+<ul class="simple">
+<li>Windows (CPU, CUDA, DX11, RenderCloth)</li>
+<li>Mac (beta, tested on Sierra, RenderCloth)</li>
+<li>Linux (beta, tested on Ubuntu 16.04.1 LTS x64)</li>
+<li>PlayStation 4 (beta) with PS4 4.5 SDK</li>
+<li>Xbox one (CPU, DX11, beta)</li>
+</ul>
+<p>Note: beta platforms are not yet optimized.</p>
+<p><strong>1.0.0</strong></p>
+<ul class="simple">
+<li>Windows (CPU, CUDA, DX11, RenderCloth)</li>
+<li>Mac (beta, tested on Sierra, RenderCloth)</li>
+<li>Linux (beta, tested on Ubuntu 16.04.1 LTS x64)</li>
+<li>PlayStation 4 (beta)</li>
+<li>Xbox one (CPU, DX11, beta)</li>
+</ul>
+<p>Note: beta platforms are not yet optimized.</p>
+</div>
+<div class="section" id="supported-compilers">
+<h2>Supported Compilers<a class="headerlink" href="#supported-compilers" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.0.0</strong></p>
+<p>Using cmake 3.7</p>
+<ul class="simple">
+<li>Windows: Visual Studio 12, 14 (2013, 2015)</li>
+<li>Linux: gcc (only x64)</li>
+<li>Mac: xcode</li>
+<li>PlayStation 4: Visual studio 14 (2015)</li>
+<li>Xbox one: Visual studio 14 (2015)</li>
+</ul>
+</div>
+<div class="section" id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.1.0</strong></p>
+<ul class="simple">
+<li>DirectX 11 solver has issues with ccd sphere/capsule collision.</li>
+</ul>
+<p><strong>1.0.0</strong></p>
+<ul class="simple">
+<li>DirectX 11 solver doesn&#8217;t support triangle collision shapes and air drag/lift</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.0.0 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-boilerplate">
+        <div class="row">
+            <div class="boilerplate">
+                Copyright &copy; 2014, NVIDIA Corporation &nbsp; | &nbsp; <a href="http://www.nvidia.com/object/about-nvidia.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/about-nvidia.html_1&quot;;return this.s_oc?this.s_oc(e):true">About NVIDIA </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/legal_info.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/legal_info.html_1&quot;;return this.s_oc?this.s_oc(e):true">Legal Information </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/privacy_policy.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/privacy_policy.html_1&quot;;return this.s_oc?this.s_oc(e):true">Privacy Policy </a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      processEscapes: true,
+      skipTags: ["script","noscript","style","textarea"]
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] },
+    TeX: {
+        Macros: {
+          Lrg: ['\\displaystyle{#1}', 1, ""]
+        }
+      }
+  });
+</script>
+
+
+<script type="text/javascript" async
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script>
+var treestatename = 'GWDocsTreeState';
+var protocol = location.href.split('/')[0].toLowerCase();
+var storage;
+if (protocol.substring(0,4) == 'http') {
+  storage = $.cookieStorage;
+  storage.setPath('/');
+} else {
+  storage = $.localStorage;
+}
+
+if (storage.isEmpty(treestatename)) {
+  storage.set(treestatename, {});
+}
+
+var treestate = storage.get(treestatename);
+
+$.each($("#sidebar_toc ul li"), toc_walker);
+
+function toc_walker(key, value) {
+    var handleSpan = $("<span></span>")
+        .addClass("toc_handle").prependTo(value);
+    handleSpan.attr("id", $(value).closest("div").attr("id") + "." + key);
+
+    if($(value).has("ul li").size() > 0) {
+        var id = handleSpan.attr("id");
+        if (!(id in treestate)) {
+          treestate[id] = false;
+        }
+        handleSpan.addClass("toc_expanded").click(function() {
+            $(this).toggleClass("toc_expanded toc_collapsed").siblings("ul").toggle();
+            treestate[$(this).attr('id')] = $(this).hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        });
+        if(!($(this).hasClass('current') || treestate[id])) {
+            handleSpan.click();
+        }
+        if($(this).hasClass('current')) {
+            treestate[handleSpan.attr('id')] = handleSpan.hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        }
+    }
+}
+</script>
+  </body>
+</html>

@@ -35,7 +35,6 @@
 #include "CuCheckSuccess.h"
 #include "CuContextLock.h"
 #include <cuda.h>
-#include <PsFoundation.h>
 #include "CuSolverKernelBlob.h"
 
 #if PX_VC
@@ -155,7 +154,7 @@ cloth::Fabric* cloth::CuFactory::createFabric(uint32_t numParticles, Range<const
 
 cloth::Cloth* cloth::CuFactory::createCloth(Range<const PxVec4> particles, Fabric& fabric)
 {
-	return NV_CLOTH_NEW(CuClothImpl)(*this, fabric, particles);
+	return NV_CLOTH_NEW(CuCloth)(*this, static_cast<CuFabric&>(fabric), particles);
 }
 
 cloth::Solver* cloth::CuFactory::createSolver()
@@ -255,7 +254,7 @@ void cloth::CuFactory::extractCollisionData(const Cloth& cloth, Range<PxVec4> sp
 {
 	NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 
 	NV_CLOTH_ASSERT(spheres.empty() || spheres.size() == cuCloth.mStartCollisionSpheres.size());
 	NV_CLOTH_ASSERT(capsules.empty() || capsules.size() == cuCloth.mCapsuleIndices.size() * 2);
@@ -287,7 +286,7 @@ void cloth::CuFactory::extractMotionConstraints(const Cloth& cloth, Range<PxVec4
 {
 	NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 
 	if (cuCloth.mMotionConstraints.mHostCopy.size())
 	{
@@ -314,7 +313,7 @@ void cloth::CuFactory::extractSeparationConstraints(const Cloth& cloth, Range<Px
 {
 	NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 
 	if (cuCloth.mSeparationConstraints.mHostCopy.size())
 	{
@@ -341,7 +340,7 @@ void cloth::CuFactory::extractParticleAccelerations(const Cloth& cloth, Range<Px
 {
 	NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 
 	if (cuCloth.mParticleAccelerationsHostCopy.size())
 	{
@@ -359,7 +358,7 @@ void cloth::CuFactory::extractVirtualParticles(const Cloth& cloth, Range<uint32_
 
 	CuContextLock contextLock(*this);
 
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 
 	if (destWeights.size() > 0)
 	{
@@ -400,7 +399,7 @@ void cloth::CuFactory::extractVirtualParticles(const Cloth& cloth, Range<uint32_
 
 void cloth::CuFactory::extractSelfCollisionIndices(const Cloth& cloth, Range<uint32_t> destIndices) const
 {
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 	NV_CLOTH_ASSERT(destIndices.size() == cuCloth.mSelfCollisionIndices.size());
 	copyToHost(cuCloth.mSelfCollisionIndices.begin().get(), cuCloth.mSelfCollisionIndices.end().get(),
 	           destIndices.begin());
@@ -408,7 +407,7 @@ void cloth::CuFactory::extractSelfCollisionIndices(const Cloth& cloth, Range<uin
 
 void cloth::CuFactory::extractRestPositions(const Cloth& cloth, Range<PxVec4> destRestPositions) const
 {
-	const CuCloth& cuCloth = static_cast<const CuClothImpl&>(cloth).mCloth;
+	const CuCloth& cuCloth = static_cast<const CuCloth&>(cloth);
 	NV_CLOTH_ASSERT(destRestPositions.size() == cuCloth.mRestPositions.size());
 	copyToHost(cuCloth.mRestPositions.begin().get(), cuCloth.mRestPositions.end().get(), destRestPositions.begin());
 }

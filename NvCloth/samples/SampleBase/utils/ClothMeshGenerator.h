@@ -24,6 +24,8 @@ struct ClothMeshData
 		Triangle(uint32_t _a, uint32_t _b, uint32_t _c) :
 			a(_a), b(_b), c(_c){}
 		uint32_t a, b, c;
+
+		Triangle operator+(uint32_t offset)const { return Triangle(a + offset, b + offset, c + offset); };
 	};
 	struct Quad
 	{
@@ -31,6 +33,8 @@ struct ClothMeshData
 		Quad(uint32_t _a, uint32_t _b, uint32_t _c, uint32_t _d) :
 			a(_a), b(_b), c(_c), d(_d){}
 		uint32_t a, b, c, d;
+
+		Quad operator+(uint32_t offset)const { return Quad(a + offset, b + offset, c + offset, d + offset); };
 	};
 	std::vector<physx::PxVec3>	mVertices;
 	std::vector<physx::PxVec2>	mUvs;
@@ -41,7 +45,7 @@ struct ClothMeshData
 	SimpleMesh					mMesh;
 
 	void Clear();
-	void GeneratePlaneCloth(float width, float height, int segmentsX, int segmentsY, bool createQuads = false, physx::PxMat44 transform = physx::PxIdentity, bool alternatingDiagonals = true);
+	void GeneratePlaneCloth(float width, float height, int segmentsX, int segmentsY, bool createQuads = false, physx::PxMat44 transform = physx::PxIdentity, bool alternatingDiagonals = true, int zigzag = 0);
 
 	void AttachClothPlaneByAngles(int segmentsX, int segmentsY, bool  attachByWidth = true);
 	void AttachClothPlaneBySide(int segmentsX, int segmentsY, bool  attachByWidth = true);
@@ -51,4 +55,6 @@ struct ClothMeshData
 
 	nv::cloth::ClothMeshDesc	GetClothMeshDesc();
 	SimpleMesh					GetRenderMesh();
+
+	void Merge(const ClothMeshData& other);
 };

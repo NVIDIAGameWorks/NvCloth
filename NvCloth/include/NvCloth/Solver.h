@@ -30,6 +30,7 @@
 #pragma once
 
 #include "NvCloth/Allocator.h"
+#include "PsArray.h"
 
 namespace nv
 {
@@ -52,11 +53,17 @@ class Solver : public UserAllocated
   public:
 	virtual ~Solver() {}
 
-	/// Adds cloth object, returns true if successful.
-	virtual void addCloth(Cloth*) = 0;
+	/// Adds cloth object.
+	virtual void addCloth(Cloth* cloth) = 0;
 
 	/// Removes cloth object.
-	virtual void removeCloth(Cloth*) = 0;
+	virtual void removeCloth(Cloth* cloth) = 0;
+
+	/// Returns the numer of cloths added to the solver.
+	virtual int getNumCloths() const = 0;
+
+	/// Returns the pointer to the first cloth added to the solver
+	virtual Cloth * const * getClothList() const = 0;
 
 	// functions executing the simulation work.
 	/**	\brief Begins a simulation frame.

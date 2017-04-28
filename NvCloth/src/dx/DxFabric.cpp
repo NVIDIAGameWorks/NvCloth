@@ -49,6 +49,7 @@ cloth::DxFabric::DxFabric(DxFactory& factory, uint32_t numParticles, Range<const
 , mSets(sets.begin(), sets.end())
 , mConstraints(mFactory.mConstraints)
 , mConstraintsHostCopy(mFactory.mConstraintsHostCopy)
+, mTriangles(mFactory.mTriangles)
 , mStiffnessValues(mFactory.mStiffnessValues)
 , mTethers(mFactory.mTethers)
 , mId(id)
@@ -114,12 +115,20 @@ cloth::DxFabric::DxFabric(DxFactory& factory, uint32_t numParticles, Range<const
 	mTethers.assign(tethers.begin(), tethers.end());
 
 	// triangles
-	Vector<uint16_t>::Type hostTriangles;
-	hostTriangles.resizeUninitialized(triangles.size());
-	Vector<uint16_t>::Type::Iterator tIt = hostTriangles.begin();
+	Vector<uint32_t>::Type hostTriangles;
+	mNumTriangles = triangles.size();
+	//make sure there is an even number of elements allocated
+	hostTriangles.resizeUninitialized(triangles.size()>>1);
+	Vector<uint32_t>::Type::Iterator tIt = hostTriangles.begin();
 
 	for (; !triangles.empty(); triangles.popFront())
-		*tIt++ = uint16_t(triangles.front());
+	{
+		uint32_t packed = triangles.front();
+		triangles.popFront();
+		if(!triangles.empty())
+			packed |= triangles.front()<<16;
+		*tIt++ = packed;
+	}
 
 	mTriangles.assign(hostTriangles.begin(), hostTriangles.end());
 
@@ -181,7 +190,7 @@ uint32_t cloth::DxFabric::getNumTethers() const
 
 uint32_t cloth::DxFabric::getNumTriangles() const
 {
-	return uint32_t(mTriangles.size()) / 3;
+	return uint32_t(mNumTriangles) / 3;
 }
 
 void cloth::DxFabric::scaleRestvalues(float scale)

@@ -225,7 +225,7 @@ class DxBatchedVector
 	DxBatchedVector& operator = (const DxBatchedVector& other)
 	{
 		NV_CLOTH_ASSERT(mSize == other.size()); // current limitation
-		NV_CLOTH_ASSERT(!mStorage.mMapRefCount);
+		NV_CLOTH_ASSERT(!mStorage.mMapRefCount); // This will trigger if the user still has a reference to the MappedRange returned by Cloth::getCurrentParticles
 
 		CD3D11_BOX box(other.mOffset * sizeof(T), 0, 0, (other.mOffset + other.size()) * sizeof(T), 1, 1);
 		mStorage.mBuffer.context()->CopySubresourceRegion(buffer(), 0, mOffset * sizeof(T), 0, 0, other.buffer(), 0,

@@ -158,27 +158,30 @@ ClothRenderMesh::~ClothRenderMesh()
 void ClothRenderMesh::update(const PxVec3* positions, uint32_t numVertices)
 {
 	PxStrideIterator<const PxVec3> pIt(positions, sizeof(PxVec3));
+	Vertex* vertices = mVertices.data();
+	const uint16_t* indices = mIndices.data();
 	for (PxU32 i = 0; i < numVertices; ++i)
 	{
-		mVertices[i].position = *pIt++;
-		mVertices[i].normal = PxVec3(0.f);
+		vertices[i].position = *pIt++;
+		vertices[i].normal = PxVec3(0.f);
 	}
 
-	for (PxU32 i = 0; i < mIndices.size(); i += 3)
+	const PxU32 numIndices = (PxU32)mIndices.size();
+	for (PxU32 i = 0; i < numIndices; i += 3)
 	{
-		auto p0 = mVertices[mIndices[i]].position;
-		auto p1 = mVertices[mIndices[i + 1]].position;
-		auto p2 = mVertices[mIndices[i + 2]].position;
+		const auto p0 = vertices[indices[i]].position;
+		const auto p1 = vertices[indices[i + 1]].position;
+		const auto p2 = vertices[indices[i + 2]].position;
 
-		auto normal = ((p2 - p0).cross(p1 - p0)).getNormalized();
+		const auto normal = ((p2 - p0).cross(p1 - p0)).getNormalized();
 
-		mVertices[mIndices[i]].normal += normal;
-		mVertices[mIndices[i + 1]].normal += normal;
-		mVertices[mIndices[i + 2]].normal += normal;
+		vertices[indices[i]].normal += normal;
+		vertices[indices[i + 1]].normal += normal;
+		vertices[indices[i + 2]].normal += normal;
 	}
 
 	for (PxU32 i = 0; i < numVertices; ++i)
-		mVertices[i].normal.normalize();
+		vertices[i].normal.normalize();
 
 	ID3D11DeviceContext* context;
 	mDevice->GetImmediateContext(&context);

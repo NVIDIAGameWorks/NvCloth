@@ -52,7 +52,7 @@ class CuFactory : public Factory
 
   public:
 	typedef CuFabric FabricType;
-	typedef ClothImpl<CuCloth> ImplType;
+	typedef CuCloth ClothType;
 
 	CuFactory(CUcontext);
 	virtual ~CuFactory();

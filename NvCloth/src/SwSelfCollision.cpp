@@ -68,16 +68,16 @@ void radixSort(const uint32_t* first, const uint32_t* last, uint16_t* out)
 	for (uint32_t i = 0; i < 256; ++i)
 	{
 		uint16_t temp0 = uint16_t(histograms[0][i] + sums[0]);
-		histograms[0][i] = sums[0], sums[0] = temp0;
+		histograms[0][i] = sums[0]; sums[0] = temp0;
 
 		uint16_t temp1 = uint16_t(histograms[1][i] + sums[1]);
-		histograms[1][i] = sums[1], sums[1] = temp1;
+		histograms[1][i] = sums[1]; sums[1] = temp1;
 
 		uint16_t temp2 = uint16_t(histograms[2][i] + sums[2]);
-		histograms[2][i] = sums[2], sums[2] = temp2;
+		histograms[2][i] = sums[2]; sums[2] = temp2;
 
 		uint16_t temp3 = uint16_t(histograms[3][i] + sums[3]);
-		histograms[3][i] = sums[3], sums[3] = temp3;
+		histograms[3][i] = sums[3]; sums[3] = temp3;
 	}
 
 	NV_CLOTH_ASSERT(sums[0] == n && sums[1] == n && sums[2] == n && sums[3] == n);
@@ -93,18 +93,27 @@ void radixSort(const uint32_t* first, const uint32_t* last, uint16_t* out)
 	for (uint16_t i = 0; i != n; ++i)
 		indices[1][histograms[0][0xff & first[i]]++] = i;
 
-	for (uint16_t i = 0, index; index = indices[1][i], i != n; ++i)
+	for (uint16_t i = 0, index; i != n; ++i)
+	{
+		index = indices[1][i];
 		indices[0][histograms[1][0xff & (first[index] >> 8)]++] = index;
+	}
 
-	for (uint16_t i = 0, index; index = indices[0][i], i != n; ++i)
+	for (uint16_t i = 0, index; i != n; ++i)
+	{
+		index = indices[0][i];
 		indices[1][histograms[2][0xff & (first[index] >> 16)]++] = index;
-
-	for (uint16_t i = 0, index; index = indices[1][i], i != n; ++i)
+	
+	}
+	for (uint16_t i = 0, index; i != n; ++i)
+	{
+		index = indices[1][i];
 		indices[0][histograms[3][first[index] >> 24]++] = index;
+	}
 }
 
-template <typename Simd4f>
-uint32_t longestAxis(const Simd4f& edgeLength)
+template <typename T4f>
+uint32_t longestAxis(const T4f& edgeLength)
 {
 	const float* e = array(edgeLength);
 
@@ -131,30 +140,30 @@ inline uint32_t align2(uint32_t x)
 
 } // anonymous namespace
 
-template <typename Simd4f>
-cloth::SwSelfCollision<Simd4f>::SwSelfCollision(cloth::SwClothData& clothData, cloth::SwKernelAllocator& alloc)
+template <typename T4f>
+cloth::SwSelfCollision<T4f>::SwSelfCollision(cloth::SwClothData& clothData, cloth::SwKernelAllocator& alloc)
 : mClothData(clothData), mAllocator(alloc)
 {
 	mCollisionDistance = simd4f(mClothData.mSelfCollisionDistance);
 	mCollisionSquareDistance = mCollisionDistance * mCollisionDistance;
-	mStiffness = sMaskXYZ & static_cast<Simd4f>(simd4f(mClothData.mSelfCollisionStiffness));
+	mStiffness = sMaskXYZ & static_cast<T4f>(simd4f(mClothData.mSelfCollisionStiffness));
 }
 
-template <typename Simd4f>
-cloth::SwSelfCollision<Simd4f>::~SwSelfCollision()
+template <typename T4f>
+cloth::SwSelfCollision<T4f>::~SwSelfCollision()
 {
 }
 
-template <typename Simd4f>
-void cloth::SwSelfCollision<Simd4f>::operator()()
+template <typename T4f>
+void cloth::SwSelfCollision<T4f>::operator()()
 {
 	mNumTests = mNumCollisions = 0;
 
 	if (!isSelfCollisionEnabled(mClothData))
 		return;
 
-	Simd4f lowerBound = load(mClothData.mCurBounds);
-	Simd4f edgeLength = max(load(mClothData.mCurBounds + 3) - lowerBound, gSimd4fEpsilon);
+	T4f lowerBound = load(mClothData.mCurBounds);
+	T4f edgeLength = max(load(mClothData.mCurBounds + 3) - lowerBound, gSimd4fEpsilon);
 
 	// sweep along longest axis
 	uint32_t sweepAxis = longestAxis(edgeLength);
@@ -162,15 +171,15 @@ void cloth::SwSelfCollision<Simd4f>::operator()()
 	uint32_t hashAxis1 = (sweepAxis + 2) % 3;
 
 	// reserve 0, 127, and 65535 for sentinel
-	Simd4f cellSize = max(mCollisionDistance, simd4f(1.0f / 253) * edgeLength);
+	T4f cellSize = max(mCollisionDistance, simd4f(1.0f / 253) * edgeLength);
 	array(cellSize)[sweepAxis] = array(edgeLength)[sweepAxis] / 65533;
 
-	Simd4f one = gSimd4fOne;
-	Simd4f gridSize = simd4f(254.0f);
+	T4f one = gSimd4fOne;
+	T4f gridSize = simd4f(254.0f);
 	array(gridSize)[sweepAxis] = 65534.0f;
 
-	Simd4f gridScale = recip<1>(cellSize);
-	Simd4f gridBias = -lowerBound * gridScale + one;
+	T4f gridScale = recip<1>(cellSize);
+	T4f gridBias = -lowerBound * gridScale + one;
 
 	uint32_t numIndices = mClothData.mNumSelfCollisionIndices;
 	void* buffer = mAllocator.allocate(getBufferSize(numIndices));
@@ -180,7 +189,7 @@ void cloth::SwSelfCollision<Simd4f>::operator()()
 	uint16_t* __restrict sortedIndices = reinterpret_cast<uint16_t*>(keys + numIndices);
 	uint32_t* __restrict sortedKeys = reinterpret_cast<uint32_t*>(sortedIndices + align2(numIndices));
 
-	const Simd4f* particles = reinterpret_cast<const Simd4f*>(mClothData.mCurParticles);
+	const T4f* particles = reinterpret_cast<const T4f*>(mClothData.mCurParticles);
 
 	// create keys
 	for (uint32_t i = 0; i < numIndices; ++i)
@@ -188,7 +197,7 @@ void cloth::SwSelfCollision<Simd4f>::operator()()
 		uint32_t index = indices ? indices[i] : i;
 
 		// grid coordinate
-		Simd4f keyf = particles[index] * gridScale + gridBias;
+		T4f keyf = particles[index] * gridScale + gridBias;
 
 		// need to clamp index because shape collision potentially
 		// pushes particles outside of their original bounds
@@ -235,8 +244,8 @@ void cloth::SwSelfCollision<Simd4f>::operator()()
 	uint32_t numCollisions = mNumCollisions;
 	mNumCollisions = 0;
 
-	Simd4f* qarticles = reinterpret_cast<
-	    Simd4f*>(mClothData.mCurParticles);
+	T4f* qarticles = reinterpret_cast<
+	    T4f*>(mClothData.mCurParticles);
 	for (uint32_t i = 0; i < numIndices; ++i)
 	{
 	    uint32_t indexI = indices ? indices[i] : i;
@@ -253,16 +262,16 @@ void cloth::SwSelfCollision<Simd4f>::operator()()
 	*/
 }
 
-template <typename Simd4f>
-size_t cloth::SwSelfCollision<Simd4f>::estimateTemporaryMemory(const SwCloth& cloth)
+template <typename T4f>
+size_t cloth::SwSelfCollision<T4f>::estimateTemporaryMemory(const SwCloth& cloth)
 {
 	uint32_t numIndices =
 	    uint32_t(cloth.mSelfCollisionIndices.empty() ? cloth.mCurParticles.size() : cloth.mSelfCollisionIndices.size());
 	return isSelfCollisionEnabled(cloth) ? getBufferSize(numIndices) : 0;
 }
 
-template <typename Simd4f>
-size_t cloth::SwSelfCollision<Simd4f>::getBufferSize(uint32_t numIndices)
+template <typename T4f>
+size_t cloth::SwSelfCollision<T4f>::getBufferSize(uint32_t numIndices)
 {
 	uint32_t keysSize = numIndices * sizeof(uint32_t);
 	uint32_t indicesSize = align2(numIndices) * sizeof(uint16_t);
@@ -270,13 +279,13 @@ size_t cloth::SwSelfCollision<Simd4f>::getBufferSize(uint32_t numIndices)
 	return keysSize + indicesSize + std::max(radixSize, keysSize + uint32_t(sizeof(uint32_t)));
 }
 
-template <typename Simd4f>
+template <typename T4f>
 template <bool useRestParticles>
-void cloth::SwSelfCollision<Simd4f>::collideParticles(Simd4f& pos0, Simd4f& pos1, const Simd4f& pos0rest,
-                                                      const Simd4f& pos1rest)
+void cloth::SwSelfCollision<T4f>::collideParticles(T4f& pos0, T4f& pos1, const T4f& pos0rest,
+                                                      const T4f& pos1rest)
 {
-	Simd4f diff = pos1 - pos0;
-	Simd4f distSqr = dot3(diff, diff);
+	T4f diff = pos1 - pos0;
+	T4f distSqr = dot3(diff, diff);
 
 #if PX_DEBUG
 	++mNumTests;
@@ -289,19 +298,19 @@ void cloth::SwSelfCollision<Simd4f>::collideParticles(Simd4f& pos0, Simd4f& pos1
 	{
 		// calculate distance in rest configuration, if less than collision
 		// distance then ignore collision between particles in deformed config
-		Simd4f restDiff = pos1rest - pos0rest;
-		Simd4f restDistSqr = dot3(restDiff, restDiff);
+		T4f restDiff = pos1rest - pos0rest;
+		T4f restDistSqr = dot3(restDiff, restDiff);
 
 		if (allGreater(mCollisionSquareDistance, restDistSqr))
 			return;
 	}
 
-	Simd4f w0 = splat<3>(pos0);
-	Simd4f w1 = splat<3>(pos1);
+	T4f w0 = splat<3>(pos0);
+	T4f w1 = splat<3>(pos1);
 
-	Simd4f ratio = mCollisionDistance * rsqrt(distSqr);
-	Simd4f scale = mStiffness * recip(gSimd4fEpsilon + w0 + w1);
-	Simd4f delta = (scale * (diff - diff * ratio)) & sMaskXYZ;
+	T4f ratio = mCollisionDistance * rsqrt(distSqr);
+	T4f scale = mStiffness * recip(gSimd4fEpsilon + w0 + w1);
+	T4f delta = (scale * (diff - diff * ratio)) & sMaskXYZ;
 
 	pos0 = pos0 + delta * w0;
 	pos1 = pos1 - delta * w1;
@@ -311,14 +320,14 @@ void cloth::SwSelfCollision<Simd4f>::collideParticles(Simd4f& pos0, Simd4f& pos1
 #endif
 }
 
-template <typename Simd4f>
+template <typename T4f>
 template <bool useRestParticles>
-void cloth::SwSelfCollision<Simd4f>::collideParticles(const uint32_t* keys, uint16_t firstColumnSize,
+void cloth::SwSelfCollision<T4f>::collideParticles(const uint32_t* keys, uint16_t firstColumnSize,
                                                       const uint16_t* indices, uint32_t collisionDistance)
 {
-	Simd4f* __restrict particles = reinterpret_cast<Simd4f*>(mClothData.mCurParticles);
-	Simd4f* __restrict restParticles =
-	    useRestParticles ? reinterpret_cast<Simd4f*>(mClothData.mRestPositions) : particles;
+	T4f* __restrict particles = reinterpret_cast<T4f*>(mClothData.mCurParticles);
+	T4f* __restrict restParticles =
+	    useRestParticles ? reinterpret_cast<T4f*>(mClothData.mRestPositions) : particles;
 
 	const uint32_t bucketMask = uint16_t(-1);
 
@@ -367,8 +376,8 @@ void cloth::SwSelfCollision<Simd4f>::collideParticles(const uint32_t* keys, uint
 		NV_CLOTH_ASSERT(*iIt < mClothData.mNumParticles);
 
 		// load current particle once outside of inner loop
-		Simd4f particle = particles[*iIt];
-		Simd4f restParticle = restParticles[*iIt];
+		T4f particle = particles[*iIt];
+		T4f restParticle = restParticles[*iIt];
 
 		uint32_t key = *kFirst[0];
 

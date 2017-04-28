@@ -1,0 +1,592 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+    
+    <title>User Guide &mdash; NvCloth 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/breathe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/application.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styleguide.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/jquery.storageapi.js"></script>
+    <link rel="top" title="NvCloth 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="NVIDIA Copyright Notice" href="../CopyRight/Index.html" />
+    <link rel="prev" title="Modules" href="../Modules/Index.html" /> 
+  </head>
+  <body>
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="row">
+      <div class="navbar-brand">
+             <img class="logo" src="../_static/developerzone_gameworks_logo.png" alt="Logo"/>
+      </div>
+<div id="searchbox" style="display: none; float:right; padding-top:4px; padding-right:4px">
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</nav>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.0.0 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-3 bs-sidenav" style="white-space: nowrap; overflow: auto;">
+<div class="bs-sidebar">
+  <div id="sidebar_toc">
+  <h4>Table Of Contents</h4>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes/index.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#new-features">New Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#supported-platforms">Supported Platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#supported-compilers">Supported Compilers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#known-issues">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Modules/Index.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth">NvCloth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth-extensions">NvCloth extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initializing-the-library">Initializing the Library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#factory">Factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fabric-cloth">Fabric &amp; Cloth</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fabric">Fabric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cloth">Cloth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#solver">Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-simulation-data">Retrieving simulation data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-cloth-properties">Common cloth properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tethers">Tethers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collision-detection">Collision detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-space-simulation">Local space simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drag-lift-and-wind">Drag lift and wind</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../Modules/Index.html"
+                        title="previous chapter">Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../CopyRight/Index.html"
+                        title="next chapter">NVIDIA Copyright Notice</a></p>
+<div id="searchbox" style="display: none">
+  <h4>Quick search</h4>
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+  </div>
+    <div class="document col-md-8">
+          <div class="body">
+            
+  <div class="section" id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
+<p>In this section we describe how to set up NvCloth and guide you through some common features.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Some setup is required before we can start simulating.
+Here we give an overview of all the components needed.
+The sections below will provide more details about each component.</p>
+<dl class="docutils">
+<dt><strong>NvCloth library</strong></dt>
+<dd>Uses callbacks for things like memory allocations, which need to be initialized.</dd>
+<dt><strong>Factory</strong></dt>
+<dd>Interface object creating all other objects.</dd>
+<dt><strong>Solver</strong></dt>
+<dd>Manages simulation and time stepping.</dd>
+<dt><strong>Fabric</strong></dt>
+<dd>Contains information about cloth that can be shared between multiple instances.</dd>
+<dt><strong>Cloth</strong></dt>
+<dd>Contains the cloth instance data.</dd>
+</dl>
+<div class="section" id="initializing-the-library">
+<h3>Initializing the Library<a class="headerlink" href="#initializing-the-library" title="Permalink to this headline">¶</a></h3>
+<p>NvCloth uses user defined callbacks for memory allocation, error reporting, assert handling, and profile timings.
+The callbacks need to be passed to the library using nv::cloth::InitializeNvCloth() before the rest of the library can be used.
+The callbacks are straightforward to implement by providing classes with implementations for all the functions of physx::PxAllocatorCallback, physx::PxErrorCallback, physx::PxAssertHandler, and optionally physx::PxProfilerCallback.
+Note that the allocations returned by the PxAllocatorCallback need to be 16 byte aligned.</p>
+<p>The library doesn&#8217;t need any deinitialization.</p>
+</div>
+<div class="section" id="factory">
+<h3>Factory<a class="headerlink" href="#factory" title="Permalink to this headline">¶</a></h3>
+<p>The Factory object lets you construct all the other components necessary for the simulation.
+There are different factories, one for each platform (e.g. CPU, CUDA, etc.)
+Components created with different platforms cannot be used together (e.g. a CPU cloth cannot be added to a GPU solver), but multiple factories (for different platforms) can be used at the same time.
+A factory is created as follows:</p>
+<div class="highlight-python"><pre>#include &lt;NvCloth/Factory.h&gt;
+
+...
+
+nv::cloth::Factory* factory = NvClothCreateFactoryCPU();
+if(factory==nullptr)
+{
+       //error
+}
+
+...
+
+//At cleanup:
+NvClothDestroyFactory(factory); //This works for all different factories.</pre>
+</div>
+<p>Different functions instead of NvClothCreateFactoryCPU() can be used to create factories for a different platform.
+Some platforms may need additional arguments when creating the factory, like CUDA:</p>
+<div class="highlight-python"><pre>//// CUDA
+#include &lt;NvCloth/Factory.h&gt;
+#include &lt;cuda.h&gt;
+
+...
+
+CUcontext cudaContext;
+int deviceCount = 0;
+CUresult result = cuDeviceGetCount(&amp;deviceCount);
+ASSERT(CUDA_SUCCESS == result);
+ASSERT(deviceCount &gt;= 1);
+
+result = cuCtxCreate(&amp;cudaContext, 0, 0); //Pick first device
+ASSERT(CUDA_SUCCESS == result);
+
+nv::cloth::Factory* factory = NvClothCreateFactoryCUDA(cudaContext);
+//We need to call cuCtxDestroy(cudaContext); after destroying the factory.</pre>
+</div>
+<p>And DX11:</p>
+<div class="highlight-python"><pre>//// DX11
+#include &lt;NvCloth/Factory.h&gt;
+#include &lt;d3d11.h&gt;
+
+...
+
+//Setup DX11 context
+ID3D11Device* DXDevice;
+ID3D11DeviceContext* DXDeviceContext;
+nv::cloth::DxContextManagerCallback* GraphicsContextManager;
+D3D_FEATURE_LEVEL featureLevels[] = {D3D_FEATURE_LEVEL_11_0};
+D3D_FEATURE_LEVEL featureLevelResult;
+HRESULT result = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevels, 1, D3D11_SDK_VERSION, &amp;DXDevice, &amp;featureLevelResult, &amp;DXDeviceContext);
+ASSERT(result == S_OK);
+ASSERT(featureLevelResult == D3D_FEATURE_LEVEL_11_0);
+GraphicsContextManager = new DxContextManagerCallbackImpl(DXDevice);
+ASSERT(GraphicsContextManager != nullptr);
+
+nv::cloth::Factory* factory = NvClothCreateFactoryDX11(GraphicsContextManager);
+//We need to release all DX objects after destroying the factory.</pre>
+</div>
+</div>
+<div class="section" id="fabric-cloth">
+<h3>Fabric &amp; Cloth<a class="headerlink" href="#fabric-cloth" title="Permalink to this headline">¶</a></h3>
+<p>The data used for cloth simulation is divided into two objects.
+The fabric object contains all reusable data like the constraint lengths and connections.
+The cloth object contains all instance data like particle positions.
+This way multiple cloths can share the same fabric data, reducing memory usage.</p>
+<div class="section" id="fabric">
+<h4>Fabric<a class="headerlink" href="#fabric" title="Permalink to this headline">¶</a></h4>
+<p>Creating the fabric is the most complicated part of the setup.
+We have included helper functions as extension to simplify this step.
+We can fill the nv::cloth::ClothMeshDesc meshDesc struct and pass it to the NvClothCookFabricFromMesh function if we use the cooking extension:</p>
+<div class="highlight-python"><pre>#include &lt;NvClothExt/ClothFabricCooker.h&gt;
+
+...
+
+nv::cloth::ClothMeshDesc meshDesc;
+
+//Fill meshDesc with data
+meshDesc.setToDefault();
+meshDesc.points.data = vertexArray;
+meshDesc.points.stride = sizeof(vertexArray[0]);
+meshDesc.points.count = vertexCount;
+//etc. for quads, triangles and invMasses
+
+physx::PxVec3 gravity(0.0f, -9.8f, 0.0f);
+nv::cloth::Vector&lt;int32_t&gt;::Type phaseTypeInfo;
+nv::cloth::Fabric* fabric = NvClothCookFabricFromMesh(factory, meshDesc, gravity, &amp;phaseTypeInfo);
+
+...
+
+fabric-&gt;decRefCount();</pre>
+</div>
+<p>phaseTypeInfo contains information used later for setting up the constraint phases of the cloth.
+We provide the gravity vector so the cooker can differentiate between horizontal and vertical constraints.</p>
+<p>You have to release the fabric using the decRefCount() function.
+Cloths that depend on the fabric also keep a reference, so it is safe to decrease the refcount when the fabric is still in use.
+The fabric returned by NvClothCookFabricFromMesh (or by *Factory::createFabric) already has a reference count of 1.
+The fabric will destroy itself when its reference count reaches 0.
+All fabrics created by a factory need to be destroyed before that factory is destroyed (meaning indirectly that all cloths, which hold references to these fabrics, also need to be destroyed).</p>
+<p>You can also manually provide all the cooked data using the Factory::createFabric function directly in case you have your own cooking code or if you do not cook at runtime.</p>
+</div>
+<div class="section" id="cloth">
+<h4>Cloth<a class="headerlink" href="#cloth" title="Permalink to this headline">¶</a></h4>
+<p>We can now create a cloth instance from the fabric created in the previous step.
+The cloth instance does not need to begin with the same particle positions the fabric was cooked in, so we need to provide the initial position of the particles:</p>
+<div class="highlight-python"><pre>physx::PxVec4* particlePositions = ...; // The w component is the inverse mass of the particle
+                                        //  and can be to 0 to lock the particle / make it static.
+nv::cloth::Cloth* cloth = factory-&gt;createCloth(nv::cloth::Range&lt;physx::PxVec4&gt;( particlePositions, &amp; particlePositions + particleCount), *fabric);
+// particlePositions can be freed here.
+
+...
+
+NV_CLOTH_DELETE(cloth);</pre>
+</div>
+<p>Now we need to setup the phase configurations.
+Phase configurations control the order in which the constraints are solved (e.g. first horizontal then vertical etc.) and the constrain properties like stiffness:</p>
+<div class="highlight-python"><pre>nv::cloth::PhaseConfig* phases = new nv::cloth::PhaseConfig[fabric-&gt;getNumPhases()];
+for(int i = 0; i &lt; fabric-&gt;getNumPhases(); i++)
+{
+       phases[i].mPhaseIndex = i; // Set index to the corresponding set (constraint group)
+
+       //Give phases different configs depending on type
+       switch(phaseTypeInfo[i])
+       {
+               case nv::cloth::ClothFabricPhaseType::eINVALID:
+                       //ERROR
+                       break;
+               case nv::cloth::ClothFabricPhaseType::eVERTICAL:
+                       break;
+               case nv::cloth::ClothFabricPhaseType::eHORIZONTAL:
+                       break;
+               case nv::cloth::ClothFabricPhaseType::eBENDING:
+                       break;
+               case nv::cloth::ClothFabricPhaseType::eSHEARING:
+                       break;
+       }
+
+       //For this example we give very phase the same config
+       phases[i].mStiffness = 1.0f;
+       phases[i].mStiffnessMultiplier = 1.0f;
+       phases[i].mCompressionLimit = 1.0f;
+       phases[i].mStretchLimit = 1.0f;
+}
+cloth-&gt;setPhaseConfig(nv::cloth::Range&lt;nv::cloth::PhaseConfig&gt;(&amp;phases[0], &amp;phases[0] + fabric-&gt;getNumPhases()));
+delete [] phases;</pre>
+</div>
+<p>Note that there might be more phase of each type.
+Check if the gravity vector used for cooking is correct (and in the same space as the cooked mesh) when the vertical phases are missing.</p>
+<p>There are more properties you can set on the cloth.
+They will be described below in the Usage section.</p>
+</div>
+</div>
+<div class="section" id="solver">
+<h3>Solver<a class="headerlink" href="#solver" title="Permalink to this headline">¶</a></h3>
+<p>The solver represents something similar to a scene.
+It has a list of cloths that will be simulated together and it contains some simulation properties.
+Creating a solver is simple:</p>
+<div class="highlight-python"><pre>nv::cloth::Solver* solver = factory-&gt;createSolver();
+
+...
+
+NV_CLOTH_DELETE(solver);</pre>
+</div>
+<p>We can add and remove cloths to/from the scene as follows:</p>
+<div class="highlight-python"><pre>solver-&gt;addCloth(cloth);
+
+...
+
+solver-&gt;removeCloth(cloth);</pre>
+</div>
+<p>Advancing the simulation is broken up in a couple of function calls:</p>
+<div class="highlight-python"><pre>float deltaTime = 1.0f/60.0f;
+solver-&gt;beginSimulation(deltaTime);
+for(int i = 0; i &lt; solver-&gt;getSimulationChunkCount(); i++)
+{
+       solver-&gt;simulateChunk(i);
+}
+solver-&gt;endSimulation();</pre>
+</div>
+<p>The simulateChunk() calls can be called concurrently from multiple threads to increase performance.</p>
+</div>
+<div class="section" id="retrieving-simulation-data">
+<h3>Retrieving simulation data<a class="headerlink" href="#retrieving-simulation-data" title="Permalink to this headline">¶</a></h3>
+<p>We need to retrieve the new positions of the cloth particles after the simulation step to display the results:</p>
+<div class="highlight-python"><pre>nv::cloth::MappedRange&lt;physx::PxVec4&gt; particles = mCloth-&gt;getCurrentParticles();
+for(int i = 0; i&lt;particles.size(); i++)
+{
+       //do something with particles[i]
+       //the xyz components are the current positions
+       //the w component is the invMass.
+}
+//destructor of particles should be called before mCloth is destroyed.</pre>
+</div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Cloth instances have many properties that can be influence their behavior.
+This section shows how to use some of the most common properties.</p>
+<div class="section" id="common-cloth-properties">
+<h3>Common cloth properties<a class="headerlink" href="#common-cloth-properties" title="Permalink to this headline">¶</a></h3>
+<p>We can set the gravity acceleration vector in global space:</p>
+<div class="highlight-python"><pre>cloth-&gt;setGravity(physx::PxVec3(0.0f, -9.8f, 0.0f));</pre>
+</div>
+<p>This vector doesn&#8217;t have to be the same as provided to the cooker.</p>
+<p>Sometimes it is desirable to dampen the particle motion:</p>
+<div class="highlight-python"><pre>cloth-&gt;setDamping(0.5f); //0.0f is default</pre>
+</div>
+<p>Note that the effect of the damping varies between local and global space simulation, as it dampens the local space motion only (so everything is damped if global space simulation is used as local and global space are equal in that case).
+To create effects like air drag or underwater motion it is better to use the wind / air drag properties instead.</p>
+<p>We can change the accuracy (and stiffness) of the cloth by increasing the solver frequency.
+The solver frequency is used to calculate how many solver iterations are executed per frame (Solver::begin/endSimulation call):</p>
+<div class="highlight-python"><pre>cloth-&gt;setSolverFrequency(60.0f); //default is 300</pre>
+</div>
+<p>There will be at least 1 iteration executed per frame, regardless of the value set.
+Sometimes lowering the solver frequency helps to avoid instabilities and oscillations, while a higher solver frequency can help to increase stiffness and improve other behavior like collision detection.
+It is common to set this value to a multiple of the fps target for the application.</p>
+</div>
+<div class="section" id="tethers">
+<h3>Tethers<a class="headerlink" href="#tethers" title="Permalink to this headline">¶</a></h3>
+<p>Tethers are generated at the cooking stage and stored in the fabric.
+They improve behavior and reduce stretchiness by adding long range constraints between particles and fixed points.</p>
+<p>We can change some properties of the tethers in the cloth instance.
+We can change the length of all tethers by setting the scale:</p>
+<div class="highlight-python"><pre>cloth-&gt;setTetherConstraintScale(1.2f); //Increase the length by 20%</pre>
+</div>
+<p>We can make the tethers more spring like, or even disable them by changing the stiffness:</p>
+<div class="highlight-python"><pre>cloth-&gt;setTetherConstraintStiffness(0.0f); //Disable tethers
+cloth-&gt;setTetherConstraintStiffness(0.5f); //Springy tethers
+cloth-&gt;setTetherConstraintStiffness(1.0f); //Default value</pre>
+</div>
+<p>The whole tether stage is skipped if the stiffness is set to 0 (increasing performance).</p>
+</div>
+<div class="section" id="collision-detection">
+<h3>Collision detection<a class="headerlink" href="#collision-detection" title="Permalink to this headline">¶</a></h3>
+<p>NvCloth provides a couple of different methods to add collision to the simulation.
+All collision primitives are defined in local space.</p>
+<p>We can define up to 32 collision spheres per cloth:</p>
+<div class="highlight-python"><pre>physx::PxVec4 spheres[2] = {
+       physx::PxVec4(0.0f, 0.0f, 0.0f, 1.0f),
+       physx::PxVec4(0.0f, 5.0f, 0.0f, 1.0f)
+};
+nv::cloth::Range&lt;const physx::PxVec4&gt; sphereRange(spheres, spheres + 2);
+cloth-&gt;setSpheres(sphereRange, 0, cloth-&gt;getNumSpheres());</pre>
+</div>
+<p>The last two arguments define which range of spheres defined previously is replaced (the parameters work the same across all Cloth::set&#8217;CollisionShape&#8217; functions).
+This can be useful if only a couple of collision primitives changed since previous frame.
+Here we use the range [0, cloth-&gt;getNumSpheres()[ to ensure we replace all spheres that might have been defined previously.
+To insert the spheres at the beginning we could use [0, 0[ and to insert at the end we use [cloth-&gt;getNumSpheres(), cloth-&gt;getNumSpheres()[.</p>
+<p>We can connect spheres to create capsules:</p>
+<div class="highlight-python"><pre>uint32_t capsuleIndices[2];
+capsuleIndices[0]       = 0;
+capsuleIndices[1]       = 1;
+
+cloth-&gt;setCapsules(nv::cloth::Range&lt;uint32_t&gt;(capsuleIndices, capsuleIndices + 2), 0, cloth-&gt;getNumCapsules());</pre>
+</div>
+<p>This connects sphere 0 and 1.
+Indices always need to be provided in pairs.
+Also note that the last two arguments specify indices of pairs. So cloth-&gt;getNumCapsules() will return 1 after the above snippet is executed.</p>
+<p>We can also define up to 32 collision planes:</p>
+<div class="highlight-python"><pre>physx::PxVec4 planes[2] = {
+       physx::PxVec4(physx::PxVec3(0.5f, 0.4f, 0.0f).getNormalized(), 3.0f),
+       physx::PxVec4(physx::PxVec3(0.0f, 0.4f, 0.5f).getNormalized(), 3.0f)
+};
+
+nv::cloth::Range&lt;const physx::PxVec4&gt; planesR(planes, planes + 2);
+cloth-&gt;setPlanes(planesR, 0, cloth-&gt;getNumPlanes());</pre>
+</div>
+<p>This on its own will not make the cloth collide with anything as we first need to tell the solver that each plane is one convex shape:</p>
+<div class="highlight-python"><pre>uint32_t indices[2];
+for(int i = 0; i &lt; 2; i++)
+       indices[i] = 1 &lt;&lt; i;
+nv::cloth::Range&lt;uint32_t&gt; indiceR(indices, indices + 2);
+mCloth-&gt;setConvexes(indiceR, 0, mCloth-&gt;getNumConvexes());</pre>
+</div>
+<p>The value stored in the indices array is a bit mask telling the solver which planes are part of the convex shape. Plane i is indicated by bit 1&lt;&lt;i.
+We can easily construct convex shapes consisting of more planes by setting more bits (e.g. (1&lt;&lt;i) | (1&lt;&lt;j)).</p>
+<p>We can also use arbitrary triangle meshes for collision:</p>
+<div class="highlight-python"><pre>physx::PxVec3* triangles = ...; //Get triangle data from somewhere
+                                //We can't use indexed meshes/vertex sharing,
+                                // each triangle is defined with its own 3 vertexes
+nv::cloth::Range&lt;const physx::PxVec3&gt; triangleR(&amp;triangles[0], &amp;triangles[0] + triangleCount * 3);
+cloth-&gt;setTriangles(triangleR, 0, cloth&gt;getNumTriangles());</pre>
+</div>
+<p>Note that the range arguments passed to setTriangles are counting whole triangles (3 PxVec3 vertexes each).</p>
+<p>We can set the friction coefficient used for collision between cloth and collision shapes like this:</p>
+<div class="highlight-python"><pre>cloth-&gt;setFriction(0.5);</pre>
+</div>
+</div>
+<div class="section" id="local-space-simulation">
+<h3>Local space simulation<a class="headerlink" href="#local-space-simulation" title="Permalink to this headline">¶</a></h3>
+<p>Using local space simulation gives you more control over the simulation allowing you to improve the stability and response of the simulation.
+We separate the global/render coordinate system from the particle simulation coordinate system in order to use local space simulation.
+Graphics transforms should be adjusted to render the cloth in the correct location again.</p>
+<p>We can use the following methods to let the simulation know that the cloth coordinate system has moved relative to the global coordinates:</p>
+<div class="highlight-python"><pre>cloth-&gt;setTranslation(physx::PxVec3(x,y,z));
+cloth-&gt;setRotation(physx::PxQuat(qx,qy,qz,qw));</pre>
+</div>
+<p>This will not change the particle positions, but will apply impulses so that the cloth reacts properly to the movement of the coordinate system.
+Air drag and lift also reacts accordingly.</p>
+<p>We can use an inertia multiplier to control the strength of these impulses.
+Fast movements can cause problems like tunneling through collision shapes, self-intersection, instabilities and stretchy cloth.
+Use smaller inertia multipliers if these issues are noticeable.
+We can set these multipliers as follows:</p>
+<div class="highlight-python"><pre>//All values should be between 0.0 and 1.0
+cloth-&gt;setLinearInertia(physx::PxVec3(x,y,z));
+cloth-&gt;setAngularInertia(physx::PxVec3(ax,ay,az));
+cloth-&gt;setCentrifugalInertia(physx::PxVec3(cx,cy,cz));</pre>
+</div>
+<p>If we want to move the cloth without applying any forces (in case of a world origin shift for example) we can teleport:</p>
+<div class="highlight-python"><pre>cloth-&gt;teleport(physx::PxVec3(deltaX, deltaY, deltaZ));</pre>
+</div>
+<p>Or we can reset the inertia effects after using the setTranslation/setPosition functions:</p>
+<div class="highlight-python"><pre>//Clear any pending inertia
+cloth-&gt;clearInertia();</pre>
+</div>
+</div>
+<div class="section" id="drag-lift-and-wind">
+<h3>Drag lift and wind<a class="headerlink" href="#drag-lift-and-wind" title="Permalink to this headline">¶</a></h3>
+<p>Cloth is simulated in a vacuum by default.
+We can set the drag and lift coefficients to make the simulation more natural:</p>
+<div class="highlight-python"><pre>cloth-&gt;setDragCoefficient(0.5f);
+cloth-&gt;setLiftCoefficient(0.6f);</pre>
+</div>
+<p>We can also add wind to the simulation:</p>
+<div class="highlight-python"><pre>cloth-&gt;setWindVelocity(physx::PxVec3(x,y,z));</pre>
+</div>
+<p>It is a good idea to vary this parameter continuously to simulate gusts, making the simulation more lively.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.0.0 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-boilerplate">
+        <div class="row">
+            <div class="boilerplate">
+                Copyright &copy; 2014, NVIDIA Corporation &nbsp; | &nbsp; <a href="http://www.nvidia.com/object/about-nvidia.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/about-nvidia.html_1&quot;;return this.s_oc?this.s_oc(e):true">About NVIDIA </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/legal_info.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/legal_info.html_1&quot;;return this.s_oc?this.s_oc(e):true">Legal Information </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/privacy_policy.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/privacy_policy.html_1&quot;;return this.s_oc?this.s_oc(e):true">Privacy Policy </a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      processEscapes: true,
+      skipTags: ["script","noscript","style","textarea"]
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] },
+    TeX: {
+        Macros: {
+          Lrg: ['\\displaystyle{#1}', 1, ""]
+        }
+      }
+  });
+</script>
+
+
+<script type="text/javascript" async
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script>
+var treestatename = 'GWDocsTreeState';
+var protocol = location.href.split('/')[0].toLowerCase();
+var storage;
+if (protocol.substring(0,4) == 'http') {
+  storage = $.cookieStorage;
+  storage.setPath('/');
+} else {
+  storage = $.localStorage;
+}
+
+if (storage.isEmpty(treestatename)) {
+  storage.set(treestatename, {});
+}
+
+var treestate = storage.get(treestatename);
+
+$.each($("#sidebar_toc ul li"), toc_walker);
+
+function toc_walker(key, value) {
+    var handleSpan = $("<span></span>")
+        .addClass("toc_handle").prependTo(value);
+    handleSpan.attr("id", $(value).closest("div").attr("id") + "." + key);
+
+    if($(value).has("ul li").size() > 0) {
+        var id = handleSpan.attr("id");
+        if (!(id in treestate)) {
+          treestate[id] = false;
+        }
+        handleSpan.addClass("toc_expanded").click(function() {
+            $(this).toggleClass("toc_expanded toc_collapsed").siblings("ul").toggle();
+            treestate[$(this).attr('id')] = $(this).hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        });
+        if(!($(this).hasClass('current') || treestate[id])) {
+            handleSpan.click();
+        }
+        if($(this).hasClass('current')) {
+            treestate[handleSpan.attr('id')] = handleSpan.hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        }
+    }
+}
+</script>
+  </body>
+</html>

@@ -74,7 +74,7 @@ void FreeFallScene::initializeCloth(int index, physx::PxVec3 offset)
 
 	mClothActor[index]->mCloth->setGravity(physx::PxVec3(0.0f, -1.0f, 0.0f));
 	mClothActor[index]->mCloth->setFriction(0.1);
-	mClothActor[index]->mCloth->setDragCoefficient(0.5);
+	mClothActor[index]->mCloth->setDragCoefficient(0.1);
 	mClothActor[index]->mCloth->setLiftCoefficient(0.0);
 
 	// Setup phase configs
@@ -89,8 +89,6 @@ void FreeFallScene::initializeCloth(int index, physx::PxVec3 offset)
 	}
 	mClothActor[index]->mCloth->setPhaseConfig(nv::cloth::Range<nv::cloth::PhaseConfig>(&phases.front(), &phases.back()));
 
-	mSolver = getSceneController()->getFactory()->createSolver();
-	trackSolver(mSolver);
 	trackClothActor(mClothActor[index]);
 
 	// Add the cloth to the solver for simulation
@@ -99,12 +97,12 @@ void FreeFallScene::initializeCloth(int index, physx::PxVec3 offset)
 
 void FreeFallScene::onInitialize()
 {
-	float spaceX = -1.5f;
+	mSolver = getSceneController()->getFactory()->createSolver();
+	trackSolver(mSolver);
 
+	float spaceX = -1.1f;
 	for(int i = 0; i < 4; ++i)
-	{
-		initializeCloth(i, physx::PxVec3(16.f + float((i+1)*(i+1)) * spaceX, 2.f, -7.f));
-	}
+		initializeCloth(i, physx::PxVec3(8.f + float((i+1)*(i+1)) * spaceX, 2.f, -7.f));
 
 	{
 		IRenderMesh* mesh = getSceneController()->getRenderer().getPrimitiveRenderMesh(PrimitiveRenderMeshType::Plane);

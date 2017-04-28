@@ -369,14 +369,14 @@ void ClothGeodesicTetherCooker::createTetherData(const ClothMeshDesc &desc)
 	mAttached.resize(mNumParticles);
 	PxStrideIterator<const PxVec3> pIt(reinterpret_cast<const PxVec3*>(desc.points.data), desc.points.stride);
 	PxStrideIterator<const PxReal> wIt(reinterpret_cast<const PxReal*>(desc.invMasses.data), desc.invMasses.stride);
-	for(PxU32 i=0; i<mNumParticles; ++i)
+	for (PxU32 i=0; i<mNumParticles; ++i)
 	{
 		mVertices[i] = *pIt++;
 		mAttached[i] = PxU8(wIt.ptr() ? (*wIt++ == 0.0f) : 0);
 	}
 
 	// build triangle indices
-	if(desc.flags & MeshFlag::e16_BIT_INDICES)
+	if (desc.flags & MeshFlag::e16_BIT_INDICES)
 		gatherIndices<PxU16>(mIndices, desc.triangles, desc.quads);
 	else
 		gatherIndices<PxU32>(mIndices, desc.triangles, desc.quads);
@@ -392,7 +392,7 @@ void ClothGeodesicTetherCooker::createTetherData(const ClothMeshDesc &desc)
 	// build adjacent vertex list
 	nv::cloth::Vector<PxU32>::Type valency(mNumParticles+1, 0);
 	nv::cloth::Vector<PxU32>::Type adjacencies;
-	if(desc.flags & MeshFlag::e16_BIT_INDICES)
+	if (desc.flags & MeshFlag::e16_BIT_INDICES)
 		gatherAdjacencies<PxU16>(valency, adjacencies, desc.triangles, desc.quads);
 	else
 		gatherAdjacencies<PxU32>(valency, adjacencies, desc.triangles, desc.quads);
@@ -400,7 +400,7 @@ void ClothGeodesicTetherCooker::createTetherData(const ClothMeshDesc &desc)
 	// build unique neighbors from adjacencies
 	nv::cloth::Vector<PxU32>::Type mark(valency.size(), 0);
 	nv::cloth::Vector<PxU32>::Type neighbors; neighbors.reserve(adjacencies.size());
-	for(PxU32 i=1, j=0; i<valency.size(); ++i)
+	for (PxU32 i=1, j=0; i<valency.size(); ++i)
 	{
 		for(; j<valency[i]; ++j)
 		{

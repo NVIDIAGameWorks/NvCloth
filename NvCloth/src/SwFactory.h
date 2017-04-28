@@ -48,7 +48,7 @@ class SwFactory : public Factory
 {
   public:
 	typedef SwFabric FabricType;
-	typedef ClothImpl<SwCloth> ImplType;
+	typedef SwCloth ClothType;
 
 	SwFactory();
 	virtual ~SwFactory();

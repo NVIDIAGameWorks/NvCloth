@@ -23,12 +23,11 @@ DECLARE_SCENE_NAME(TetherScene, "Tether Scene")
 
 void TetherScene::initializeCloth(int index, physx::PxVec3 offset, float tetherStiffness)
 {
-	///////////////////////////////////////////////////////////////////////
 	ClothMeshData clothMesh;
 
-	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 13.f, 0.f)+ offset, PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
-	clothMesh.GeneratePlaneCloth(6.f, 7.5f, 39, 59, false, transform);
-	clothMesh.AttachClothPlaneByAngles(39, 59);
+	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 13.f, 0.f) + offset, PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
+	clothMesh.GeneratePlaneCloth(6.f, 7.f, 49, 59, false, transform);
+	clothMesh.AttachClothPlaneByAngles(49, 59);
 
 	mClothActor[index] = new ClothActor;
 	nv::cloth::ClothMeshDesc meshDesc = clothMesh.GetClothMeshDesc();
@@ -48,13 +47,13 @@ void TetherScene::initializeCloth(int index, physx::PxVec3 offset, float tetherS
 	particlesCopy.resize(clothMesh.mVertices.size());
 
 	physx::PxVec3 clothOffset = transform.getPosition();
-	for(int i = 0; i < (int)clothMesh.mVertices.size(); i++)
+	for (int i = 0; i < (int)clothMesh.mVertices.size(); i++)
 	{
 		// To put attachment point closer to each other
 		if(clothMesh.mInvMasses[i] < 1e-6)
-			clothMesh.mVertices[i] = (clothMesh.mVertices[i] - clothOffset)*0.8f + clothOffset;
+			clothMesh.mVertices[i] = (clothMesh.mVertices[i] - clothOffset) * 0.8f + clothOffset;
 
-		particlesCopy[i] = physx::PxVec4(clothMesh.mVertices[i], clothMesh.mInvMasses[i]); // w component is 1/mass, or 0.0f for anchored/fixed particles
+		particlesCopy[i] = physx::PxVec4(clothMesh.mVertices[i], 0.5f * clothMesh.mInvMasses[i]); // w component is 1/mass, or 0.0f for anchored/fixed particles
 	}
 
 	// Create the cloth from the initial positions/masses and the fabric
@@ -66,19 +65,16 @@ void TetherScene::initializeCloth(int index, physx::PxVec3 offset, float tetherS
 
 	// Setup phase configs
 	std::vector<nv::cloth::PhaseConfig> phases(mFabric[index]->getNumPhases());
-	for(int i = 0; i < (int)phases.size(); i++)
+	for (int i = 0; i < (int)phases.size(); i++)
 	{
 		phases[i].mPhaseIndex = i;
-		phases[i].mStiffness = 1.0f;
+		phases[i].mStiffness = 0.75f;
 		phases[i].mStiffnessMultiplier = 1.0f;
 		phases[i].mCompressionLimit = 1.0f;
 		phases[i].mStretchLimit = 1.0f;
 	}
 	mClothActor[index]->mCloth->setPhaseConfig(nv::cloth::Range<nv::cloth::PhaseConfig>(&phases.front(), &phases.back()));
 
-
-	mSolver = getSceneController()->getFactory()->createSolver();
-	trackSolver(mSolver);
 	trackClothActor(mClothActor[index]);
 
 	// Add the cloth to the solver for simulation
@@ -87,9 +83,11 @@ void TetherScene::initializeCloth(int index, physx::PxVec3 offset, float tetherS
 
 void TetherScene::onInitialize()
 {
+	mSolver = getSceneController()->getFactory()->createSolver();
+	trackSolver(mSolver);
 
-	initializeCloth(0,physx::PxVec3(-5.0f,0.0f,0.0f),0);
-	initializeCloth(1, physx::PxVec3(4.0f, 0.0f, 0.0f),1);
+	initializeCloth(0,physx::PxVec3(-7.0f, 2.0f, 0.0f), 0.0f);
+	initializeCloth(1, physx::PxVec3(2.0f, 2.0f, 0.0f), 1.0f);
 
 	mTime = 0.0f;
 

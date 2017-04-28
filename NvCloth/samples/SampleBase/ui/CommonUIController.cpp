@@ -89,12 +89,7 @@ LRESULT CommonUIController::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 		int iKeyPressed = static_cast<int>(wParam);
 		switch (iKeyPressed)
 		{
-			case 'P':
-			{
-				//getPhysXController().setPaused(!getPhysXController().isPaused());
-				break;
-			}
-			case 'O':
+			case 'B':
 			{
 				getRenderer().setWireframeMode(!getRenderer().getWireframeMode());
 				break;
@@ -226,7 +221,7 @@ void CommonUIController::drawUI()
 		{
 			// WireFrame
 			bool wireFrameEnabled = getRenderer().getWireframeMode();
-			if (ImGui::Checkbox("WireFrame (O)", &wireFrameEnabled))
+			if (ImGui::Checkbox("WireFrame (B)", &wireFrameEnabled))
 			{
 				getRenderer().setWireframeMode(wireFrameEnabled);
 			}

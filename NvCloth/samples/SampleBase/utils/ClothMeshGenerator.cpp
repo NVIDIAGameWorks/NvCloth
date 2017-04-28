@@ -17,9 +17,8 @@ void ClothMeshData::Clear()
 	mQuads.clear();
 }
 
-void ClothMeshData::GeneratePlaneCloth(float width, float height, int segmentsX, int segmentsY, bool createQuads, physx::PxMat44 transform, bool alternatingDiagonals)
+void ClothMeshData::GeneratePlaneCloth(float width, float height, int segmentsX, int segmentsY, bool createQuads, physx::PxMat44 transform, bool alternatingDiagonals, int zigzag)
 {
-
 /*
 GeneratePlaneCloth(x,y,2,2) generates:
 
@@ -61,14 +60,30 @@ GeneratePlaneCloth(x,y,2,2) generates:
 	{
 		for(int x = 0; x < segmentsX + 1; x++)
 		{
-			mVertices[x + y * (segmentsX + 1)] = transform.transform(topLeft + physx::PxVec3( ((float)x / (float)segmentsX) * width,
-																		0.f,
-																		((float)y / (float)segmentsY) * height));
+			physx::PxVec3 pos;
+			switch(zigzag)
+			{
+				case 1:
+					pos =	physx::PxVec3(((float)x / (float)segmentsX) * width,
+							sinf(y*0.5)/(float)segmentsY * height,
+							((float)y / (float)segmentsY) * height);
+					break;
+				case 2:
+					pos =	physx::PxVec3(((float)x / (float)segmentsX) * width,
+							((float)(y&2) / (float)segmentsY) * height,
+							((float)((y+1)&~1) / (float)segmentsY) * height);
+				default:
+					pos =	physx::PxVec3(((float)x / (float)segmentsX) * width,
+							0.f,
+							((float)y / (float)segmentsY) * height);
+			}
+
+			mVertices[x + y * (segmentsX + 1)] = transform.transform(topLeft + pos);
+
 			mInvMasses[x + y * (segmentsX + 1)] = 1.0f;
 
-			mMesh.vertices[x + y * (segmentsX + 1)].position = transform.transform(topLeft + physx::PxVec3(((float)x / (float)segmentsX) * width,
-																		0.f,
-																		((float)y / (float)segmentsY) * height));
+			mMesh.vertices[x + y * (segmentsX + 1)].position = transform.transform(topLeft + pos);
+
 			mMesh.vertices[x + y * (segmentsX + 1)].normal = transform.transform(physx::PxVec3(0.f, 1.f, 0.f));
 
 			mMesh.vertices[x + y * (segmentsX + 1)].uv = physx::PxVec2(uvOx + uvSx*(float)x / (float)segmentsX, uvOy + uvSy*(1.0f - (float)y / (float)segmentsY));
@@ -190,4 +205,29 @@ nv::cloth::ClothMeshDesc ClothMeshData::GetClothMeshDesc()
 SimpleMesh ClothMeshData::GetRenderMesh()
 {
 	return mMesh;
+}
+
+void ClothMeshData::Merge(const ClothMeshData& other)
+{
+	uint32_t firstVertex = (uint32_t)mVertices.size();
+	uint32_t firstTriangle = (uint32_t)mTriangles.size();
+	uint32_t firstQuad = (uint32_t)mQuads.size();
+
+	mVertices.insert(mVertices.end(), other.mVertices.begin(), other.mVertices.end());
+	mUvs.insert(mUvs.end(), other.mUvs.begin(), other.mUvs.end());
+	mInvMasses.insert(mInvMasses.end(), other.mInvMasses.begin(), other.mInvMasses.end());
+
+	mMesh.vertices.insert(mMesh.vertices.end(), mMesh.vertices.begin(), mMesh.vertices.end());
+
+	for(const auto& t : other.mTriangles)
+	{
+		mTriangles.push_back(t + firstVertex);
+	}
+	for(const auto& q : other.mQuads)
+	{
+		mQuads.push_back(q + firstVertex);
+		mMesh.indices.push_back(mQuads.back().a);
+		mMesh.indices.push_back(mQuads.back().b);
+		mMesh.indices.push_back(mQuads.back().c);
+	}
 }

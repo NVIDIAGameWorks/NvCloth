@@ -26,8 +26,8 @@ void FrictionScene::initializeCloth(int index, physx::PxVec3 offset, float frict
 	///////////////////////////////////////////////////////////////////////
 	ClothMeshData clothMesh;
 
-	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 13.f, 0.f)+ offset, PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
-	clothMesh.GeneratePlaneCloth(3.f, 3.f, 29, 29, false, transform);
+	physx::PxMat44 transform = PxTransform(PxVec3(0.f, 9.f, 0.f) + offset, PxQuat(PxPi / 6.f, PxVec3(1.f, 0.f, 0.f)));
+	clothMesh.GeneratePlaneCloth(4.f, 5.f, 29, 34, false, transform);
 
 	mClothActor[index] = new ClothActor;
 	nv::cloth::ClothMeshDesc meshDesc = clothMesh.GetClothMeshDesc();
@@ -47,7 +47,7 @@ void FrictionScene::initializeCloth(int index, physx::PxVec3 offset, float frict
 	particlesCopy.resize(clothMesh.mVertices.size());
 
 	physx::PxVec3 clothOffset = transform.getPosition();
-	for(int i = 0; i < (int)clothMesh.mVertices.size(); i++)
+	for (int i = 0; i < (int)clothMesh.mVertices.size(); i++)
 	{
 		// To put attachment point closer to each other
 		if(clothMesh.mInvMasses[i] < 1e-6)
@@ -67,7 +67,7 @@ void FrictionScene::initializeCloth(int index, physx::PxVec3 offset, float frict
 	mClothActor[index]->mCloth->setPlanes(planesR, 0, mClothActor[index]->mCloth->getNumPlanes());
 	std::vector<uint32_t> indices;
 	indices.resize(planes.size());
-	for(int i = 0; i < (int)indices.size(); i++)
+	for (int i = 0; i < (int)indices.size(); i++)
 		indices[i] = 1 << i;
 	nv::cloth::Range<uint32_t> cind(&indices[0], &indices[0] + indices.size());
 	mClothActor[index]->mCloth->setConvexes(cind, 0, mClothActor[index]->mCloth->getNumConvexes());
@@ -76,7 +76,7 @@ void FrictionScene::initializeCloth(int index, physx::PxVec3 offset, float frict
 
 	// Setup phase configs
 	std::vector<nv::cloth::PhaseConfig> phases(mFabric[index]->getNumPhases());
-	for(int i = 0; i < (int)phases.size(); i++)
+	for (int i = 0; i < (int)phases.size(); i++)
 	{
 		phases[i].mPhaseIndex = i;
 		phases[i].mStiffness = 1.0f;
@@ -87,8 +87,6 @@ void FrictionScene::initializeCloth(int index, physx::PxVec3 offset, float frict
 	mClothActor[index]->mCloth->setPhaseConfig(nv::cloth::Range<nv::cloth::PhaseConfig>(&phases.front(), &phases.back()));
 	mClothActor[index]->mCloth->setFriction(frictionCoef);
 
-	mSolver = getSceneController()->getFactory()->createSolver();
-	trackSolver(mSolver);
 	trackClothActor(mClothActor[index]);
 
 	// Add the cloth to the solver for simulation
@@ -97,15 +95,15 @@ void FrictionScene::initializeCloth(int index, physx::PxVec3 offset, float frict
 
 void FrictionScene::onInitialize()
 {
-
+	mSolver = getSceneController()->getFactory()->createSolver();
+	trackSolver(mSolver);
 	
-	float spaceX = -4.f;
+	float spaceX = -5.f;
 	float frictionDelta = 0.2f;
 
-	for(int i = 0; i < 4; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
-		float friction = i > 0 ? float(i) * frictionDelta : 0.f; // 0.0, 0.2, 0.4, 0.6
-
+		float friction = i > 0 ? float(i) * frictionDelta : 0.f; // 0.0, 0.2, 0.4, 0.6, 0.8
 		initializeCloth(i, physx::PxVec3(4.f + float(i) * spaceX, 4.f, -18.f), friction);
 	}
 
