@@ -40,8 +40,13 @@
 
 #define BOOL_TO_U16(b) (PxU16)(- PxI32(b))
 
+#define PX_VECMATH_ASSERT_ENABLED 0
 
+#if PX_VECMATH_ASSERT_ENABLED
 #define VECMATHAOS_ASSERT(x) { PX_ASSERT(x); }
+#else
+#define VECMATHAOS_ASSERT(x)
+#endif
 
 /////////////////////////////////////////////////////////////////////
 ////INTERNAL USE ONLY AND TESTS
@@ -1479,7 +1484,7 @@ PX_FORCE_INLINE BoolV BOr(const BoolV a, const BoolV b)
 
 PX_FORCE_INLINE PxU32 BAllEq(const BoolV a, const BoolV b)
 {
-	return (a.ux == b.ux && a.uy == b.uy && a.uz == b.uz && a.uw == b.uw ? TRUE_TO_U32 : FALSE_TO_U32);
+	return (a.ux == b.ux && a.uy == b.uy && a.uz == b.uz && a.uw == b.uw ? 1 : 0);
 }
 
 PX_FORCE_INLINE PxU32 BAllEqTTTT(const BoolV a)

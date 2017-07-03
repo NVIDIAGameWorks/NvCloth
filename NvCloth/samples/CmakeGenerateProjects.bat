@@ -14,6 +14,9 @@ SET PATH=%PATH%;"%CMAKE_PATH_F%"
 
 REM Make sure the various variables that we need are set
 
+call "../scripts/locate_cuda.bat" CUDA_PATH_
+echo CUDA_PATH_ = %CUDA_PATH_%
+
 IF EXIST %~dp0..\Externals\CMakeModules (
 	set GW_DEPS_ROOT=%~dp0..\
 )
@@ -30,13 +33,13 @@ REM Generate projects here
 rmdir /s /q compiler\vc14win32-cmake\
 mkdir compiler\vc14win32-cmake\
 pushd compiler\vc14win32-cmake\
-cmake ..\.. -G "Visual Studio 14 2015" -AWin32 -DTARGET_BUILD_PLATFORM=Windows -DSTATIC_WINCRT=0 -DBL_DLL_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win32-cmake -DBL_LIB_OUTPUT_DIR=%OUTPUT_ROOT%\lib\vc14win32-cmake -DBL_EXE_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win32-cmake
+cmake ..\.. -G "Visual Studio 14 2015" -AWin32 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DTARGET_BUILD_PLATFORM=windows -DSTATIC_WINCRT=0 -DBL_DLL_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win32-cmake -DBL_LIB_OUTPUT_DIR=%OUTPUT_ROOT%\lib\vc14win32-cmake -DBL_EXE_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win32-cmake
 popd
 
 rmdir /s /q compiler\vc14win64-cmake\
 mkdir compiler\vc14win64-cmake\
 pushd compiler\vc14win64-cmake\
-cmake ..\.. -G "Visual Studio 14 2015" -Ax64 -DTARGET_BUILD_PLATFORM=Windows -DSTATIC_WINCRT=0 -DBL_DLL_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win64-cmake -DBL_LIB_OUTPUT_DIR=%OUTPUT_ROOT%\lib\vc14win64-cmake -DBL_EXE_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win64-cmake
+cmake ..\.. -G "Visual Studio 14 2015" -Ax64 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DTARGET_BUILD_PLATFORM=windows -DSTATIC_WINCRT=0 -DBL_DLL_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win64-cmake -DBL_LIB_OUTPUT_DIR=%OUTPUT_ROOT%\lib\vc14win64-cmake -DBL_EXE_OUTPUT_DIR=%OUTPUT_ROOT%\bin\vc14win64-cmake
 popd
 
 

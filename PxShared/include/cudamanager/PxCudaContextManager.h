@@ -23,7 +23,7 @@
 // components in life support devices or systems without express written approval of
 // NVIDIA Corporation.
 //
-// Copyright (c) 2008-2014 NVIDIA Corporation. All rights reserved.
+// Copyright (c) 2008-2017 NVIDIA Corporation. All rights reserved.
 
 
 #ifndef PXCUDACONTEXTMANAGER_PXCUDACONTEXTMANAGER_H
@@ -42,6 +42,7 @@
 /* Forward decl to avoid inclusion of cuda.h */
 typedef struct CUctx_st *CUcontext;
 typedef struct CUgraphicsResource_st *CUgraphicsResource;
+typedef int CUdevice;
 
 namespace physx
 { 
@@ -58,7 +59,6 @@ struct PxCudaInteropMode
 	enum Enum
 	{
 		NO_INTEROP = 0,
-		D3D9_INTEROP,
 		D3D10_INTEROP,
 		D3D11_INTEROP,
 		OGL_INTEROP,
@@ -154,6 +154,9 @@ public:
      * to every CUDA work submission, so we recommend that you carefully tune
      * this initial base memory size to closely approximate the amount of
      * memory your application will consume.
+
+	 Note: This is currently not used by PxSceneFlag::eENABLE_GPU_DYNAMICS. Memory allocation properties are configured
+	 for GPU rigid bodies using PxSceneDesc::gpuDynamicsConfig.
      */
 	uint32_t	memoryBaseSize[PxCudaBufferMemorySpace::COUNT];
 
@@ -162,11 +165,17 @@ public:
      *
      * The memory manager will dynamically grow and shrink in blocks multiple of
      * this page size. Size has to be power of two and bigger than 0.
+
+	Note: This is currently not used by PxSceneFlag::eENABLE_GPU_DYNAMICS. Memory allocation properties are configured
+	for GPU rigid bodies using PxSceneDesc::gpuDynamicsConfig.
      */
 	uint32_t	memoryPageSize[PxCudaBufferMemorySpace::COUNT];
 
     /**
      * \brief Maximum size of memory that the memory manager will allocate
+
+	 Note: This is currently not used by PxSceneFlag::eENABLE_GPU_DYNAMICS. Memory allocation properties are configured
+	 for GPU rigid bodies using PxSceneDesc::gpuDynamicsConfig.
      */
 	uint32_t	maxMemorySize[PxCudaBufferMemorySpace::COUNT];
 
@@ -223,7 +232,7 @@ public:
      * harmfull to (re)acquire the context in code that is shared between
      * GpuTasks and non-task functions.
      */
-	virtual CUcontext acquireContext() = 0;
+    virtual void acquireContext() = 0;
 
     /**
      * \brief Release the CUDA context from the current thread
@@ -234,9 +243,16 @@ public:
      */
     virtual void releaseContext() = 0;
 
+	/**
+	* \brief Return the CUcontext
+	*/
+	virtual CUcontext getContext() = 0;
+
     /**
      * \brief Return the PxCudaMemoryManager instance associated with this
      * CUDA context
+	 * Note: This is currently not used by PxSceneFlag::eENABLE_GPU_DYNAMICS. Memory allocation properties are configured
+	 * for GPU rigid bodies using PxSceneDesc::gpuDynamicsConfig.
      */
 	virtual PxCudaMemoryManager *getMemoryManager() = 0;
 
@@ -268,6 +284,7 @@ public:
 	virtual bool supportsArchSM35() const = 0;  //!< GK110
 	virtual bool supportsArchSM50() const = 0;  //!< GM100
 	virtual bool supportsArchSM52() const = 0;  //!< GM200
+	virtual bool supportsArchSM60() const = 0;  //!< GP100
 	virtual bool isIntegrated() const = 0;      //!< true if GPU is an integrated (MCP) part
 	virtual bool canMapHostMemory() const = 0;  //!< true if GPU map host memory to GPU (0-copy)
 	virtual int  getDriverVersion() const = 0;  //!< returns cached value of cuGetDriverVersion()
@@ -278,6 +295,7 @@ public:
 	virtual int  getSharedMemPerMultiprocessor() const = 0; //!< returns total amount of shared memory available per multiprocessor in bytes
 	virtual unsigned int getMaxThreadsPerBlock() const = 0; //!< returns the maximum number of threads per block
     virtual const char *getDeviceName() const = 0; //!< returns device name retrieved from driver
+	virtual CUdevice getDevice() const = 0; //!< returns device handle retrieved from driver
 	virtual PxCudaInteropMode::Enum getInteropMode() const = 0; //!< interop mode the context was created with
 
 	virtual void setUsingConcurrentStreams(bool) = 0; //!< turn on/off using concurrent streams for GPU work

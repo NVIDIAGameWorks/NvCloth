@@ -30,38 +30,38 @@ REM Generate projects here
 rmdir /s /q compiler\vc11win32-cmake\
 mkdir compiler\vc11win32-cmake\
 pushd compiler\vc11win32-cmake\
-cmake ..\cmake\windows -G "Visual Studio 11 2012" -AWin32 -DTARGET_BUILD_PLATFORM=Windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc11win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win32-cmake
+cmake ..\cmake\windows -G "Visual Studio 11 2012" -AWin32 -DTARGET_BUILD_PLATFORM=windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc11win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win32-cmake
 popd
 
 rmdir /s /q compiler\vc11win64-cmake\
 mkdir compiler\vc11win64-cmake\
 pushd compiler\vc11win64-cmake\
-cmake ..\cmake\windows -G "Visual Studio 11 2012" -Ax64 -DTARGET_BUILD_PLATFORM=Windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc11win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win64-cmake
+cmake ..\cmake\windows -G "Visual Studio 11 2012" -Ax64 -DTARGET_BUILD_PLATFORM=windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc11win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc11win64-cmake
 popd
 
 
 rmdir /s /q compiler\vc12win32-cmake\
 mkdir compiler\vc12win32-cmake\
 pushd compiler\vc12win32-cmake\
-cmake ..\cmake\windows -G "Visual Studio 12 2013" -AWin32 -DTARGET_BUILD_PLATFORM=Windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc12win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win32-cmake
+cmake ..\cmake\windows -G "Visual Studio 12 2013" -AWin32 -DTARGET_BUILD_PLATFORM=windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc12win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win32-cmake
 popd
 
 rmdir /s /q compiler\vc12win64-cmake\
 mkdir compiler\vc12win64-cmake\
 pushd compiler\vc12win64-cmake\
-cmake ..\cmake\windows -G "Visual Studio 12 2013" -Ax64 -DTARGET_BUILD_PLATFORM=Windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc12win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win64-cmake
+cmake ..\cmake\windows -G "Visual Studio 12 2013" -Ax64 -DTARGET_BUILD_PLATFORM=windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc12win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc12win64-cmake
 popd
 
 rmdir /s /q compiler\vc14win32-cmake\
 mkdir compiler\vc14win32-cmake\
 pushd compiler\vc14win32-cmake\
-cmake ..\cmake\windows -G "Visual Studio 14 2015" -AWin32 -DTARGET_BUILD_PLATFORM=Windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc14win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win32-cmake
+cmake ..\cmake\windows -G "Visual Studio 14 2015" -AWin32 -DTARGET_BUILD_PLATFORM=windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc14win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win32-cmake
 popd
 
 rmdir /s /q compiler\vc14win64-cmake\
 mkdir compiler\vc14win64-cmake\
 pushd compiler\vc14win64-cmake\
-cmake ..\cmake\windows -G "Visual Studio 14 2015" -Ax64 -DTARGET_BUILD_PLATFORM=Windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc14win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win64-cmake
+cmake ..\cmake\windows -G "Visual Studio 14 2015" -Ax64 -DTARGET_BUILD_PLATFORM=windows -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DSTATIC_WINCRT=1 -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\Lib\vc14win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\Bin\vc14win64-cmake
 popd
 
 

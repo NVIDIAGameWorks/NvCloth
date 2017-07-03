@@ -110,6 +110,8 @@ SET(SCENES_FILES
 	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene.h
 	${SB_SCENE_SOURCE_DIR}/scenes/MultiSolverScene.cpp
 	${SB_SCENE_SOURCE_DIR}/scenes/MultiSolverScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/ScaledScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/ScaledScene.h
 )
 
 SET(UI_FILES

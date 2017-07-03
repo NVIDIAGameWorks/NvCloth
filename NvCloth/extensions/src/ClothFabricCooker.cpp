@@ -97,7 +97,9 @@ nv::cloth::Range<const T> CreateRange(typename nv::cloth::Vector<T>::Type const&
 template<typename T, typename U>
 nv::cloth::Range<const T> CreateRangeF(typename nv::cloth::Vector<U>::Type const& vector, int offset = 0)
 {
+#ifndef _LIBCPP_HAS_NO_STATIC_ASSERT
 	static_assert(sizeof(T) == sizeof(U), "Type T and U need to be of the same size");
+#endif
 	const T* begin = reinterpret_cast<const T*>(vector.begin()+offset);
 	const T* end = reinterpret_cast<const T*>(vector.end());
 

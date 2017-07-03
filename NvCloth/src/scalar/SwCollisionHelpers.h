@@ -29,7 +29,7 @@
 
 #pragma once
 
-namespace physx
+namespace nv
 {
 namespace cloth
 {
@@ -89,4 +89,4 @@ Scalar4i Gather<Scalar4i>::operator()(const Scalar4i* ptr) const
 }
 
 } // namespace cloth
-} // namespace physx
+} // namespace nv

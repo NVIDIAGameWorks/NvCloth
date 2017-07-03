@@ -1,9 +1,9 @@
 NvCloth Release notes.
 
-[1.1.0]
+[1.1.1]
 Supported platforms:
-* Windows (CPU, CUDA, DX11, RenderCloth)
-* Mac (beta, tested on Sierra, RenderCloth)
+* Windows (CPU, CUDA, DX11)
+* Mac (beta, tested on Sierra)
 * Linux (beta, tested on Ubuntu 16.04.1 LTS x64)
 * PlayStation 4 (beta) with PS4 SDK 4.5
 * Xbox one (CPU, DX11, beta)
@@ -16,6 +16,15 @@ Supported compilers (via cmake 3.7)
 * PlayStation 4: Visual studio 14 (2015)
 * Xbox one: Visual studio 14 (2015)
 
+Fixed:
+Air drag/lift did react to flow speed only linearly, model was changed to be more physically correct.
+Fixed issue where scaling units would result in different air drag/lift behavior (by adding fluid density parameter).
+Fixed "unused typedef `__t100`" warning in xcode.
+
+Known issues:
+DirectX 11 solver has issues with ccd sphere/capsule collision.
+
+[1.1.0]
 Fixed:
 DirectX 11 solver now supports triangle collision shapes and air drag/lift.
 Fixed bug where changing friction on cloth already in simulation would cause assert or crash.

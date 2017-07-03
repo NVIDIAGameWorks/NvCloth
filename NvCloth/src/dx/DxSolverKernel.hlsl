@@ -202,7 +202,8 @@ void applyWind(IParticles curParticles, IParticles prevParticles, uint32_t threa
 {
 	const float dragCoefficient = gFrameData.mDragCoefficient;
 	const float liftCoefficient = gFrameData.mLiftCoefficient;
-
+	const float fluidDensity = gFrameData.mFluidDensity;
+	const float itrDt = gFrameData.mIterDt;
 	if(dragCoefficient == 0.0f && liftCoefficient == 0.0f)
 		return;
 
@@ -258,20 +259,22 @@ void applyWind(IParticles curParticles, IParticles prevParticles, uint32_t threa
 
 		float3 normal = cross(c2.xyz - c0.xyz, c1.xyz - c0.xyz);
 
-		float doubleArea = sqrt(dot(normal, normal));
+		const float doubleArea = sqrt(dot(normal, normal));
+		normal = normal / doubleArea;
 
 		float invSqrScale = dot(delta, delta);
 		float scale = rsqrt(invSqrScale);
+		float deltaLength = sqrt(invSqrScale);
 
-		float cosTheta = dot(normal, delta) * scale / doubleArea;
+		float cosTheta = dot(normal, delta) * scale;
 		float sinTheta = sqrt(max(0.0f, 1.0f - cosTheta * cosTheta));
 
 		float3 liftDir = cross(cross(delta, normal), scale * delta);
 
-		float3 lift = liftCoefficient * cosTheta * sinTheta * liftDir;
-		float3 drag = dragCoefficient * abs(cosTheta) * doubleArea * delta;
+		float3 lift = liftCoefficient * cosTheta * sinTheta * liftDir * deltaLength / itrDt;
+		float3 drag = dragCoefficient * abs(cosTheta) * delta * deltaLength / itrDt;
 
-		float3 impulse = invSqrScale < 1.192092896e-07F ? float3(0.0f, 0.0f, 0.0f) : lift + drag;
+		float3 impulse = invSqrScale < 1.192092896e-07F ? float3(0.0f, 0.0f, 0.0f) : (lift + drag) * fluidDensity * doubleArea;
 
 		curParticles.atomicAdd(i0, -impulse * c0.w);
 		curParticles.atomicAdd(i1, -impulse * c1.w);

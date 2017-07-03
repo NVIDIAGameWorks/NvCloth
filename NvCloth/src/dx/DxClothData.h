@@ -46,7 +46,7 @@ typedef unsigned int uint32_t;
 typedef int int32_t;
 #endif
 
-static const uint32_t MaxParticlesInSharedMem = 1972;
+static const uint32_t MaxParticlesInSharedMem = 1971;
 
 
 struct DxPhaseConfig
@@ -167,6 +167,7 @@ struct DxFrameData
 	// wind data
 	float mDragCoefficient;
 	float mLiftCoefficient;
+	float mFluidDensity;
 	float mRotation[9];
 
 	// motion constraint data

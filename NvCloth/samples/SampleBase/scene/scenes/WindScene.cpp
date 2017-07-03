@@ -35,7 +35,7 @@ void WindScene::Animate(double dt)
 
 		for(int i = 0; i < 3; i++)
 		{
-			physx::PxVec3 wind = physx::PxVec3(dvx, vy, dvz);
+			physx::PxVec3 wind = physx::PxVec3(dvx, vy, dvz)/5.0f;
 			mClothActor[i]->mCloth->setWindVelocity(wind);
 		}
 	}

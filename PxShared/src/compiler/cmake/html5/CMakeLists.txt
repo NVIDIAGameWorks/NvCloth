@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.3)
+PROJECT(PxShared CXX)
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 include(../common/CMakeLists.txt)
 
 
 IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to HTML5
-	SET(TARGET_BUILD_PLATFORM "HTML5")
+	SET(TARGET_BUILD_PLATFORM "html5")
 ENDIF()
 
 SET(PLATFORM_LIST HTML5)

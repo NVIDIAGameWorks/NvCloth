@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
 
-PROJECT(PxShared CXX)
-
 CMAKE_POLICY(SET CMP0057 NEW) # Enable IN_LIST
 
 IF(DEFINED ENV{GW_DEPS_ROOT})

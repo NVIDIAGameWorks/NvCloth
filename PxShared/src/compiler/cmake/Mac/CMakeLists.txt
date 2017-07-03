@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.3)
+PROJECT(PxShared CXX)
 include(../common/CMakeLists.txt)
 
 
-IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to Mac
-	SET(TARGET_BUILD_PLATFORM "Mac")
+IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to mac
+	SET(TARGET_BUILD_PLATFORM "mac")
 ENDIF()
 
-SET(PLATFORM_LIST Mac)
+SET(PLATFORM_LIST mac)
 
 IF (NOT ${TARGET_BUILD_PLATFORM} IN_LIST PLATFORM_LIST)
 	MESSAGE(FATAL_ERROR "Invalid platform:" ${TARGET_BUILD_PLATFORM})

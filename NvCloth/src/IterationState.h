@@ -137,7 +137,7 @@ struct IterationState
 
 	Simd4f mCurBias;  // in local space
 	Simd4f mPrevBias; // in local space
-	Simd4f mWind;     // delta position per iteration
+	Simd4f mWind;     // delta position per iteration (wind velocity * mIterDt)
 
 	Simd4f mPrevMatrix[3];
 	Simd4f mCurMatrix[3];
@@ -290,7 +290,7 @@ cloth::IterationState<Simd4f> cloth::IterationStateFactory::create(MyCloth const
 	result.mCurBias = transform(result.mRotationMatrix, curLinearInertia + bias) & maskXYZ;
 	result.mPrevBias = transform(result.mRotationMatrix, linearInertia - curLinearInertia) & maskXYZ;
 
-	Simd4f wind = load(array(cloth.mWind)) * iterDt;
+	Simd4f wind = load(array(cloth.mWind)) * iterDt; // multiply with delta time here already so we don't have to do it inside the solver
 	result.mWind = transform(result.mRotationMatrix, translation - wind) & maskXYZ;
 
 	result.mIsTurning = mPrevAngularVelocity.magnitudeSquared() + cloth.mAngularVelocity.magnitudeSquared() > 0.0f;

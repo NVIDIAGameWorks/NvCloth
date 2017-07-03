@@ -157,6 +157,8 @@ class ClothImpl : public Cloth
 	virtual float getDragCoefficient() const;
 	virtual void setLiftCoefficient(float);
 	virtual float getLiftCoefficient() const;
+	virtual void setFluidDensity(float);
+	virtual float getFluidDensity() const;
 
 	virtual void setSelfCollisionDistance(float);
 	virtual float getSelfCollisionDistance() const;
@@ -216,6 +218,7 @@ public: //Fields shared between all cloth classes
 	physx::PxVec3 mWind;
 	float mDragLogCoefficient;
 	float mLiftLogCoefficient;
+	float mFluidDensity;
 
 	// sleeping
 	uint32_t mSleepTestInterval; // how often to test for movement
@@ -313,7 +316,8 @@ inline physx::PxVec3 ClothImpl<T>::getGravity() const
 
 inline float safeLog2(float x)
 {
-	return x ? physx::shdfnd::log2(x) : -FLT_MAX_EXP;
+	NV_CLOTH_ASSERT(("safeLog2",x >= 0.0f));
+	return x > 0 ? physx::shdfnd::log2(x) : -FLT_MAX_EXP;
 }
 
 inline physx::PxVec3 safeLog2(const physx::PxVec3& v)
@@ -1214,10 +1218,29 @@ inline float ClothImpl<T>::getLiftCoefficient() const
 }
 
 template <typename T>
+inline void ClothImpl<T>::setFluidDensity(float fluidDensity)
+{
+	NV_CLOTH_ASSERT(fluidDensity < 0.f);
+	if (fluidDensity == mFluidDensity)
+		return;
+
+	mFluidDensity = fluidDensity;
+	getChildCloth()->notifyChanged();
+	wakeUp();
+}
+
+template <typename T>
+inline float ClothImpl<T>::getFluidDensity() const
+{
+	return mFluidDensity;
+}
+
+template <typename T>
 inline uint32_t ClothImpl<T>::getNumSelfCollisionIndices() const
 {
 	return uint32_t(getChildCloth()->mSelfCollisionIndices.size());
 }
+
 
 // Fixed 4505:local function has been removed
 template <typename T>
@@ -1255,6 +1278,7 @@ inline float ClothImpl<T>::getSelfCollisionDistance() const
 template <typename T>
 inline void ClothImpl<T>::setSelfCollisionStiffness(float stiffness)
 {
+	NV_CLOTH_ASSERT(stiffness <= 1.0f);
 	float value = safeLog2(1 - stiffness);
 	if (value == getChildCloth()->mSelfCollisionLogStiffness)
 		return;

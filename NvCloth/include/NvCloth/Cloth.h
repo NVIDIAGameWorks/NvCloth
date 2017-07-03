@@ -376,6 +376,10 @@ class Cloth : public UserAllocated
 	virtual void setLiftCoefficient(float) = 0;
 	///Returns value set with setLiftCoefficient().
 	virtual float getLiftCoefficient() const = 0;
+	/** /brief Sets the fluid density used for air drag/lift calculations. */
+	virtual void setFluidDensity(float) = 0;
+	///Returns value set with setFluidDensity().
+	virtual float getFluidDensity() const = 0;
 
 	/* self collision */
 

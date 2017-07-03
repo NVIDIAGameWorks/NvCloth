@@ -13,7 +13,7 @@ FIND_PATH(		NVTOOLSEXT_INCLUDE_DIRS nvToolsExt.h
 
 INCLUDE(FindPackageHandleStandardArgs)
 				
-IF(TARGET_BUILD_PLATFORM STREQUAL "Windows")
+IF(TARGET_BUILD_PLATFORM STREQUAL "windows")
 	# NOTE: Doesn't make sense for all platforms - ARM
 	IF(CMAKE_CL_64)
 		SET(NVTOOLSEXT_LIBNAME "nvToolsExt64_1")

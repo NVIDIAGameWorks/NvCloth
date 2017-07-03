@@ -63,8 +63,9 @@ void PxGpuWorkerThread::blockingWaitFunc()
 		}
 		else if (!mFailureDetected)
 		{
-			emitStartEvent("GpuDispatcher.BlockingWaitEvent");
-
+#if PX_SUPPORT_PXTASK_PROFILING
+			PX_PROFILE_ZONE("GpuDispatcher.BlockingWaitEvent", 0);
+#endif
 			if (1 & ~intptr_t(b.blockingStream))
 			{
 				GD_CHECK_CALL(cuStreamSynchronize(b.blockingStream));
@@ -73,8 +74,6 @@ void PxGpuWorkerThread::blockingWaitFunc()
 			{
 				GD_CHECK_CALL(cuEventSynchronize(b.blockingEvent));
 			}
-
-			emitStopEvent("GpuDispatcher.BlockingWaitEvent");
 		}
 
 		if (b.blockingEvent)

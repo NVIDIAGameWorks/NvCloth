@@ -384,9 +384,13 @@ T4f calculateMaxDelta(const T4f* prevIt, const T4f* curIt, const T4f* curEnd)
 
 template <bool IsTurning, typename T4f>
 void applyWind(T4f* __restrict curIt, const T4f* __restrict prevIt, const uint16_t* __restrict tIt,
-               const uint16_t* __restrict tEnd, T4f dragCoefficient, T4f liftCoefficient, T4f wind,
+               const uint16_t* __restrict tEnd, float itrDtf, float dragCoefficientf, float liftCoefficientf, float fluidDensityf, T4f wind,
                const T4f (&rotation)[3])
 {
+	const T4f dragCoefficient = simd4f(dragCoefficientf);
+	const T4f liftCoefficient = simd4f(liftCoefficientf);
+	const T4f fluidDensity = simd4f(fluidDensityf);
+	const T4f itrDt = simd4f(itrDtf);
 	const T4f oneThird = simd4f(1.0f / 3.0f);
 
 	for (; tIt < tEnd; tIt += 3)
@@ -410,7 +414,7 @@ void applyWind(T4f* __restrict curIt, const T4f* __restrict prevIt, const uint16
 		T4f previous = oneThird * (p0 + p1 + p2);
 
 		//offset of the triangle center, including wind
-		T4f delta = current - previous + wind;
+		T4f delta = current - previous + wind; //wind is also already multiplied by dt in the iteration state so everything it in the same units
 
 		if (IsTurning)
 		{
@@ -423,23 +427,25 @@ void applyWind(T4f* __restrict curIt, const T4f* __restrict prevIt, const uint16
 		T4f normal = cross3(c2 - c0, c1 - c0);
 
 		T4f doubleArea = sqrt(dot3(normal, normal));
+		normal = normal / doubleArea;
 
 		T4f invSqrScale = dot3(delta, delta);
 		T4f isZero = invSqrScale < gSimd4fEpsilon;
 		T4f scale = rsqrt(invSqrScale);
+		T4f deltaLength = sqrt(invSqrScale);
 
 		//scale 'normalizes' delta, doubleArea normalized normal
-		T4f cosTheta = dot3(normal, delta) * scale / doubleArea;
+		T4f cosTheta = dot3(normal, delta) * scale;
 		T4f sinTheta = sqrt(max(gSimd4fZero, gSimd4fOne - cosTheta * cosTheta));
 
 		// orthogonal to delta, in delta-normal plane, same length as delta
 		T4f liftDir = cross3(cross3(delta, normal), delta * scale);
 
 		// sin(theta) * cos(theta) = 0.5 * sin(2 * theta)
-		T4f lift = liftCoefficient * cosTheta * sinTheta * liftDir;
-		T4f drag = dragCoefficient * abs(cosTheta) * doubleArea * delta; //dragCoefficient should compensate for double area
+		T4f lift = liftCoefficient * cosTheta * sinTheta * liftDir * deltaLength / itrDt;
+		T4f drag = dragCoefficient * abs(cosTheta) * delta * deltaLength / itrDt; 
 
-		T4f impulse = (lift + drag) & ~isZero;
+		T4f impulse = (drag + lift) * fluidDensity * doubleArea & ~isZero; //fluidDensity compensates for double area
 
 		curIt[i0] = c0 - impulse * splat<3>(c0);
 		curIt[i1] = c1 - impulse * splat<3>(c1);
@@ -668,17 +674,14 @@ void cloth::SwSolverKernel<T4f>::applyWind()
 	const uint16_t* tIt = mClothData.mTriangles;
 	const uint16_t* tEnd = tIt + 3 * mClothData.mNumTriangles;
 
-	T4f dragCoefficient = simd4f(mClothData.mDragCoefficient);
-	T4f liftCoefficient = simd4f(mClothData.mLiftCoefficient);
-
 	if (mState.mIsTurning)
 	{
-		::applyWind<true>(curIt, prevIt, tIt, tEnd, dragCoefficient, liftCoefficient, mState.mWind,
+		::applyWind<true>(curIt, prevIt, tIt, tEnd, mState.mIterDt, mClothData.mDragCoefficient, mClothData.mLiftCoefficient, mClothData.mFluidDensity, mState.mWind,
 		                  mState.mRotationMatrix);
 	}
 	else
 	{
-		::applyWind<false>(curIt, prevIt, tIt, tEnd, dragCoefficient, liftCoefficient, mState.mWind,
+		::applyWind<false>(curIt, prevIt, tIt, tEnd, mState.mIterDt, mClothData.mDragCoefficient, mClothData.mLiftCoefficient, mClothData.mFluidDensity, mState.mWind,
 		                   mState.mRotationMatrix);
 	}
 }

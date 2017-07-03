@@ -23,7 +23,7 @@
 // components in life support devices or systems without express written approval of
 // NVIDIA Corporation.
 //
-// Copyright (c) 2008-2014 NVIDIA Corporation. All rights reserved.
+// Copyright (c) 2008-2017 NVIDIA Corporation. All rights reserved.
 
 #include "foundation/PxAssert.h"
 #include "foundation/PxErrorCallback.h"
@@ -88,102 +88,6 @@ static void* GetProcAddress(void* handle, const char* name) { return dlsym(handl
 
 #define ENABLE_DEVICE_INFO_BRINGUP	0
 
-#include "GPUProfile.h"
-
-#if ENABLE_CUDA_DEVICE_RESET
-#include "cudaProfiler.h"
-#endif
-
-#if USE_PERFKIT
-#pragma warning (push)
-#pragma warning (disable : 4099)
-#pragma warning (disable : 4191)
-#define NVPM_INITGUID
-#include <stdio.h>
-#include "cuda.h"
-#include "../../../../../../../externals/nvPerfKit/4.1.0.14260/inc/NvPmApi.Manager.h"
-static NvPmApiManager S_NVPMManager;
-extern NvPmApiManager *GetNvPmApiManager() {return &S_NVPMManager;}
-const NvPmApi *GetNvPmApi() {return S_NVPMManager.Api();}
-NVPMContext hNVPMContext(0);
-
-void initPerfKit()
-{
-	//Sync with GPU
-	cuCtxSynchronize();
-	
-	// Reset counters
-	uint32_t nCount;
-	GetNvPmApi()->Sample(hNVPMContext, NULL, &nCount);
-}
-
-void endPerfKit()
-{
-	//Sync with GPU
-	cuCtxSynchronize();
-	
-	uint32_t nCount;
-	GetNvPmApi()->Sample(hNVPMContext, NULL, &nCount);
-	
-	uint64_t value;
-	uint64_t cycle;
-	
-	uint64_t sum = 0;
-	uint64_t maxVal = 0;
-	char name[512];
-
-	int nvStatus = 0;
-
-	PX_UNUSED(value);
-	PX_UNUSED(cycle);
-	PX_UNUSED(sum);
-	PX_UNUSED(maxVal);
-	PX_UNUSED(name);
-	PX_UNUSED(nvStatus);
-
-	printf("counters:\n");
-
-#if COUNT_L2_TO_L1_BYTES
-	nvStatus |= GetNvPmApi()->GetCounterValueByName(hNVPMContext, "l2_read_bytes", 0, &value, &cycle);
-	printf("L2->L1 bytes %d\n",value);
-#elif COUNT_SM_TO_L1_QUERIES
-	nvStatus |= GetNvPmApi()->GetCounterValueByName(hNVPMContext, "tex_cache_sector_queries", 0, &value, &cycle);
-	printf("SM->L1 queries %d\n",value);
-#endif
-
-#if COUNT_INST_EXECUTED || COUNT_STORE_INST_EXECUTED || COUNT_ACTIVE_CYCLES || COUNT_ACTIVE_WARPS
-	for (int i = 0; i != SM_COUNT; i++)
-	{
-#if COUNT_INST_EXECUTED
-		sprintf_s(name, 512, "sm_inst_executed_vsm%d", i);
-#elif COUNT_STORE_INST_EXECUTED
-		sprintf_s(name, 512, "sm_inst_executed_global_stores_vsm%d", i);
-#elif COUNT_ACTIVE_CYCLES
-		sprintf_s(name, 512, "sm_active_cycles_vsm%d", i);
-#elif COUNT_ACTIVE_WARPS
-		sprintf_s(name, 512, "sm_active_warps_vsm%d", i);
-#endif
-		nvStatus |= GetNvPmApi()->GetCounterValueByName(hNVPMContext, name, 0, &value, &cycle);
-		
-		sum += value;
-		maxVal = physx::PxMax(maxVal, value);
-	}
-#if COUNT_ACTIVE_CYCLES
-	printf("sum %I64d\n", sum);
-#else
-	printf("sum %I64d\n", sum);
-#endif
-
-	if (!nvStatus)
-	{
-		PX_ASSERT(false);
-	}
-#endif
-}
-
-#pragma warning (pop)
-#endif
-
 namespace physx
 {
 
@@ -201,7 +105,7 @@ public:
 	~CudaCtxMgr();
 
 	bool            safeDelayImport(PxErrorCallback& errorCallback);
-	CUcontext       acquireContext();
+	void            acquireContext();
 	void            releaseContext();
 
 	/* All these methods can be called without acquiring the context */
@@ -219,6 +123,7 @@ public:
 	bool            supportsArchSM35() const;  // GK110
 	bool            supportsArchSM50() const;  // GM100
 	bool            supportsArchSM52() const;  // GM200
+	bool            supportsArchSM60() const;  // GP100
 	bool            isIntegrated() const;      // true if GPU is integrated (MCP) part
 	bool            canMapHostMemory() const;  // true if GPU map host memory to GPU
 	int             getDriverVersion() const;
@@ -230,6 +135,7 @@ public:
 	unsigned int	getClockRate() const;
 
 	const char*     getDeviceName() const;
+	CUdevice		getDevice() const;
 	const CUdevprop* getDeviceProperties() const;
 
 	PxCudaInteropMode::Enum	getInteropMode() const;
@@ -250,6 +156,8 @@ public:
 	int				usingDedicatedGPU() const;
 
 	void            release();
+
+	CUcontext		getContext() { return mCtx; }
 
 private:
 
@@ -330,6 +238,10 @@ bool CudaCtxMgr::supportsArchSM52() const
 {
 	return mIsValid && ((mComputeCapMajor > 5) || (mComputeCapMajor == 5 && mComputeCapMinor >= 2));
 }
+bool CudaCtxMgr::supportsArchSM60() const
+{
+	return mIsValid && mComputeCapMajor >= 6;
+}
 
 bool CudaCtxMgr::isIntegrated() const
 {
@@ -377,6 +289,18 @@ const char* CudaCtxMgr::getDeviceName() const
 	else
 	{
 		return "Invalid";
+	}
+}
+
+CUdevice CudaCtxMgr::getDevice() const
+{
+	if (mIsValid)
+	{
+		return mDevHandle;
+	}
+	else
+	{
+		return -1;
 	}
 }
 
@@ -504,8 +428,7 @@ CudaCtxMgr::CudaCtxMgr(const PxCudaContextManagerDesc& desc, PxErrorCallback& er
 
 		if (PhysXDeviceSettings::isUsingDedicatedGPU() == 1 || sliEnabled)
 		{
-			if (mInteropMode == PxCudaInteropMode::D3D9_INTEROP ||
-				mInteropMode == PxCudaInteropMode::D3D10_INTEROP ||
+			if (mInteropMode == PxCudaInteropMode::D3D10_INTEROP ||
 				mInteropMode == PxCudaInteropMode::D3D11_INTEROP)
 			{
 				mInteropMode = PxCudaInteropMode::NO_INTEROP;
@@ -562,18 +485,6 @@ CudaCtxMgr::CudaCtxMgr(const PxCudaContextManagerDesc& desc, PxErrorCallback& er
 			mOwnContext = true;
 		}
 #if PX_WIN32 || PX_WIN64
-		else if (mInteropMode == PxCudaInteropMode::D3D9_INTEROP)
-		{
-			status = cuD3D9CtxCreate(&mCtx, &mDevHandle, (unsigned int)flags,
-			                         reinterpret_cast<IDirect3DDevice9*>(desc.graphicsDevice));
-
-			if (CUDA_SUCCESS != status)
-			{
-				errorCallback.reportError(PxErrorCode::eDEBUG_WARNING, "cuD3D9CtxCreate failed",__FILE__,__LINE__);
-				return;
-			}
-			mOwnContext = true;
-		}
 		else if (mInteropMode == PxCudaInteropMode::D3D10_INTEROP)
 		{
 			status = cuD3D10CtxCreate(&mCtx, &mDevHandle, (unsigned int)flags,
@@ -710,73 +621,6 @@ CudaCtxMgr::CudaCtxMgr(const PxCudaContextManagerDesc& desc, PxErrorCallback& er
 	errorCallback.reportError(PxErrorCode::eDEBUG_INFO, "Number of SM: %d", mMultiprocessorCount);
 	errorCallback.reportError(PxErrorCode::eDEBUG_INFO, "Max Threads Per Block: %d", mMaxThreadsPerBlock);
 #endif
-
-#if USE_PERFKIT
-	{
-#if _WIN64
-		wchar_t * dllName = L"..\\..\\..\\..\\..\\externals\\nvPerfKit\\4.1.0.14260\\bin\\win7_x64\\NvPmApi.Core.dll";
-#else
-		wchar_t * dllName = L"..\\..\\..\\..\\..\\externals\\nvPerfKit\\4.1.0.14260\\bin\\win7_x86\\NvPmApi.Core.dll";
-#endif
-
-		NVPMRESULT nvResult;
-
-		if ((nvResult = GetNvPmApiManager()->Construct(dllName)) != NVPM_OK)
-		{
-			printf("perfkit error 1\n");
-			return; 
-		}
-
-		if ((nvResult = GetNvPmApi()->Init()) != NVPM_OK)
-		{
-			printf("perfkit error 2\n");
-			return; 
-		}
-
-		acquireContext();
-
-		CUcontext ctx;
-		cuCtxGetCurrent(&ctx);
-		if ((nvResult = GetNvPmApi()->CreateContextFromCudaContext((APIContextHandle)ctx, &hNVPMContext)) != NVPM_OK)
-		{
-			printf("perfkit error 3\n");
-			return; // This is an error condition
-		}
-
-		uint32_t nvStatus = 0;
-
-#if COUNT_L2_TO_L1_BYTES
-		nvStatus |= GetNvPmApi()->AddCounterByName(hNVPMContext, "l2_read_bytes");
-#elif COUNT_SM_TO_L1_QUERIES
-		nvStatus |= GetNvPmApi()->AddCounterByName(hNVPMContext, "tex_cache_sector_queries");
-#endif
-
-#if COUNT_INST_EXECUTED || COUNT_STORE_INST_EXECUTED || COUNT_ACTIVE_CYCLES || COUNT_ACTIVE_WARPS
-		char name[512];
-		for (int i = 0; i != SM_COUNT; i++)
-		{
-#if COUNT_INST_EXECUTED
-			sprintf_s(name,512,"sm_inst_executed_vsm%d",i);
-#elif COUNT_STORE_INST_EXECUTED
-			sprintf_s(name, 512, "sm_inst_executed_global_stores_vsm%d",i);
-#elif COUNT_ACTIVE_CYCLES
-			sprintf_s(name, 512, "sm_active_cycles_vsm%d",i);
-#elif COUNT_ACTIVE_WARPS
-			sprintf_s(name, 512, "sm_active_warps_vsm%d",i);
-#endif
-			nvStatus |= GetNvPmApi()->AddCounterByName(hNVPMContext, name);
-		}
-#elif COUNT_GPU_BUSY
-		nvStatus |= GetNvPmApi()->AddCounterByName(hNVPMContext, "gpu_busy");
-#endif
-
-		if (nvStatus != 0)
-		{
-			printf("perfkit error 4\n");
-			return; // This is an error condition
-		}
-	}
-#endif
 }
 
 /* Some driver version mismatches can cause delay import crashes.  Load NVCUDA.dll
@@ -871,10 +715,6 @@ CudaCtxMgr::~CudaCtxMgr()
 	if(!--mManagerRefCount)
 		 shdfnd::TlsFree(mContextRefCountTls);
 #endif
-
-#if ENABLE_CUDA_DEVICE_RESET
-	CUT_SAFE_CALL(cuProfilerStop());
-#endif
 }
 
 bool CudaCtxMgr::registerResourceInCudaGL(CUgraphicsResource& resource, uint32_t buffer, PxCudaInteropRegisterFlags flags)
@@ -900,9 +740,6 @@ bool CudaCtxMgr::registerResourceInCudaD3D(CUgraphicsResource& resource, void* r
 
 	switch (mInteropMode)
 	{
-	case PxCudaInteropMode::D3D9_INTEROP:
-		ret = cuGraphicsD3D9RegisterResource(&resource, (IDirect3DResource9*)resourcePointer, uint32_t(flags));
-		break;
 	case PxCudaInteropMode::D3D10_INTEROP:
 		ret = cuGraphicsD3D10RegisterResource(&resource, (ID3D10Resource*)resourcePointer, uint32_t(flags));
 		break;
@@ -938,7 +775,7 @@ bool CudaCtxMgr::unregisterResourceInCuda(CUgraphicsResource resource)
 	return ret == CUDA_SUCCESS;
 }
 
-CUcontext CudaCtxMgr::acquireContext()
+void CudaCtxMgr::acquireContext()
 {
 	CUcontext ctx = 0;
 	CUT_SAFE_CALL(cuCtxGetCurrent(&ctx));
@@ -955,8 +792,6 @@ CUcontext CudaCtxMgr::acquireContext()
 	char* refCount = (char*)shdfnd::TlsGet(mContextRefCountTls);
 	shdfnd::TlsSet(mContextRefCountTls, ++refCount);
 #endif
-
-	return mCtx;
 }
 
 void CudaCtxMgr::releaseContext()

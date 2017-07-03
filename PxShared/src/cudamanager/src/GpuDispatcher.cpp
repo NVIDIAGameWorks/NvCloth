@@ -487,21 +487,6 @@ PxGpuWorkerThread::~PxGpuWorkerThread()
 	}
 }
 
-void PxGpuWorkerThread::emitStartEvent(const char *id)
-{
-	PX_UNUSED(id);
-#if PX_SUPPORT_PXTASK_PROFILING
-	PX_PROFILE_START_CROSSTHREAD(id,0);
-#endif
-}
-
-void PxGpuWorkerThread::emitStopEvent(const char *id)
-{
-	PX_UNUSED(id);
-#if PX_SUPPORT_PXTASK_PROFILING
-	PX_PROFILE_STOP_CROSSTHREAD(id,0);
-#endif
-}
 
 /* A TaskManager is informing us that its simulation is being stepped */
 void PxGpuWorkerThread::startSimulation()
@@ -555,15 +540,14 @@ void PxGpuWorkerThread::execute()
  */
 void PxGpuWorkerThread::addCompletionPrereq(PxBaseTask& task)
 {
-	if (mFailureDetected)
-	{
+	if(mFailureDetected)
 		return;
-	}
 
-	emitStartEvent("GpuDispatcher.AddCompletionEvent");
+#if PX_SUPPORT_PXTASK_PROFILING
+	PX_PROFILE_ZONE("GpuDispatcher.AddCompletionEvent", task.getContextId());
+#endif
 	task.addReference();
 	mCompletionTasks.pushBack(&task);
-	emitStopEvent("GpuDispatcher.AddCompletionEvent");
 }
 
 namespace
@@ -757,7 +741,9 @@ void PxGpuWorkerThread::pollSubmitted(shdfnd::Array<ReadyTask>* ready)
 
 void PxGpuWorkerThread::processActiveTasks()
 {
-	emitStartEvent("GpuDispatcher.ProcessTasksEvent");
+#if PX_SUPPORT_PXTASK_PROFILING
+	PX_PROFILE_ZONE("GpuDispatcher.ProcessTasksEvent", 0);	// PT: TODO: fix invalid context
+#endif
 	
 	if (mFailureDetected)
 	{
@@ -766,7 +752,6 @@ void PxGpuWorkerThread::processActiveTasks()
 			mInputReady.reset();
 			mSubmittedTaskList.popBack()->release();
 		}
-		emitStopEvent("GpuDispatcher.ProcessTasksEvent");
 		return;
 	}
 
@@ -824,13 +809,16 @@ void PxGpuWorkerThread::processActiveTasks()
 				else
 				{
 					const CUstream s = (r.task->mStreamIndex > 0) ? mCachedStreams.get(r.task->mStreamIndex) : 0;
+
+					bool active;
+					{
 #if PX_PROFILE
-					r.task->mTm->emitStartEvent(*r.task);
+#if PX_SUPPORT_PXTASK_PROFILING
+						PX_PROFILE_ZONE(r.task->getName(), r.task->getContextId());
 #endif
-					bool active = r.task->launchInstance(s, int(r.iteration++));
-#if PX_PROFILE
-					r.task->mTm->emitStopEvent(*r.task);
 #endif
+						active = r.task->launchInstance(s, int(r.iteration++));
+					}
 					if(singleStream != r.task->mStreamIndex)
 						singleStream = 0;
 
@@ -935,8 +923,6 @@ void PxGpuWorkerThread::processActiveTasks()
 	while (tasksRemain);
 
 	mCachedNonBlockingEvents.add(nonBlockEv);
-
-	emitStopEvent("GpuDispatcher.ProcessTasksEvent");
 }
 
 #endif

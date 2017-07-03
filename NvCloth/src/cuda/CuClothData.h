@@ -135,6 +135,7 @@ struct CuFrameData
 	// wind data
 	float mDragCoefficient;
 	float mLiftCoefficient;
+	float mFluidDensity;
 	float mRotation[9];
 
 	// motion constraint data

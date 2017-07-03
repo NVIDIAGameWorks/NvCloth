@@ -867,6 +867,8 @@ __device__ void applyWind(CurrentT& current, PreviousT& previous)
 {
 	const float dragCoefficient = gFrameData.mDragCoefficient;
 	const float liftCoefficient = gFrameData.mLiftCoefficient;
+	const float fluidDensity = gFrameData.mFluidDensity;
+	const float itrDt = gFrameData.mIterDt;
 
 	if (dragCoefficient == 0.0f && liftCoefficient == 0.0f)
 		return;
@@ -912,20 +914,22 @@ __device__ void applyWind(CurrentT& current, PreviousT& previous)
 
 		float3 normal = cross3(c2 - c0, c1 - c0);
 
-		float doubleArea = sqrtf(dot3(normal, normal));
+		const float doubleArea = sqrtf(dot3(normal, normal));
+		normal = (1.0f / doubleArea) * normal;
 
 		float invSqrScale = dot3(delta, delta);
 		float scale = rsqrtf(invSqrScale);
+		float deltaLength = sqrtf(invSqrScale);
 
-		float cosTheta = dot3(normal, delta) * scale / doubleArea;
+		float cosTheta = dot3(normal, delta) * scale;
 		float sinTheta = sqrtf(max(0.0f, 1.0f - cosTheta * cosTheta));
 
 		float3 liftDir = cross3(cross3(delta, normal), scale * delta);
 
-		float3 lift = liftCoefficient * cosTheta * sinTheta * liftDir;
-		float3 drag = dragCoefficient * abs(cosTheta) * doubleArea * delta;
+		float3 lift = liftCoefficient * cosTheta * sinTheta * ((deltaLength / itrDt) * liftDir);
+		float3 drag = dragCoefficient * abs(cosTheta) * ((deltaLength / itrDt) * delta);
 
-		float3 impulse = invSqrScale < FLT_EPSILON ? make_float3(0.0f, 0.0f, 0.0f) : lift + drag;
+		float3 impulse = invSqrScale < FLT_EPSILON ? make_float3(0.0f, 0.0f, 0.0f) : fluidDensity * doubleArea * (lift + drag);
 
 		applyImpulse(current(i0), impulse);
 		applyImpulse(current(i1), impulse);

@@ -74,6 +74,7 @@ void initialize(Cloth& cloth, const physx::PxVec4* pIt, const physx::PxVec4* pEn
 	cloth.mWind = physx::PxVec3(0.0f);
 	cloth.mDragLogCoefficient = 0.0f;
 	cloth.mLiftLogCoefficient = 0.0f;
+	cloth.mFluidDensity = 1.0f;
 	cloth.mEnableContinuousCollision = false;
 	cloth.mCollisionMassScale = 0.0f;
 	cloth.mFriction = 0.0f;

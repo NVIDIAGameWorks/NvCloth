@@ -42,7 +42,7 @@
 
 // "exact"
 #define VRECIPQ recipq_newton<4>
-#if PX_NX
+#if PX_SWITCH
 // StabilizationTests.AveragePoint needs more precision to succeed.
 #define VRECIP recip_newton<5> 
 #else
