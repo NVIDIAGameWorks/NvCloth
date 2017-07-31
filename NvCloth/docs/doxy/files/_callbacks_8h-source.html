@@ -117,71 +117,86 @@
 <a name="l00099"></a>00099 <span class="preprocessor">#if !PX_ENABLE_ASSERTS</span>
 <a name="l00100"></a>00100 <span class="preprocessor"></span><span class="preprocessor">#if PX_VC</span>
 <a name="l00101"></a>00101 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT(exp) __noop</span>
-<a name="l00102"></a>00102 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00103"></a><a class="code" href="_callbacks_8h.html#95d1d44fde08004dd6fa0be04be6a445">00103</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT(exp) ((void)0)</span>
-<a name="l00104"></a>00104 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00105"></a>00105 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00106"></a>00106 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT(exp)                                                                                           \</span>
-<a name="l00107"></a>00107 <span class="preprocessor">    {                                                                                                                  \</span>
-<a name="l00108"></a>00108 <span class="preprocessor">        static bool _ignore = false;                                                                                   \</span>
-<a name="l00109"></a>00109 <span class="preprocessor">        (static_cast&lt;void&gt;((!!(exp)) || (!_ignore &amp;&amp; ((*nv::cloth::GetNvClothAssertHandler())(#exp, __FILE__, __LINE__, _ignore), false))));    \</span>
-<a name="l00110"></a>00110 <span class="preprocessor">        PX_CODE_ANALYSIS_ASSUME(exp);                                                                                  \</span>
-<a name="l00111"></a>00111 <span class="preprocessor">    }</span>
-<a name="l00112"></a>00112 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00113"></a>00113 <span class="preprocessor"></span>
-<a name="l00114"></a>00114 <span class="comment">//Profiler</span>
-<a name="l00115"></a>00115 physx::PxProfilerCallback* GetNvClothProfiler(); <span class="comment">//Only use internally</span>
-<a name="l00116"></a>00116 <span class="preprocessor">#if PX_DEBUG || PX_CHECKED || PX_PROFILE || 1</span>
-<a name="l00117"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">00117</a> <span class="preprocessor"></span><span class="keyword">class </span><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">NvClothProfileScoped</a>
-<a name="l00118"></a>00118 {
-<a name="l00119"></a>00119   <span class="keyword">public</span>:
-<a name="l00120"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#eb4cd36d11aa03f05d05a6f18f8b41cb">00120</a>     PX_FORCE_INLINE <a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">NvClothProfileScoped</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* eventName, <span class="keywordtype">bool</span> detached, uint64_t contextId,
-<a name="l00121"></a>00121                                     <span class="keyword">const</span> <span class="keywordtype">char</span>* fileName, <span class="keywordtype">int</span> lineno, physx::PxProfilerCallback* callback)
-<a name="l00122"></a>00122     : mCallback(callback)
-<a name="l00123"></a>00123     {
-<a name="l00124"></a>00124         PX_UNUSED(fileName);
-<a name="l00125"></a>00125         PX_UNUSED(lineno);
-<a name="l00126"></a>00126         mProfilerData = NULL; <span class="comment">//nullptr doesn't work here on mac</span>
-<a name="l00127"></a>00127         <span class="keywordflow">if</span> (mCallback)
-<a name="l00128"></a>00128         {
-<a name="l00129"></a>00129             mEventName = eventName;
-<a name="l00130"></a>00130             mDetached = detached;
-<a name="l00131"></a>00131             mContextId = contextId;
-<a name="l00132"></a>00132             mProfilerData = mCallback-&gt;zoneStart(mEventName, mDetached, mContextId);
-<a name="l00133"></a>00133         }
-<a name="l00134"></a>00134     }
-<a name="l00135"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#803ffc5af708346f086454ca7c6948d9">00135</a>     ~<a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">NvClothProfileScoped</a>(<span class="keywordtype">void</span>)
-<a name="l00136"></a>00136     {
-<a name="l00137"></a>00137         <span class="keywordflow">if</span> (mCallback)
-<a name="l00138"></a>00138         {
-<a name="l00139"></a>00139             mCallback-&gt;zoneEnd(mProfilerData, mEventName, mDetached, mContextId);
-<a name="l00140"></a>00140         }
-<a name="l00141"></a>00141     }
-<a name="l00142"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#561c535d463cb4ef349db1b13b52761b">00142</a>     physx::PxProfilerCallback* mCallback;
-<a name="l00143"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#e4bae4fa99fd522f226143f9b7f8a0fb">00143</a>     <span class="keyword">const</span> <span class="keywordtype">char</span>* mEventName;
-<a name="l00144"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#3a008841539b432550e139510d84d987">00144</a>     <span class="keywordtype">bool</span> mDetached;
-<a name="l00145"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#dbbaf92e01e8d8cd7c2a80242a60c5a3">00145</a>     uint64_t mContextId;
-<a name="l00146"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#45731a72d188fd61afab53f65793ae6b">00146</a>     <span class="keywordtype">void</span>* mProfilerData;
-<a name="l00147"></a>00147 };
-<a name="l00148"></a>00148 
-<a name="l00149"></a><a class="code" href="_callbacks_8h.html#07a777d717c8c0eb9d8ae6d1b5db94ee">00149</a> <span class="preprocessor">#define NV_CLOTH_PROFILE_ZONE(x, y)                                                                                          \</span>
-<a name="l00150"></a>00150 <span class="preprocessor">    nv::cloth::NvClothProfileScoped PX_CONCAT(_scoped, __LINE__)(x, false, y, __FILE__, __LINE__, nv::cloth::GetNvClothProfiler())</span>
-<a name="l00151"></a><a class="code" href="_callbacks_8h.html#d31f06d741b7e7340058e66b64e8d1da">00151</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_START_CROSSTHREAD(x, y)                                                                             \</span>
-<a name="l00152"></a>00152 <span class="preprocessor">    (GetNvClothProfiler()!=nullptr?                                                                                        \</span>
-<a name="l00153"></a>00153 <span class="preprocessor">    GetNvClothProfiler()-&gt;zoneStart(x, true, y):nullptr)</span>
-<a name="l00154"></a><a class="code" href="_callbacks_8h.html#5c4305c0f359cd51e90391ce3847d4de">00154</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_STOP_CROSSTHREAD(profilerData, x, y)                                                                              \</span>
-<a name="l00155"></a>00155 <span class="preprocessor">    if (GetNvClothProfiler())                                                                                           \</span>
-<a name="l00156"></a>00156 <span class="preprocessor">    GetNvClothProfiler()-&gt;zoneEnd(profilerData, x, true, y)</span>
-<a name="l00157"></a>00157 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00158"></a>00158 <span class="preprocessor"></span>
-<a name="l00159"></a>00159 <span class="preprocessor">#define NV_CLOTH_PROFILE_ZONE(x, y)</span>
-<a name="l00160"></a>00160 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_START_CROSSTHREAD(x, y) nullptr</span>
-<a name="l00161"></a>00161 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_STOP_CROSSTHREAD(profilerData, x, y)</span>
-<a name="l00162"></a>00162 <span class="preprocessor"></span>
-<a name="l00163"></a>00163 <span class="preprocessor">#endif</span>
-<a name="l00164"></a>00164 <span class="preprocessor"></span>
-<a name="l00165"></a>00165 }
-<a name="l00166"></a>00166 }
+<a name="l00102"></a>00102 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT_WITH_MESSAGE(message, exp) __noop</span>
+<a name="l00103"></a>00103 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00104"></a><a class="code" href="_callbacks_8h.html#95d1d44fde08004dd6fa0be04be6a445">00104</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT(exp) ((void)0)</span>
+<a name="l00105"></a><a class="code" href="_callbacks_8h.html#7580256d644389afb1a6fbf123cd9747">00105</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT_WITH_MESSAGE(message, exp) ((void)0)</span>
+<a name="l00106"></a>00106 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00107"></a>00107 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00108"></a>00108 <span class="preprocessor"></span><span class="preprocessor">#if PX_VC</span>
+<a name="l00109"></a>00109 <span class="preprocessor"></span><span class="preprocessor">#define PX_CODE_ANALYSIS_ASSUME(exp)                                                                                   \</span>
+<a name="l00110"></a>00110 <span class="preprocessor">    __analysis_assume(!!(exp)) // This macro will be used to get rid of analysis warning messages if a PX_ASSERT is used</span>
+<a name="l00111"></a>00111 <span class="preprocessor"></span>                                                                 <span class="comment">// to "guard" illegal mem access, for example.</span>
+<a name="l00112"></a>00112 <span class="preprocessor">#else</span>
+<a name="l00113"></a>00113 <span class="preprocessor"></span><span class="preprocessor">#define PX_CODE_ANALYSIS_ASSUME(exp)</span>
+<a name="l00114"></a>00114 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00115"></a>00115 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT(exp)                                                                                           \</span>
+<a name="l00116"></a>00116 <span class="preprocessor">    {                                                                                                                  \</span>
+<a name="l00117"></a>00117 <span class="preprocessor">        static bool _ignore = false;                                                                                   \</span>
+<a name="l00118"></a>00118 <span class="preprocessor">        ((void)((!!(exp)) || (!_ignore &amp;&amp; ((*nv::cloth::GetNvClothAssertHandler())(#exp, __FILE__, __LINE__, _ignore), false))));    \</span>
+<a name="l00119"></a>00119 <span class="preprocessor">        PX_CODE_ANALYSIS_ASSUME(exp);                                                                                  \</span>
+<a name="l00120"></a>00120 <span class="preprocessor">    }</span>
+<a name="l00121"></a>00121 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_ASSERT_WITH_MESSAGE(message, exp)                                                                             \</span>
+<a name="l00122"></a>00122 <span class="preprocessor">    {                                                                                                                    \</span>
+<a name="l00123"></a>00123 <span class="preprocessor">        static bool _ignore = false;                                                                                     \</span>
+<a name="l00124"></a>00124 <span class="preprocessor">        ((void)((!!(exp)) || (!_ignore &amp;&amp; (physx::PxGetAssertHandler()(message, __FILE__, __LINE__, _ignore), false)))); \</span>
+<a name="l00125"></a>00125 <span class="preprocessor">        PX_CODE_ANALYSIS_ASSUME(exp);                                                                                    \</span>
+<a name="l00126"></a>00126 <span class="preprocessor">    }</span>
+<a name="l00127"></a>00127 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00128"></a>00128 <span class="preprocessor"></span>
+<a name="l00129"></a>00129 <span class="comment">//Profiler</span>
+<a name="l00130"></a>00130 physx::PxProfilerCallback* GetNvClothProfiler(); <span class="comment">//Only use internally</span>
+<a name="l00131"></a>00131 <span class="preprocessor">#if PX_DEBUG || PX_CHECKED || PX_PROFILE || 1</span>
+<a name="l00132"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">00132</a> <span class="preprocessor"></span><span class="keyword">class </span><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">NvClothProfileScoped</a>
+<a name="l00133"></a>00133 {
+<a name="l00134"></a>00134   <span class="keyword">public</span>:
+<a name="l00135"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#eb4cd36d11aa03f05d05a6f18f8b41cb">00135</a>     PX_FORCE_INLINE <a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">NvClothProfileScoped</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* eventName, <span class="keywordtype">bool</span> detached, uint64_t contextId,
+<a name="l00136"></a>00136                                     <span class="keyword">const</span> <span class="keywordtype">char</span>* fileName, <span class="keywordtype">int</span> lineno, physx::PxProfilerCallback* callback)
+<a name="l00137"></a>00137     : mCallback(callback)
+<a name="l00138"></a>00138     {
+<a name="l00139"></a>00139         PX_UNUSED(fileName);
+<a name="l00140"></a>00140         PX_UNUSED(lineno);
+<a name="l00141"></a>00141         mProfilerData = NULL; <span class="comment">//nullptr doesn't work here on mac</span>
+<a name="l00142"></a>00142         <span class="keywordflow">if</span> (mCallback)
+<a name="l00143"></a>00143         {
+<a name="l00144"></a>00144             mEventName = eventName;
+<a name="l00145"></a>00145             mDetached = detached;
+<a name="l00146"></a>00146             mContextId = contextId;
+<a name="l00147"></a>00147             mProfilerData = mCallback-&gt;zoneStart(mEventName, mDetached, mContextId);
+<a name="l00148"></a>00148         }
+<a name="l00149"></a>00149     }
+<a name="l00150"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#803ffc5af708346f086454ca7c6948d9">00150</a>     ~<a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html">NvClothProfileScoped</a>(<span class="keywordtype">void</span>)
+<a name="l00151"></a>00151     {
+<a name="l00152"></a>00152         <span class="keywordflow">if</span> (mCallback)
+<a name="l00153"></a>00153         {
+<a name="l00154"></a>00154             mCallback-&gt;zoneEnd(mProfilerData, mEventName, mDetached, mContextId);
+<a name="l00155"></a>00155         }
+<a name="l00156"></a>00156     }
+<a name="l00157"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#561c535d463cb4ef349db1b13b52761b">00157</a>     physx::PxProfilerCallback* mCallback;
+<a name="l00158"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#e4bae4fa99fd522f226143f9b7f8a0fb">00158</a>     <span class="keyword">const</span> <span class="keywordtype">char</span>* mEventName;
+<a name="l00159"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#3a008841539b432550e139510d84d987">00159</a>     <span class="keywordtype">bool</span> mDetached;
+<a name="l00160"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#dbbaf92e01e8d8cd7c2a80242a60c5a3">00160</a>     uint64_t mContextId;
+<a name="l00161"></a><a class="code" href="classnv_1_1cloth_1_1_nv_cloth_profile_scoped.html#45731a72d188fd61afab53f65793ae6b">00161</a>     <span class="keywordtype">void</span>* mProfilerData;
+<a name="l00162"></a>00162 };
+<a name="l00163"></a>00163 
+<a name="l00164"></a><a class="code" href="_callbacks_8h.html#07a777d717c8c0eb9d8ae6d1b5db94ee">00164</a> <span class="preprocessor">#define NV_CLOTH_PROFILE_ZONE(x, y)                                                                                          \</span>
+<a name="l00165"></a>00165 <span class="preprocessor">    nv::cloth::NvClothProfileScoped PX_CONCAT(_scoped, __LINE__)(x, false, y, __FILE__, __LINE__, nv::cloth::GetNvClothProfiler())</span>
+<a name="l00166"></a><a class="code" href="_callbacks_8h.html#d31f06d741b7e7340058e66b64e8d1da">00166</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_START_CROSSTHREAD(x, y)                                                                             \</span>
+<a name="l00167"></a>00167 <span class="preprocessor">    (GetNvClothProfiler()!=nullptr?                                                                                        \</span>
+<a name="l00168"></a>00168 <span class="preprocessor">    GetNvClothProfiler()-&gt;zoneStart(x, true, y):nullptr)</span>
+<a name="l00169"></a><a class="code" href="_callbacks_8h.html#5c4305c0f359cd51e90391ce3847d4de">00169</a> <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_STOP_CROSSTHREAD(profilerData, x, y)                                                                              \</span>
+<a name="l00170"></a>00170 <span class="preprocessor">    if (GetNvClothProfiler())                                                                                           \</span>
+<a name="l00171"></a>00171 <span class="preprocessor">    GetNvClothProfiler()-&gt;zoneEnd(profilerData, x, true, y)</span>
+<a name="l00172"></a>00172 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00173"></a>00173 <span class="preprocessor"></span>
+<a name="l00174"></a>00174 <span class="preprocessor">#define NV_CLOTH_PROFILE_ZONE(x, y)</span>
+<a name="l00175"></a>00175 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_START_CROSSTHREAD(x, y) nullptr</span>
+<a name="l00176"></a>00176 <span class="preprocessor"></span><span class="preprocessor">#define NV_CLOTH_PROFILE_STOP_CROSSTHREAD(profilerData, x, y)</span>
+<a name="l00177"></a>00177 <span class="preprocessor"></span>
+<a name="l00178"></a>00178 <span class="preprocessor">#endif</span>
+<a name="l00179"></a>00179 <span class="preprocessor"></span>
+<a name="l00180"></a>00180 }
+<a name="l00181"></a>00181 }
 </pre></div></div>
 <!-- start footer part -->
 <div class="footer">

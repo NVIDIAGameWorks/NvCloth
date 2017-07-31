@@ -51,7 +51,7 @@ cloth::SwFactory::SwFactory()
 
 cloth::SwFactory::~SwFactory()
 {
-	NV_CLOTH_ASSERT(("All fabrics created by this factory need to be deleted before this factory is destroyed.", mFabrics.size() == 0));
+	NV_CLOTH_ASSERT_WITH_MESSAGE("All fabrics created by this factory need to be deleted before this factory is destroyed.", mFabrics.size() == 0);
 }
 
 cloth::Fabric* cloth::SwFactory::createFabric(uint32_t numParticles, Range<const uint32_t> phaseIndices,

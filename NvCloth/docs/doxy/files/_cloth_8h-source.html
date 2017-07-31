@@ -286,61 +286,63 @@
 <a name="l00374"></a>00374     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#16b04df700089098bb956fcdc30e77b4" title="Returns value set with setDragCoefficient().">getDragCoefficient</a>() <span class="keyword">const</span> = 0;
 <a name="l00376"></a>00376     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#17b5a40330eb57bdc495a2eb0d713193" title="/brief Sets the air lift coefficient.">setLiftCoefficient</a>(<span class="keywordtype">float</span>) = 0;
 <a name="l00378"></a>00378     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#2dbaaaa013d7c69902c9d5eaa98f6af9" title="Returns value set with setLiftCoefficient().">getLiftCoefficient</a>() <span class="keyword">const</span> = 0;
-<a name="l00379"></a>00379 
-<a name="l00380"></a>00380     <span class="comment">/* self collision */</span>
-<a name="l00381"></a>00381 
-<a name="l00383"></a>00383     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#8677510130ff4438306d20a413abd5d8" title="/brief Set the distance particles need to be separated from each other withing the...">setSelfCollisionDistance</a>(<span class="keywordtype">float</span> distance) = 0;
-<a name="l00385"></a>00385     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#064c442c7588405581006d72aa3d88f9" title="Returns value set with setSelfCollisionDistance().">getSelfCollisionDistance</a>() <span class="keyword">const</span> = 0;
-<a name="l00387"></a>00387     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#b9988307f35da068e3d2ff08b56d95a1" title="/brief Set the constraint stiffness for the self collision constraints.">setSelfCollisionStiffness</a>(<span class="keywordtype">float</span> stiffness) = 0;
-<a name="l00389"></a>00389     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#209dae86682049c944b9c2ba41aeb0bf" title="Returns value set with setSelfCollisionStiffness().">getSelfCollisionStiffness</a>() <span class="keyword">const</span> = 0;
-<a name="l00390"></a>00390 
-<a name="l00391"></a>00391     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#e77122c9d483539afe4b944429d5d464">setSelfCollisionIndices</a>(<a class="code" href="structnv_1_1cloth_1_1_range.html">Range&lt;const uint32_t&gt;</a>) = 0;
-<a name="l00392"></a>00392     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#44b430eff88a119b5242e5ed87722ee0">getNumSelfCollisionIndices</a>() <span class="keyword">const</span> = 0;
-<a name="l00393"></a>00393 
-<a name="l00394"></a>00394     <span class="comment">/* rest positions */</span>
-<a name="l00395"></a>00395 
-<a name="l00396"></a>00396     <span class="comment">// set rest particle positions used during self-collision</span>
-<a name="l00397"></a>00397     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#263e8beebed6fb96f06bf2688a15ad1c">setRestPositions</a>(<a class="code" href="structnv_1_1cloth_1_1_range.html">Range&lt;const physx::PxVec4&gt;</a>) = 0;
-<a name="l00398"></a>00398     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#6549b36b76a8269864c695d3b77aae63">getNumRestPositions</a>() <span class="keyword">const</span> = 0;
-<a name="l00399"></a>00399 
-<a name="l00400"></a>00400     <span class="comment">/* bounding box */</span>
-<a name="l00401"></a>00401 
-<a name="l00403"></a>00403     <span class="keyword">virtual</span> <span class="keyword">const</span> physx::PxVec3&amp; <a class="code" href="classnv_1_1cloth_1_1_cloth.html#6b0c89213073d0a58f2309b4c0526c7d" title="Returns current particle position bounds center in local space.">getBoundingBoxCenter</a>() <span class="keyword">const</span> = 0;
-<a name="l00405"></a>00405     <span class="keyword">virtual</span> <span class="keyword">const</span> physx::PxVec3&amp; <a class="code" href="classnv_1_1cloth_1_1_cloth.html#4b16c7cedaecc35b5d722040b28f7bdf" title="Returns current particle position bounds size in local space.">getBoundingBoxScale</a>() <span class="keyword">const</span> = 0;
-<a name="l00406"></a>00406 
-<a name="l00407"></a>00407     <span class="comment">/* sleeping (disabled by default) */</span>
+<a name="l00380"></a>00380     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#23bb80bd7b7acd3caa9c2b792c41a752" title="/brief Sets the fluid density used for air drag/lift calculations.">setFluidDensity</a>(<span class="keywordtype">float</span>) = 0;
+<a name="l00382"></a>00382     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#31aeac4d22831073a79d2b6da53c17ae" title="Returns value set with setFluidDensity().">getFluidDensity</a>() <span class="keyword">const</span> = 0;
+<a name="l00383"></a>00383 
+<a name="l00384"></a>00384     <span class="comment">/* self collision */</span>
+<a name="l00385"></a>00385 
+<a name="l00387"></a>00387     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#8677510130ff4438306d20a413abd5d8" title="/brief Set the distance particles need to be separated from each other withing the...">setSelfCollisionDistance</a>(<span class="keywordtype">float</span> distance) = 0;
+<a name="l00389"></a>00389     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#064c442c7588405581006d72aa3d88f9" title="Returns value set with setSelfCollisionDistance().">getSelfCollisionDistance</a>() <span class="keyword">const</span> = 0;
+<a name="l00391"></a>00391     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#b9988307f35da068e3d2ff08b56d95a1" title="/brief Set the constraint stiffness for the self collision constraints.">setSelfCollisionStiffness</a>(<span class="keywordtype">float</span> stiffness) = 0;
+<a name="l00393"></a>00393     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#209dae86682049c944b9c2ba41aeb0bf" title="Returns value set with setSelfCollisionStiffness().">getSelfCollisionStiffness</a>() <span class="keyword">const</span> = 0;
+<a name="l00394"></a>00394 
+<a name="l00399"></a>00399     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#e77122c9d483539afe4b944429d5d464" title="Set self collision indices.">setSelfCollisionIndices</a>(<a class="code" href="structnv_1_1cloth_1_1_range.html">Range&lt;const uint32_t&gt;</a>) = 0;
+<a name="l00401"></a>00401     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#44b430eff88a119b5242e5ed87722ee0" title="Returns the number of self collision indices set.">getNumSelfCollisionIndices</a>() <span class="keyword">const</span> = 0;
+<a name="l00402"></a>00402 
+<a name="l00403"></a>00403     <span class="comment">/* rest positions */</span>
+<a name="l00404"></a>00404 
+<a name="l00405"></a>00405     <span class="comment">// set rest particle positions used during self-collision</span>
+<a name="l00406"></a>00406     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#263e8beebed6fb96f06bf2688a15ad1c">setRestPositions</a>(<a class="code" href="structnv_1_1cloth_1_1_range.html">Range&lt;const physx::PxVec4&gt;</a>) = 0;
+<a name="l00407"></a>00407     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#6549b36b76a8269864c695d3b77aae63">getNumRestPositions</a>() <span class="keyword">const</span> = 0;
 <a name="l00408"></a>00408 
-<a name="l00409"></a>00409     <span class="comment">// max particle velocity (per axis) to pass sleep test</span>
-<a name="l00410"></a>00410     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#1a34c62e0891496b949194556dc729f1">setSleepThreshold</a>(<span class="keywordtype">float</span>) = 0;
-<a name="l00411"></a>00411     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#2bd353debfdb900979395fe8870df1bf">getSleepThreshold</a>() <span class="keyword">const</span> = 0;
-<a name="l00412"></a>00412     <span class="comment">// test sleep condition every nth millisecond</span>
-<a name="l00413"></a>00413     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#de65cf56e6b20d5a44a222b9e28ecf2f">setSleepTestInterval</a>(uint32_t) = 0;
-<a name="l00414"></a>00414     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#6313c4680c883d3bb6e20632ebde1ab8">getSleepTestInterval</a>() <span class="keyword">const</span> = 0;
-<a name="l00415"></a>00415     <span class="comment">// put cloth to sleep when n consecutive sleep tests pass</span>
-<a name="l00416"></a>00416     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#7ef6797d557a31d9380835d26a894f15">setSleepAfterCount</a>(uint32_t) = 0;
-<a name="l00417"></a>00417     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#a3be62e917066f2f29f64320c8286893">getSleepAfterCount</a>() <span class="keyword">const</span> = 0;
-<a name="l00418"></a>00418     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#7a07e21a9b99dd3eab429569c77eac1c">getSleepPassCount</a>() <span class="keyword">const</span> = 0;
-<a name="l00419"></a>00419     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#21e5c91983c11511600cfefd68be49f9">isAsleep</a>() <span class="keyword">const</span> = 0;
-<a name="l00420"></a>00420     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#21da17df59669e7a2b670823400e740b">putToSleep</a>() = 0;
-<a name="l00421"></a>00421     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#4294ed2b0a515600e9448264cc0377e3">wakeUp</a>() = 0;
-<a name="l00422"></a>00422 
-<a name="l00424"></a>00424     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#e7c0b099e90d409a65ee14d6f77e57c5" title="Set user data.">setUserData</a>(<span class="keywordtype">void</span>*) = 0;
-<a name="l00425"></a>00425     <span class="comment">// Returns value set by setUserData().</span>
-<a name="l00426"></a>00426     <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="classnv_1_1cloth_1_1_cloth.html#91e02303afccc55bba87886c1187002b">getUserData</a>() <span class="keyword">const</span> = 0;
-<a name="l00427"></a>00427 };
-<a name="l00428"></a>00428 
-<a name="l00429"></a>00429 <span class="comment">// wrappers to prevent non-const overload from marking particles dirty</span>
-<a name="l00430"></a>00430 <span class="keyword">inline</span> MappedRange&lt;const physx::PxVec4&gt; readCurrentParticles(<span class="keyword">const</span> Cloth&amp; cloth)
-<a name="l00431"></a>00431 {
-<a name="l00432"></a>00432     <span class="keywordflow">return</span> cloth.getCurrentParticles();
-<a name="l00433"></a>00433 }
-<a name="l00434"></a>00434 <span class="keyword">inline</span> MappedRange&lt;const physx::PxVec4&gt; readPreviousParticles(<span class="keyword">const</span> Cloth&amp; cloth)
-<a name="l00435"></a>00435 {
-<a name="l00436"></a>00436     <span class="keywordflow">return</span> cloth.getPreviousParticles();
-<a name="l00437"></a>00437 }
-<a name="l00438"></a>00438 
-<a name="l00439"></a>00439 } <span class="comment">// namespace cloth</span>
-<a name="l00440"></a>00440 } <span class="comment">// namespace nv</span>
+<a name="l00409"></a>00409     <span class="comment">/* bounding box */</span>
+<a name="l00410"></a>00410 
+<a name="l00412"></a>00412     <span class="keyword">virtual</span> <span class="keyword">const</span> physx::PxVec3&amp; <a class="code" href="classnv_1_1cloth_1_1_cloth.html#6b0c89213073d0a58f2309b4c0526c7d" title="Returns current particle position bounds center in local space.">getBoundingBoxCenter</a>() <span class="keyword">const</span> = 0;
+<a name="l00414"></a>00414     <span class="keyword">virtual</span> <span class="keyword">const</span> physx::PxVec3&amp; <a class="code" href="classnv_1_1cloth_1_1_cloth.html#4b16c7cedaecc35b5d722040b28f7bdf" title="Returns current particle position bounds size in local space.">getBoundingBoxScale</a>() <span class="keyword">const</span> = 0;
+<a name="l00415"></a>00415 
+<a name="l00416"></a>00416     <span class="comment">/* sleeping (disabled by default) */</span>
+<a name="l00417"></a>00417 
+<a name="l00418"></a>00418     <span class="comment">// max particle velocity (per axis) to pass sleep test</span>
+<a name="l00419"></a>00419     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#1a34c62e0891496b949194556dc729f1">setSleepThreshold</a>(<span class="keywordtype">float</span>) = 0;
+<a name="l00420"></a>00420     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#2bd353debfdb900979395fe8870df1bf">getSleepThreshold</a>() <span class="keyword">const</span> = 0;
+<a name="l00421"></a>00421     <span class="comment">// test sleep condition every nth millisecond</span>
+<a name="l00422"></a>00422     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#de65cf56e6b20d5a44a222b9e28ecf2f">setSleepTestInterval</a>(uint32_t) = 0;
+<a name="l00423"></a>00423     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#6313c4680c883d3bb6e20632ebde1ab8">getSleepTestInterval</a>() <span class="keyword">const</span> = 0;
+<a name="l00424"></a>00424     <span class="comment">// put cloth to sleep when n consecutive sleep tests pass</span>
+<a name="l00425"></a>00425     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#7ef6797d557a31d9380835d26a894f15">setSleepAfterCount</a>(uint32_t) = 0;
+<a name="l00426"></a>00426     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#a3be62e917066f2f29f64320c8286893">getSleepAfterCount</a>() <span class="keyword">const</span> = 0;
+<a name="l00427"></a>00427     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_cloth.html#7a07e21a9b99dd3eab429569c77eac1c">getSleepPassCount</a>() <span class="keyword">const</span> = 0;
+<a name="l00428"></a>00428     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#21e5c91983c11511600cfefd68be49f9">isAsleep</a>() <span class="keyword">const</span> = 0;
+<a name="l00429"></a>00429     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#21da17df59669e7a2b670823400e740b">putToSleep</a>() = 0;
+<a name="l00430"></a>00430     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#4294ed2b0a515600e9448264cc0377e3">wakeUp</a>() = 0;
+<a name="l00431"></a>00431 
+<a name="l00433"></a>00433     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html#e7c0b099e90d409a65ee14d6f77e57c5" title="Set user data.">setUserData</a>(<span class="keywordtype">void</span>*) = 0;
+<a name="l00434"></a>00434     <span class="comment">// Returns value set by setUserData().</span>
+<a name="l00435"></a>00435     <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="classnv_1_1cloth_1_1_cloth.html#91e02303afccc55bba87886c1187002b">getUserData</a>() <span class="keyword">const</span> = 0;
+<a name="l00436"></a>00436 };
+<a name="l00437"></a>00437 
+<a name="l00438"></a>00438 <span class="comment">// wrappers to prevent non-const overload from marking particles dirty</span>
+<a name="l00439"></a>00439 <span class="keyword">inline</span> MappedRange&lt;const physx::PxVec4&gt; readCurrentParticles(<span class="keyword">const</span> Cloth&amp; cloth)
+<a name="l00440"></a>00440 {
+<a name="l00441"></a>00441     <span class="keywordflow">return</span> cloth.getCurrentParticles();
+<a name="l00442"></a>00442 }
+<a name="l00443"></a>00443 <span class="keyword">inline</span> MappedRange&lt;const physx::PxVec4&gt; readPreviousParticles(<span class="keyword">const</span> Cloth&amp; cloth)
+<a name="l00444"></a>00444 {
+<a name="l00445"></a>00445     <span class="keywordflow">return</span> cloth.getPreviousParticles();
+<a name="l00446"></a>00446 }
+<a name="l00447"></a>00447 
+<a name="l00448"></a>00448 } <span class="comment">// namespace cloth</span>
+<a name="l00449"></a>00449 } <span class="comment">// namespace nv</span>
 </pre></div></div>
 <!-- start footer part -->
 <div class="footer">

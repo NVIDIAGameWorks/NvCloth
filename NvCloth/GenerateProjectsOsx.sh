@@ -19,13 +19,13 @@ export PX_OUTPUT_ROOT="$PWD"
 rm -r -f compiler/osx32-cmake/
 mkdir compiler/osx32-cmake/
 cd compiler/osx32-cmake/
-cmake ../cmake/Mac -G Xcode -DTARGET_BUILD_PLATFORM=mac -DPX_32BIT=1 -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/Lib/osx32-cmake 
+cmake ../cmake/mac -G Xcode -DTARGET_BUILD_PLATFORM=mac -DPX_32BIT=1 -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/Lib/osx32-cmake 
 cd ../../
 
 rm -r -f compiler/osx64-cmake/
 mkdir compiler/osx64-cmake/
 cd compiler/osx64-cmake/
-cmake ../cmake/Mac -G Xcode -DTARGET_BUILD_PLATFORM=mac -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/Lib/osx64-cmake 
+cmake ../cmake/mac -G Xcode -DTARGET_BUILD_PLATFORM=mac -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/Lib/osx64-cmake 
 cd ../../
 
 

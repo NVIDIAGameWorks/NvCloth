@@ -849,10 +849,17 @@ __device__ float3 cross3(const float3& u, const float3& v)
 __device__ void applyImpulse(SharedParticleData::ParticleReferenceType pos, const float3& impulse)
 {
 	float scale = -pos.mReferences[3];
+
+#if CONVERT_ADDRESSES
 	//Use this instead of atomicAdd function to work around compiler issue treating the pointer as global memory instead of shared memory
-	asm("red.shared.add.f32 [%0], %1;" :: POINTER_CONSTRAINT(pos.mReferences[0].mPtr), "f"(impulse.x * scale));
-	asm("red.shared.add.f32 [%0], %1;" :: POINTER_CONSTRAINT(pos.mReferences[1].mPtr), "f"(impulse.y * scale));
-	asm("red.shared.add.f32 [%0], %1;" :: POINTER_CONSTRAINT(pos.mReferences[2].mPtr), "f"(impulse.z * scale));
+	asm("red.shared.add.f32 [%0], %1;" ::POINTER_CONSTRAINT(pos.mReferences[0].mPtr), "f"(impulse.x * scale));
+	asm("red.shared.add.f32 [%0], %1;" ::POINTER_CONSTRAINT(pos.mReferences[1].mPtr), "f"(impulse.y * scale));
+	asm("red.shared.add.f32 [%0], %1;" ::POINTER_CONSTRAINT(pos.mReferences[2].mPtr), "f"(impulse.z * scale));
+#else
+	atomicAdd(pos.mReferences[0].mPtr, impulse.x * scale);
+	atomicAdd(pos.mReferences[1].mPtr, impulse.y * scale);
+	atomicAdd(pos.mReferences[2].mPtr, impulse.z * scale);
+#endif	
 }
 __device__ void applyImpulse(GlobalParticleData::ParticleReferenceType pos, const float3& impulse)
 {

@@ -19,23 +19,23 @@ export PX_OUTPUT_ROOT="$PWD"
 rm -r -f compiler/linux64-debug-cmake/
 mkdir compiler/linux64-debug-cmake/
 cd compiler/linux64-debug-cmake/
-cmake ../cmake/Linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=debug -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
+cmake ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=debug -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
 cd ../../
 
 rm -r -f compiler/linux64-checked-cmake/
 mkdir compiler/linux64-checked-cmake/
 cd compiler/linux64-checked-cmake/
-cmake ../cmake/Linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=checked -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
+cmake ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=checked -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
 cd ../../
 
 rm -r -f compiler/linux64-profile-cmake/
 mkdir compiler/linux64-profile-cmake/
 cd compiler/linux64-profile-cmake/
-cmake ../cmake/Linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=profile -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
+cmake ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=profile -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
 cd ../../
 
 rm -r -f compiler/linux64-release-cmake/
 mkdir compiler/linux64-release-cmake/
 cd compiler/linux64-release-cmake/
-cmake ../cmake/Linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=release -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
+cmake ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=release -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake
 cd ../../

@@ -103,6 +103,9 @@ physx::PxVec4 &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classnv_1_1cloth_1_1_factory.html">Factory</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#dfb665fce893853e21ddbd3241685d7f">getFactory</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the <a class="el" href="classnv_1_1cloth_1_1_factory.html" title="abstract factory to create context-specific simulation components such as cloth,...">Factory</a> used to create this <a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a>.  <a href="#dfb665fce893853e21ddbd3241685d7f"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#31aeac4d22831073a79d2b6da53c17ae">getFluidDensity</a> () const =0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns value set with <a class="el" href="classnv_1_1cloth_1_1_cloth.html#23bb80bd7b7acd3caa9c2b792c41a752" title="/brief Sets the fluid density used for air drag/lift calculations.">setFluidDensity()</a>.  <a href="#31aeac4d22831073a79d2b6da53c17ae"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#a2daf756406fd64e1b7b2174eb040367">getFriction</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns value set with <a class="el" href="classnv_1_1cloth_1_1_cloth.html#c10abfe96f96b65c9b3a5f37fee68715" title="Set the cloth collision shape friction coefficient.">setFriction()</a>.  <a href="#a2daf756406fd64e1b7b2174eb040367"></a><br></td></tr>
@@ -149,6 +152,7 @@ physx::PxVec4 &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual uint32_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#44b430eff88a119b5242e5ed87722ee0">getNumSelfCollisionIndices</a> () const =0</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the number of self collision indices set.  <a href="#44b430eff88a119b5242e5ed87722ee0"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual uint32_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#7951527b51d5e4c523c179c5c7f34d3c">getNumSeparationConstraints</a> () const =0</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual uint32_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#4b6b1d7fd2adfbc9d7ac66bbb9c418dc">getNumSpheres</a> () const =0</td></tr>
@@ -246,6 +250,9 @@ physx::PxVec4 &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#fce3065c14afac4e5cf6e93b5d60a007">setDragCoefficient</a> (float)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">/brief Sets the air drag coefficient.  <a href="#fce3065c14afac4e5cf6e93b5d60a007"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#23bb80bd7b7acd3caa9c2b792c41a752">setFluidDensity</a> (float)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">/brief Sets the fluid density used for air drag/lift calculations.  <a href="#23bb80bd7b7acd3caa9c2b792c41a752"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#c10abfe96f96b65c9b3a5f37fee68715">setFriction</a> (float)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the cloth collision shape friction coefficient.  <a href="#c10abfe96f96b65c9b3a5f37fee68715"></a><br></td></tr>
@@ -279,6 +286,7 @@ physx::PxVec4 &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">/brief Set the distance particles need to be separated from each other withing the cloth.  <a href="#8677510130ff4438306d20a413abd5d8"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#e77122c9d483539afe4b944429d5d464">setSelfCollisionIndices</a> (<a class="el" href="structnv_1_1cloth_1_1_range.html">Range</a>&lt; const uint32_t &gt;)=0</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set self collision indices.  <a href="#e77122c9d483539afe4b944429d5d464"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_cloth.html#b9988307f35da068e3d2ff08b56d95a1">setSelfCollisionStiffness</a> (float stiffness)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">/brief Set the constraint stiffness for the self collision constraints.  <a href="#b9988307f35da068e3d2ff08b56d95a1"></a><br></td></tr>
@@ -807,6 +815,27 @@ Returns the <a class="el" href="classnv_1_1cloth_1_1_factory.html" title="abstra
 
 </div>
 </div><p>
+<a class="anchor" name="31aeac4d22831073a79d2b6da53c17ae"></a><!-- doxytag: member="nv::cloth::Cloth::getFluidDensity" ref="31aeac4d22831073a79d2b6da53c17ae" args="() const =0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual float nv::cloth::Cloth::getFluidDensity           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns value set with <a class="el" href="classnv_1_1cloth_1_1_cloth.html#23bb80bd7b7acd3caa9c2b792c41a752" title="/brief Sets the fluid density used for air drag/lift calculations.">setFluidDensity()</a>. 
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="a2daf756406fd64e1b7b2174eb040367"></a><!-- doxytag: member="nv::cloth::Cloth::getFriction" ref="a2daf756406fd64e1b7b2174eb040367" args="() const =0" -->
 <div class="memitem">
 <div class="memproto">
@@ -1165,6 +1194,8 @@ Returns the number of planes currently set.
 </div>
 <div class="memdoc">
 
+<p>
+Returns the number of self collision indices set. 
 <p>
 
 </div>
@@ -1976,6 +2007,28 @@ Sets damping of local particle velocity (1/stiffnessFrequency).
 
 </div>
 </div><p>
+<a class="anchor" name="23bb80bd7b7acd3caa9c2b792c41a752"></a><!-- doxytag: member="nv::cloth::Cloth::setFluidDensity" ref="23bb80bd7b7acd3caa9c2b792c41a752" args="(float)=0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nv::cloth::Cloth::setFluidDensity           </td>
+          <td>(</td>
+          <td class="paramtype">float&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+/brief Sets the fluid density used for air drag/lift calculations. 
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="c10abfe96f96b65c9b3a5f37fee68715"></a><!-- doxytag: member="nv::cloth::Cloth::setFriction" ref="c10abfe96f96b65c9b3a5f37fee68715" args="(float)=0" -->
 <div class="memitem">
 <div class="memproto">
@@ -2271,7 +2324,9 @@ Similar to <a class="el" href="classnv_1_1cloth_1_1_cloth.html#080cb97581d6e3707
 <div class="memdoc">
 
 <p>
-
+Set self collision indices. 
+<p>
+Each index in the range indicates that the particle at that index should be used for self collision. If set to an empty range (default) all particles will be used. 
 </div>
 </div><p>
 <a class="anchor" name="b9988307f35da068e3d2ff08b56d95a1"></a><!-- doxytag: member="nv::cloth::Cloth::setSelfCollisionStiffness" ref="b9988307f35da068e3d2ff08b56d95a1" args="(float stiffness)=0" -->

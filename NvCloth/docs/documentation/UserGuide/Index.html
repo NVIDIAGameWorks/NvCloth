@@ -68,6 +68,7 @@
   <h4>Table Of Contents</h4>
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes/index.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#fixes">Fixes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#new-features">New Features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#supported-platforms">Supported Platforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#supported-compilers">Supported Compilers</a></li>
@@ -271,7 +272,7 @@ All fabrics created by a factory need to be destroyed before that factory is des
 The cloth instance does not need to begin with the same particle positions the fabric was cooked in, so we need to provide the initial position of the particles:</p>
 <div class="highlight-python"><pre>physx::PxVec4* particlePositions = ...; // The w component is the inverse mass of the particle
                                         //  and can be to 0 to lock the particle / make it static.
-nv::cloth::Cloth* cloth = factory-&gt;createCloth(nv::cloth::Range&lt;physx::PxVec4&gt;( particlePositions, &amp; particlePositions + particleCount), *fabric);
+nv::cloth::Cloth* cloth = factory-&gt;createCloth(nv::cloth::Range&lt;physx::PxVec4&gt;(particlePositions, particlePositions + particleCount), *fabric);
 // particlePositions can be freed here.
 
 ...
@@ -307,7 +308,7 @@ for(int i = 0; i &lt; fabric-&gt;getNumPhases(); i++)
        phases[i].mCompressionLimit = 1.0f;
        phases[i].mStretchLimit = 1.0f;
 }
-cloth-&gt;setPhaseConfig(nv::cloth::Range&lt;nv::cloth::PhaseConfig&gt;(&amp;phases[0], &amp;phases[0] + fabric-&gt;getNumPhases()));
+cloth-&gt;setPhaseConfig(nv::cloth::Range&lt;nv::cloth::PhaseConfig&gt;(phases, phases + fabric-&gt;getNumPhases()));
 delete [] phases;</pre>
 </div>
 <p>Note that there might be more phase of each type.
@@ -361,14 +362,14 @@ for(int i = 0; i&lt;particles.size(); i++)
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>Cloth instances have many properties that can be influence their behavior.
+<p>Cloth instances have many properties that can influence their behavior.
 This section shows how to use some of the most common properties.</p>
 <div class="section" id="common-cloth-properties">
 <h3>Common cloth properties<a class="headerlink" href="#common-cloth-properties" title="Permalink to this headline">¶</a></h3>
 <p>We can set the gravity acceleration vector in global space:</p>
 <div class="highlight-python"><pre>cloth-&gt;setGravity(physx::PxVec3(0.0f, -9.8f, 0.0f));</pre>
 </div>
-<p>This vector doesn&#8217;t have to be the same as provided to the cooker.</p>
+<p>This vector doesn&#8217;t have to be the same as the one provided to the cooker.</p>
 <p>Sometimes it is desirable to dampen the particle motion:</p>
 <div class="highlight-python"><pre>cloth-&gt;setDamping(0.5f); //0.0f is default</pre>
 </div>
@@ -403,6 +404,7 @@ cloth-&gt;setTetherConstraintStiffness(1.0f); //Default value</pre>
 All collision primitives are defined in local space.</p>
 <p>We can define up to 32 collision spheres per cloth:</p>
 <div class="highlight-python"><pre>physx::PxVec4 spheres[2] = {
+       // First 3 components of each vector is sphere center in local space and the 4th one is its radius
        physx::PxVec4(0.0f, 0.0f, 0.0f, 1.0f),
        physx::PxVec4(0.0f, 5.0f, 0.0f, 1.0f)
 };
@@ -445,8 +447,8 @@ We can easily construct convex shapes consisting of more planes by setting more 
 <div class="highlight-python"><pre>physx::PxVec3* triangles = ...; //Get triangle data from somewhere
                                 //We can't use indexed meshes/vertex sharing,
                                 // each triangle is defined with its own 3 vertexes
-nv::cloth::Range&lt;const physx::PxVec3&gt; triangleR(&amp;triangles[0], &amp;triangles[0] + triangleCount * 3);
-cloth-&gt;setTriangles(triangleR, 0, cloth&gt;getNumTriangles());</pre>
+nv::cloth::Range&lt;const physx::PxVec3&gt; triangleR(triangles, triangles + triangleCount * 3);
+cloth-&gt;setTriangles(triangleR, 0, cloth-&gt;getNumTriangles());</pre>
 </div>
 <p>Note that the range arguments passed to setTriangles are counting whole triangles (3 PxVec3 vertexes each).</p>
 <p>We can set the friction coefficient used for collision between cloth and collision shapes like this:</p>

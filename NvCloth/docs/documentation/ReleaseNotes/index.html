@@ -137,6 +137,18 @@
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="fixes">
 <h2>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.1.2</strong></p>
+<ul class="simple">
+<li>Dynamic allocations at runtime removed from MovingAverage.</li>
+<li>Possible error when starting samples due to gpu incompatible with dx debug mode.</li>
+<li>Cuda crash on older hardware.</li>
+</ul>
+<p><strong>1.1.1</strong></p>
+<ul class="simple">
+<li>Air drag/lift did react to flow speed only linearly, model was changed to be more physically correct.</li>
+<li>Fixed issue where scaling units would result in different air drag/lift behavior (by adding fluid density parameter).</li>
+<li>Fixed &#8220;unused typedef <cite>__t100</cite>&#8221; warning in xcode.</li>
+</ul>
 <p><strong>1.1.0</strong></p>
 <ul class="simple">
 <li>DirectX 11 solver now supports triangle collision shapes and air drag/lift.</li>
@@ -146,6 +158,10 @@
 </div>
 <div class="section" id="new-features">
 <h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h2>
+<p><strong>1.1.2</strong></p>
+<ul class="simple">
+<li>Added cmake flags to disable dx11 and/or cuda support.</li>
+</ul>
 <p><strong>1.1.0</strong></p>
 <ul class="simple">
 <li>Solver::getNumCloths and Solver::getClothList interface.</li>

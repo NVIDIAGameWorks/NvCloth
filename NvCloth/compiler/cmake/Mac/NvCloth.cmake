@@ -2,7 +2,7 @@
 # Build NvCloth (PROJECT not SOLUTION)
 #
 
-MESSAGE("[NvCloth]cmake/Mac/NvCloth.cmake")
+MESSAGE("[NvCloth]cmake/mac/NvCloth.cmake")
 
 SET(GW_DEPS_ROOT $ENV{GW_DEPS_ROOT})
 FIND_PACKAGE(PxShared REQUIRED)
@@ -56,4 +56,4 @@ SET_TARGET_PROPERTIES(NvCloth PROPERTIES
 
 # enable -fPIC so we can link static libs with the editor
 SET_TARGET_PROPERTIES(NvCloth PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-MESSAGE("[NvCloth]cmake/Mac/NvCloth.cmake END")
+MESSAGE("[NvCloth]cmake/mac/NvCloth.cmake END")

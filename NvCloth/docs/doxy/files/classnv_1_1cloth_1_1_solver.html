@@ -50,30 +50,36 @@
 <a href="classnv_1_1cloth_1_1_solver-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#9f2265058804d818c00653af1edb554d">addCloth</a> (<a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#63e732712c5a43c44e6018cca6c1fb82">addCloth</a> (<a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *cloth)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Adds cloth object, returns true if successful.  <a href="#9f2265058804d818c00653af1edb554d"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Adds cloth object.  <a href="#63e732712c5a43c44e6018cca6c1fb82"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#d2efbe447bf07138c615973c349ab839">beginSimulation</a> (float dt)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Begins a simulation frame.  <a href="#d2efbe447bf07138c615973c349ab839"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#19d777a3882814910f8a024d92072d48">endSimulation</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Finishes up the simulation.  <a href="#19d777a3882814910f8a024d92072d48"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *const *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#a3e121ffbccc07180e08a2387eb4f6ac">getClothList</a> () const =0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the pointer to the first cloth added to the solver.  <a href="#a3e121ffbccc07180e08a2387eb4f6ac"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#6a72529d713f46dbd17a5b541aaec6df">getInterCollisionDistance</a> () const =0</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual uint32_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#124dc836903890185934c6eaedec2079">getInterCollisionNbIterations</a> () const =0</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#09e4be9b50229213a837d00a3f2f6a3f">getInterCollisionStiffness</a> () const =0</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#de377e651711ebbb9e70f928cbb682e2">getNumCloths</a> () const =0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the numer of cloths added to the solver.  <a href="#de377e651711ebbb9e70f928cbb682e2"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#54e393ba3b9fd5305385e2f57d3ca165">getSimulationChunkCount</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the number of chunks that need to be simulated this frame.  <a href="#54e393ba3b9fd5305385e2f57d3ca165"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#12a60f43b537d78499e30508bd9a6d3c">hasError</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns true if an unrecoverable error has occurred.  <a href="#12a60f43b537d78499e30508bd9a6d3c"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#c28839d9a9fbe39e5adcab44cc00fe96">removeCloth</a> (<a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#1ed765a15ab2dabbb5186d14bc5f70b1">removeCloth</a> (<a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *cloth)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Removes cloth object.  <a href="#c28839d9a9fbe39e5adcab44cc00fe96"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Removes cloth object.  <a href="#1ed765a15ab2dabbb5186d14bc5f70b1"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#5043adf6727bf66b966de6393e7d67d9">setInterCollisionDistance</a> (float distance)=0</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#31b3d4d36f2025f10cb04a32e28fada4">setInterCollisionFilter</a> (InterCollisionFilter filter)=0</td></tr>
@@ -156,7 +162,7 @@ base class for solvers <hr><h2>Constructor &amp; Destructor Documentation</h2>
 </div>
 </div><p>
 <hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="9f2265058804d818c00653af1edb554d"></a><!-- doxytag: member="nv::cloth::Solver::addCloth" ref="9f2265058804d818c00653af1edb554d" args="(Cloth *)=0" -->
+<a class="anchor" name="63e732712c5a43c44e6018cca6c1fb82"></a><!-- doxytag: member="nv::cloth::Solver::addCloth" ref="63e732712c5a43c44e6018cca6c1fb82" args="(Cloth *cloth)=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -164,7 +170,7 @@ base class for solvers <hr><h2>Constructor &amp; Destructor Documentation</h2>
           <td class="memname">virtual void nv::cloth::Solver::addCloth           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *&nbsp;</td>
-          <td class="paramname">          </td>
+          <td class="paramname"> <em>cloth</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [pure virtual]</code></td>
         </tr>
@@ -173,7 +179,7 @@ base class for solvers <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <div class="memdoc">
 
 <p>
-Adds cloth object, returns true if successful. 
+Adds cloth object. 
 <p>
 
 </div>
@@ -224,6 +230,27 @@ Returns false if there is nothing to simulate. Use <a class="el" href="classnv_1
 Finishes up the simulation. 
 <p>
 This function can be expensive if inter-collision is enabled. 
+</div>
+</div><p>
+<a class="anchor" name="a3e121ffbccc07180e08a2387eb4f6ac"></a><!-- doxytag: member="nv::cloth::Solver::getClothList" ref="a3e121ffbccc07180e08a2387eb4f6ac" args="() const =0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a>* const* nv::cloth::Solver::getClothList           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the pointer to the first cloth added to the solver. 
+<p>
+
 </div>
 </div><p>
 <a class="anchor" name="6a72529d713f46dbd17a5b541aaec6df"></a><!-- doxytag: member="nv::cloth::Solver::getInterCollisionDistance" ref="6a72529d713f46dbd17a5b541aaec6df" args="() const =0" -->
@@ -279,6 +306,27 @@ This function can be expensive if inter-collision is enabled.
 </div>
 <div class="memdoc">
 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="de377e651711ebbb9e70f928cbb682e2"></a><!-- doxytag: member="nv::cloth::Solver::getNumCloths" ref="de377e651711ebbb9e70f928cbb682e2" args="() const =0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int nv::cloth::Solver::getNumCloths           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the numer of cloths added to the solver. 
 <p>
 
 </div>
@@ -345,7 +393,7 @@ Returns true if an unrecoverable error has occurred.
 
 </div>
 </div><p>
-<a class="anchor" name="c28839d9a9fbe39e5adcab44cc00fe96"></a><!-- doxytag: member="nv::cloth::Solver::removeCloth" ref="c28839d9a9fbe39e5adcab44cc00fe96" args="(Cloth *)=0" -->
+<a class="anchor" name="1ed765a15ab2dabbb5186d14bc5f70b1"></a><!-- doxytag: member="nv::cloth::Solver::removeCloth" ref="1ed765a15ab2dabbb5186d14bc5f70b1" args="(Cloth *cloth)=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -353,7 +401,7 @@ Returns true if an unrecoverable error has occurred.
           <td class="memname">virtual void nv::cloth::Solver::removeCloth           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *&nbsp;</td>
-          <td class="paramname">          </td>
+          <td class="paramname"> <em>cloth</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [pure virtual]</code></td>
         </tr>

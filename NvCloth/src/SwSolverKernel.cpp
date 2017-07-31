@@ -414,7 +414,7 @@ void applyWind(T4f* __restrict curIt, const T4f* __restrict prevIt, const uint16
 		T4f previous = oneThird * (p0 + p1 + p2);
 
 		//offset of the triangle center, including wind
-		T4f delta = current - previous + wind; //wind is also already multiplied by dt in the iteration state so everything it in the same units
+		T4f delta = current - previous + wind; //wind is also already multiplied by dt in the iteration state so everything is in the same units
 
 		if (IsTurning)
 		{

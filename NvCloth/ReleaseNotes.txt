@@ -1,6 +1,6 @@
 NvCloth Release notes.
 
-[1.1.1]
+[1.1.2]
 Supported platforms:
 * Windows (CPU, CUDA, DX11)
 * Mac (beta, tested on Sierra)
@@ -16,6 +16,19 @@ Supported compilers (via cmake 3.7)
 * PlayStation 4: Visual studio 14 (2015)
 * Xbox one: Visual studio 14 (2015)
 
+Fixed:
+Dynamic allocations at runtime removed from MovingAverage.
+Possible error when starting samples due to gpu incompatible with dx debug mode.
+Cuda crash on older hardware.
+
+New:
+Added cmake flags to disable dx11 and/or cuda support.
+
+Known issues:
+DirectX 11 solver has issues with ccd sphere/capsule collision.
+
+
+[1.1.1]
 Fixed:
 Air drag/lift did react to flow speed only linearly, model was changed to be more physically correct.
 Fixed issue where scaling units would result in different air drag/lift behavior (by adding fluid density parameter).

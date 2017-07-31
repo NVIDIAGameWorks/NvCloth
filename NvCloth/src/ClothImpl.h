@@ -316,7 +316,7 @@ inline physx::PxVec3 ClothImpl<T>::getGravity() const
 
 inline float safeLog2(float x)
 {
-	NV_CLOTH_ASSERT(("safeLog2",x >= 0.0f));
+	NV_CLOTH_ASSERT_WITH_MESSAGE("safeLog2",x >= 0.0f);
 	return x > 0 ? physx::shdfnd::log2(x) : -FLT_MAX_EXP;
 }
 

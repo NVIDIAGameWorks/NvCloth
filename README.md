@@ -37,7 +37,7 @@ Run ./samples/CmakeGenerateProjects.bat to generate the visual studio solution f
 For osx:
 Download and install cmake 3.4 and add the cmake binary to your path.
 Install xcode.
-Run ./NvCloth/GenerateProjectsOsxIos.sh to generate xcode projects in .//NvCloth/compiler/osxXX-cmake/
+Run ./NvCloth/GenerateProjectsOsx.sh to generate xcode projects in .//NvCloth/compiler/osxXX-cmake/
 
 For linux:
 Download and install cmake 3.4.

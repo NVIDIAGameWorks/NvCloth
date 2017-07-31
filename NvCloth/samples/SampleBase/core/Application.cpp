@@ -44,11 +44,19 @@ int Application::run()
 #endif
 	deviceParams.featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-	if (FAILED(m_deviceManager->CreateWindowDeviceAndSwapChain(deviceParams, m_sampleName.c_str())))
+	if(FAILED(m_deviceManager->CreateWindowDeviceAndSwapChain(deviceParams, m_sampleName.c_str())))
 	{
-		MessageBoxA(nullptr, "Cannot initialize the D3D11 device with the requested parameters", "Error",
-			MB_OK | MB_ICONERROR);
-		return 1;
+		//retry without debug device flag
+		if(deviceParams.createDeviceFlags | D3D11_CREATE_DEVICE_DEBUG)
+		{
+			deviceParams.createDeviceFlags ^= D3D11_CREATE_DEVICE_DEBUG;
+		}
+		if(FAILED(m_deviceManager->CreateWindowDeviceAndSwapChain(deviceParams, m_sampleName.c_str())))
+		{
+			MessageBoxA(nullptr, "Cannot initialize the D3D11 device with the requested parameters", "Error",
+				MB_OK | MB_ICONERROR);
+			return 1;
+		}
 	}
 
 	for (auto it = m_controllers.begin(); it != m_controllers.end(); it++)

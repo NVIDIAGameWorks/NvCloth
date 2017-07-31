@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.3)
-MESSAGE("[NvCloth]cmake/Mac/CMakeList.txt")
+MESSAGE("[NvCloth]cmake/mac/CMakeList.txt")
 include(../common/CMakeLists.txt)
 
 
-IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to Mac
+IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to mac
 	SET(TARGET_BUILD_PLATFORM "mac")
 ENDIF()
 
@@ -32,10 +32,10 @@ SET(CMAKE_OSX_DEPLOYMENT_TARGET "10.9")
 
 #set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
 
-# Controls PX_NVTX for all projects on Mac
+# Controls PX_NVTX for all projects on mac
 SET(PHYSX_MAC_ENABLE_NVTX 0)
 
-# Disable cuda and dx for all projects on Mac
+# Disable cuda and dx for all projects on mac
 SET(PHYSX_MAC_COMPILE_DEFS DISABLE_COMPUTE_PHYSX)
 SET(PHYSX_MAC_DEBUG_COMPILE_DEFS _DEBUG;PX_DEBUG=1;PX_CHECKED=1;PX_NVTX=${PHYSX_MAC_ENABLE_NVTX};PX_SUPPORT_PVD=0)
 SET(PHYSX_MAC_CHECKED_COMPILE_DEFS NDEBUG;PX_CHECKED=1;PX_NVTX=${PHYSX_MAC_ENABLE_NVTX};PX_SUPPORT_PVD=0)
@@ -49,7 +49,7 @@ FIND_PACKAGE(PxShared REQUIRED)
 #  such as - we don't want to be installing any built artifacts on this server, etc. So for now we hack it.
 
 # Add PxShared as a dependency so that we can use project references
-ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/Mac "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
+ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/mac "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
 
 # Include all of the projects
 INCLUDE(NvCloth.cmake)

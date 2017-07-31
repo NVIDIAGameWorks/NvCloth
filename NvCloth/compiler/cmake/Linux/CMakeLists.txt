@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.3)
-MESSAGE("[NvCloth]cmake/Linux/CMakeList.txt")
+MESSAGE("[NvCloth]cmake/linux/CMakeList.txt")
 include(../common/CMakeLists.txt)
 
 
-IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to Linux
+IF(NOT DEFINED TARGET_BUILD_PLATFORM) # Not defined, default to linux
 	SET(TARGET_BUILD_PLATFORM "linux")
 ENDIF()
 
@@ -33,7 +33,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -O3 -g")
 # Controls PX_NVTX for all projects on linux
 SET(PHYSX_LINUX_ENABLE_NVTX 0)
 
-# Disable cuda and dx for all projects on Linux
+# Disable cuda and dx for all projects on linux
 SET(PHYSX_LINUX_COMPILE_DEFS DISABLE_COMPUTE_PHYSX)
 SET(PHYSX_LINUX_DEBUG_COMPILE_DEFS _DEBUG;PX_DEBUG=1;PX_CHECKED=1;PX_NVTX=${PHYSX_MAC_ENABLE_NVTX};PX_SUPPORT_PVD=0)
 SET(PHYSX_LINUX_CHECKED_COMPILE_DEFS NDEBUG;PX_CHECKED=1;PX_NVTX=${PHYSX_MAC_ENABLE_NVTX};PX_SUPPORT_PVD=0)

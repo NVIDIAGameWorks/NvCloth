@@ -26,6 +26,7 @@ IF NOT DEFINED GW_DEPS_ROOT GOTO GW_DEPS_ROOT_UNDEFINED
 set PX_OUTPUT_ROOT=%~dp0
 
 REM Generate projects here
+REM you can disable cuda/dx11 support by adding -DNV_CLOTH_ENABLE_CUDA=0 / -DNV_CLOTH_ENABLE_DX11=0
 
 rmdir /s /q compiler\vc11win32-cmake\
 mkdir compiler\vc11win32-cmake\
