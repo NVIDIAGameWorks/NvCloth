@@ -32,7 +32,7 @@
 #include <foundation/Px.h>
 
 #ifndef __CUDACC__
-#include "simd.h"
+#include "Simd.h"
 #endif
 
 namespace nv

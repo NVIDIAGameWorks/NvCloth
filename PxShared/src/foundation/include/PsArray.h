@@ -65,7 +65,7 @@ Implementation note
   case where the allocator contains some inline storage space
 */
 template <class T, class Alloc = typename AllocatorTraits<T>::Type>
-class Array : protected Alloc
+class Array : public Alloc
 {
   public:
 	typedef T* Iterator;

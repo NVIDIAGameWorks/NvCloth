@@ -51,5 +51,3 @@ ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/linux "${CMAKE_CURRENT_
 
 # Include all of the projects
 INCLUDE(NvCloth.cmake)
-
-
