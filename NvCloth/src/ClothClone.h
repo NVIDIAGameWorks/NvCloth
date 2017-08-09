@@ -29,12 +29,12 @@
 
 #pragma once
 
-#include "../SwFactory.h"
-#include "../SwFabric.h"
-#include "../SwCloth.h"
+#include "SwFactory.h"
+#include "SwFabric.h"
+#include "SwCloth.h"
 
-#include "../ClothImpl.h"
-#include "../ClothBase.h"
+#include "ClothImpl.h"
+#include "ClothBase.h"
 #include "NvCloth/Allocator.h"
 
 namespace nv
