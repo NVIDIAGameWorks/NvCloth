@@ -39,6 +39,7 @@
 
 using namespace nv;
 using namespace physx;
+using namespace cloth;
 
 namespace
 {

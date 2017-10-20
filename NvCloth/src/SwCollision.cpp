@@ -40,6 +40,7 @@
 
 using namespace nv;
 using namespace physx;
+using namespace cloth;
 
 // the particle trajectory needs to penetrate more than 0.2 * radius to trigger continuous collision
 template <typename T4f>
@@ -160,31 +161,41 @@ void generateCones(cloth::ConeData* dst, const cloth::SphereData* sourceSpheres,
 	cloth::ConeData* cIt = dst;
 	for (const cloth::IndexPair* iIt = capsuleIndices, *iEnd = iIt + numCones; iIt != iEnd; ++iIt, ++cIt)
 	{
+		// w element contains sphere radii
 		PxVec4 first = reinterpret_cast<const PxVec4&>(sourceSpheres[iIt->first]);
 		PxVec4 second = reinterpret_cast<const PxVec4&>(sourceSpheres[iIt->second]);
 
 		PxVec4 center = (second + first) * 0.5f;
-		PxVec4 axis = (second - first) * 0.5f;
+		PxVec4 axis = (second - first) * 0.5f; //half axis
+		//axiw.w = half of radii difference
 
-		float sqrAxisLength = axis.x * axis.x + axis.y * axis.y + axis.z * axis.z;
-		float sqrConeLength = sqrAxisLength - cloth::sqr(axis.w);
+		// |Axis|^2
+		float sqrAxisHalfLength = axis.x * axis.x + axis.y * axis.y + axis.z * axis.z;
 
-		float invAxisLength = 1 / sqrtf(sqrAxisLength);
-		float invConeLength = 1 / sqrtf(sqrConeLength);
+		// http://jwilson.coe.uga.edu/emt669/Student.Folders/Kertscher.Jeff/Essay.3/Tangents.html
+		// |Axis|^2 = |Cone|^2 + (sphere2Radius-sphere1Radius)^2
+		float sqrConeHalfLength = sqrAxisHalfLength - cloth::sqr(axis.w);
 
-		if (sqrConeLength <= 0.0f)
-			invAxisLength = invConeLength = 0.0f;
+		float invAxisHalfLength = 1 / sqrtf(sqrAxisHalfLength);
+		float invConeHalfLength = 1 / sqrtf(sqrConeHalfLength);
 
-		float axisLength = sqrAxisLength * invAxisLength;
-		float slope = axis.w * invConeLength;
+		if (sqrConeHalfLength <= 0.0f)
+			invAxisHalfLength = invConeHalfLength = 0.0f;
+
+		float axisHalfLength = sqrAxisHalfLength * invAxisHalfLength;
+		float slope = axis.w * invConeHalfLength;
 
 		cIt->center = PxVec3(center.x, center.y, center.z );
-		cIt->radius = (axis.w + first.w) * invConeLength * axisLength;
-		cIt->axis = PxVec3(axis.x, axis.y, axis.z) * invAxisLength;
+		cIt->radius = (axis.w + first.w) * invConeHalfLength * axisHalfLength; //cone radius in the center
+		cIt->axis = PxVec3(axis.x, axis.y, axis.z) * invAxisHalfLength;
 		cIt->slope = slope;
 
-		cIt->sqrCosine = 1.0f - cloth::sqr(axis.w * invAxisLength);
-		cIt->halfLength = axisLength;
+		// cos()^2 = 1.0 - (radius difference / axis length)^2
+		// cos()^2 = 1.0 - (opposite/hypotenuse)^2
+		// cos()^2 = 1.0 - sin(angle between c2c1 and  c2t1)^2
+		// cos()^2 = 1.0 - sin(angle between axis and  c2t1)^2
+		cIt->sqrCosine = 1.0f - cloth::sqr(axis.w * invAxisHalfLength);
+		cIt->halfLength = axisHalfLength;
 
 		uint32_t firstMask = 0x1u << iIt->first;
 		cIt->firstMask = firstMask;
@@ -407,12 +418,14 @@ void cloth::SwCollision<T4f>::buildSphereAcceleration(const SphereData* sIt)
 {
 	static const int maxIndex = sGridSize - 1;
 
+	uint32_t mask = 0x1; //single bit mask for current sphere
 	const SphereData* sEnd = sIt + mClothData.mNumSpheres;
-	for (uint32_t mask = 0x1; sIt != sEnd; ++sIt, mask <<= 1)
+	for (; sIt != sEnd; ++sIt, mask <<= 1)
 	{
 		T4f sphere = loadAligned(array(sIt->center));
 		T4f radius = splat<3>(sphere);
 
+		//calculate the first and last cell index, for each axis, that contains the sphere
 		T4i first = intFloor(max((sphere - radius) * mGridScale + mGridBias, gSimd4fZero));
 		T4i last = intFloor(min((sphere + radius) * mGridScale + mGridBias, sGridLength));
 
@@ -422,11 +435,14 @@ void cloth::SwCollision<T4f>::buildSphereAcceleration(const SphereData* sIt)
 		uint32_t* firstIt = reinterpret_cast<uint32_t*>(mSphereGrid);
 		uint32_t* lastIt = firstIt + 3 * sGridSize;
 
+		//loop through the 3 axes 
 		for (uint32_t i = 0; i < 3; ++i, firstIt += sGridSize, lastIt += sGridSize)
 		{
+			//mark the sphere and everything to the right
 			for (int j = firstIdx[i]; j <= maxIndex; ++j)
 				firstIt[j] |= mask;
 
+			//mark the sphere and everything to the left
 			for (int j = lastIdx[i]; j >= 0; --j)
 				lastIt[j] |= mask;
 		}
@@ -469,17 +485,23 @@ void cloth::SwCollision<T4f>::mergeAcceleration(uint32_t* firstIt)
 template <typename T4f>
 bool cloth::SwCollision<T4f>::buildAcceleration()
 {
-	// determine sphere bbox
+	// determine single bounding box around all spheres
 	BoundingBox<T4f> sphereBounds =
 	    expandBounds(emptyBounds<T4f>(), mCurData.mSpheres, mCurData.mSpheres + mClothData.mNumSpheres);
+
+	// determine single bounding box around all particles
 	BoundingBox<T4f> particleBounds = loadBounds<T4f>(mClothData.mCurBounds);
+
 	if (mClothData.mEnableContinuousCollision)
 	{
+		// extend bounds to include movement from previous frame
 		sphereBounds = expandBounds(sphereBounds, mPrevData.mSpheres, mPrevData.mSpheres + mClothData.mNumSpheres);
 		particleBounds = expandBounds(particleBounds, loadBounds<T4f>(mClothData.mPrevBounds));
 	}
 
 	BoundingBox<T4f> bounds = intersectBounds(sphereBounds, particleBounds);
+
+	// no collision checks needed if the intersection between particle bounds and sphere bounds is empty
 	T4f edgeLength = (bounds.mUpper - bounds.mLower) & ~static_cast<T4f>(sMaskW);
 	if (!allGreaterEqual(edgeLength, gSimd4fZero))
 		return false;
@@ -490,6 +512,7 @@ bool cloth::SwCollision<T4f>::buildAcceleration()
 	const T4f expandedEdgeLength = max(expandedUpper - expandedLower, gSimd4fEpsilon);
 
 	// make grid minimal thickness and strict upper bound of spheres
+	// grid maps bounds to 0-7 space (sGridLength =~= 8)
 	mGridScale = sGridLength * recip<1>(expandedEdgeLength);
 	mGridBias = -expandedLower * mGridScale;
 	array(mGridBias)[3] = 1.0f; // needed for collideVirtualParticles()
@@ -655,8 +678,8 @@ struct cloth::SwCollision<T4f>::ImpulseAccumulator
 		mNumCollisions = mNumCollisions + (gSimd4fOne & mask);
 	}
 
-	T4f mDeltaX, mDeltaY, mDeltaZ;
-	T4f mVelX, mVelY, mVelZ;
+	T4f mDeltaX, mDeltaY, mDeltaZ; //depenetration delta
+	T4f mVelX, mVelY, mVelZ; //frame offset of the collision shape (velocity * dt)
 	T4f mNumCollisions;
 };
 
@@ -684,12 +707,15 @@ FORCE_INLINE void cloth::SwCollision<T4f>::collideSpheres(const T4i& sphereMask,
 
 		T4f sqrDistance = gSimd4fEpsilon + deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
 		T4f negativeScale = gSimd4fOne - rsqrt(sqrDistance) * splat<3>(sphere);
+		// negativeScale = 1 - radius/|position-sphere|
 
 		T4f contactMask;
 		if (!anyGreater(gSimd4fZero, negativeScale, contactMask))
 			continue;
 
 		accum.subtract(deltaX, deltaY, deltaZ, negativeScale, contactMask);
+		// -= delta * negativeScale
+		//  = delta - delta * radius/|position-sphere|
 
 		if (frictionEnabled)
 		{
@@ -730,10 +756,13 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict positions, ImpulseAc
 
 		T4f center = loadAligned(centerPtr, offset);
 
+		// offset from center of cone to particle
+		// delta = pos - center
 		T4f deltaX = positions[0] - splat<0>(center);
 		T4f deltaY = positions[1] - splat<1>(center);
 		T4f deltaZ = positions[2] - splat<2>(center);
 
+		//axis of the cone
 		T4f axis = loadAligned(axisPtr, offset);
 
 		T4f axisX = splat<0>(axis);
@@ -741,12 +770,16 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict positions, ImpulseAc
 		T4f axisZ = splat<2>(axis);
 		T4f slope = splat<3>(axis);
 
+		// project delta onto axis
 		T4f dot = deltaX * axisX + deltaY * axisY + deltaZ * axisZ;
+		// interpolate radius
 		T4f radius = dot * slope + splat<3>(center);
 
 		// set radius to zero if cone is culled
 		radius = max(radius, gSimd4fZero) & ~culled;
 
+		// distance to axis
+		// sqrDistance = |delta|^2 - |dot|^2
 		T4f sqrDistance = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ - dot * dot;
 
 		T4i auxiliary = loadAligned(auxiliaryPtr, offset);
@@ -765,6 +798,8 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict positions, ImpulseAc
 		sqrDistance = max(sqrDistance, gSimd4fEpsilon);
 
 		T4f invDistance = rsqrt(sqrDistance);
+
+		//offset base to take slope in to account
 		T4f base = dot + slope * sqrDistance * invDistance;
 
 		// force left/rightMask to false if not inside cone
@@ -780,6 +815,7 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict positions, ImpulseAc
 		shapeMask.mSpheres = shapeMask.mSpheres & ~(firstMask & ~leftMask);
 		shapeMask.mSpheres = shapeMask.mSpheres & ~(secondMask & ~rightMask);
 
+		//contact normal direction
 		deltaX = deltaX - base * axisX;
 		deltaY = deltaY - base * axisY;
 		deltaZ = deltaZ - base * axisZ;
@@ -1173,7 +1209,9 @@ PX_INLINE void calculateFrictionImpulse(const T4f& deltaX, const T4f& deltaY, co
 	T4f ny = deltaY * rcpDelta;
 	T4f nz = deltaZ * rcpDelta;
 
-	// calculate relative velocity scaled by number of collisions
+	// calculate relative velocity
+	// velXYZ is scaled by one over the number of collisions since all collisions accumulate into 
+	//  that variable during collision detection
 	T4f rvx = curPos[0] - prevPos[0] - velX * scale;
 	T4f rvy = curPos[1] - prevPos[1] - velY * scale;
 	T4f rvz = curPos[2] - prevPos[2] - velZ * scale;
@@ -1186,7 +1224,7 @@ PX_INLINE void calculateFrictionImpulse(const T4f& deltaX, const T4f& deltaY, co
 	T4f rvty = rvy - rvn * ny;
 	T4f rvtz = rvz - rvn * nz;
 
-	// calculate magnitude of vt
+	// calculate magnitude of relative tangential velocity
 	T4f rcpVt = rsqrt(rvtx * rvtx + rvty * rvty + rvtz * rvtz + gSimd4fEpsilon);
 
 	// magnitude of friction impulse (cannot be greater than -vt)
@@ -1206,7 +1244,7 @@ void cloth::SwCollision<T4f>::collideParticles()
 	const T4f massScale = simd4f(mClothData.mCollisionMassScale);
 
 	const bool frictionEnabled = mClothData.mFrictionScale > 0.0f;
-	const T4f frictionScale = simd4f(mClothData.mFrictionScale);
+	const T4f frictionScale = simd4f(mClothData.mFrictionScale); //[arameter set by user
 
 	T4f curPos[4];
 	T4f prevPos[4];
@@ -1214,16 +1252,20 @@ void cloth::SwCollision<T4f>::collideParticles()
 	float* __restrict prevIt = mClothData.mPrevParticles;
 	float* __restrict pIt = mClothData.mCurParticles;
 	float* __restrict pEnd = pIt + mClothData.mNumParticles * 4;
+	//loop over particles 4 at a time
 	for (; pIt < pEnd; pIt += 16, prevIt += 16)
 	{
 		curPos[0] = loadAligned(pIt, 0);
 		curPos[1] = loadAligned(pIt, 16);
 		curPos[2] = loadAligned(pIt, 32);
 		curPos[3] = loadAligned(pIt, 48);
-		transpose(curPos[0], curPos[1], curPos[2], curPos[3]);
+		transpose(curPos[0], curPos[1], curPos[2], curPos[3]); //group values by axis in simd structure
 
 		ImpulseAccumulator accum;
+
+		//first collide cones
 		T4i sphereMask = collideCones(curPos, accum);
+		//pass on hit mask to ignore sphere parts that are inside the cones
 		collideSpheres(sphereMask, curPos, accum);
 
 		T4f mask;
@@ -1267,6 +1309,7 @@ void cloth::SwCollision<T4f>::collideParticles()
 			curPos[3] = select(mask, curPos[3] * scale, curPos[3]);
 		}
 
+		//apply average de-penetration delta
 		curPos[0] = curPos[0] + accum.mDeltaX * invNumCollisions;
 		curPos[1] = curPos[1] + accum.mDeltaY * invNumCollisions;
 		curPos[2] = curPos[2] + accum.mDeltaZ * invNumCollisions;

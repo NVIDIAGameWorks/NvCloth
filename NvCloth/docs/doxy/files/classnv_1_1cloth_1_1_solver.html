@@ -53,6 +53,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#63e732712c5a43c44e6018cca6c1fb82">addCloth</a> (<a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> *cloth)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Adds cloth object.  <a href="#63e732712c5a43c44e6018cca6c1fb82"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#ea0f778230b2a0f211bdb5d36d3b54f3">addCloths</a> (<a class="el" href="structnv_1_1cloth_1_1_range.html">Range</a>&lt; <a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> * &gt; cloths)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Adds an array of cloth objects.  <a href="#ea0f778230b2a0f211bdb5d36d3b54f3"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnv_1_1cloth_1_1_solver.html#d2efbe447bf07138c615973c349ab839">beginSimulation</a> (float dt)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Begins a simulation frame.  <a href="#d2efbe447bf07138c615973c349ab839"></a><br></td></tr>
@@ -180,6 +183,28 @@ base class for solvers <hr><h2>Constructor &amp; Destructor Documentation</h2>
 
 <p>
 Adds cloth object. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="ea0f778230b2a0f211bdb5d36d3b54f3"></a><!-- doxytag: member="nv::cloth::Solver::addCloths" ref="ea0f778230b2a0f211bdb5d36d3b54f3" args="(Range&lt; Cloth * &gt; cloths)=0" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nv::cloth::Solver::addCloths           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnv_1_1cloth_1_1_range.html">Range</a>&lt; <a class="el" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> * &gt;&nbsp;</td>
+          <td class="paramname"> <em>cloths</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Adds an array of cloth objects. 
 <p>
 
 </div>

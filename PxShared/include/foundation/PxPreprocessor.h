@@ -47,7 +47,9 @@ All definitions have a value of 1 or 0, use '#if' instead of '#ifdef'.
 Compiler defines, see http://sourceforge.net/p/predef/wiki/Compilers/
 */
 #if defined(_MSC_VER)
-#if _MSC_VER >= 1900
+#if _MSC_VER >= 1910
+#define PX_VC 15
+#elif _MSC_VER >= 1900
 #define PX_VC 14
 #elif _MSC_VER >= 1800
 #define PX_VC 12
@@ -488,7 +490,8 @@ struct PxPackValidation
 	long long a;
 };
 #endif
-#if !PX_APPLE_FAMILY && !PX_EMSCRIPTEN
+// clang (as of version 3.9) cannot align doubles on 8 byte boundary  when compiling for Intel 32 bit target
+#if !PX_APPLE_FAMILY && !PX_EMSCRIPTEN && !(PX_CLANG && PX_X86)
 PX_COMPILE_TIME_ASSERT(PX_OFFSET_OF(PxPackValidation, a) == 8);
 #endif
 

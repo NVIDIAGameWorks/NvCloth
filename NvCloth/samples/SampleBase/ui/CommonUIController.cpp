@@ -188,6 +188,8 @@ void CommonUIController::drawUI()
 				drawCodeProfiler(&s_showProfilerWindow);
 			}
 #endif
+
+			getSceneController().drawStatsUI();
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////

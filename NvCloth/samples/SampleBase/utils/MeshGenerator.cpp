@@ -348,6 +348,20 @@ Mesh generateIcosahedron(float radius, int subdivisions)
 	return mesh;
 }
 
+namespace
+{
+	physx::PxVec3 IntersectSpheres(float* circleRadius, physx::PxVec3 aCenter, float aRadius, physx::PxVec3 bCenter, float bRadius)
+	{
+		//Intersect spheres in 2d (http://paulbourke.net/geometry/circlesphere/ Intersection of two circles)
+		float d = (aCenter - bCenter).magnitude();
+		float a = (aRadius*aRadius - bRadius*bRadius + d*d) / (2.0f*d);
+		float h = sqrtf(aRadius*aRadius - a*a);
+		physx::PxVec3 P3 = aCenter + a * (bCenter - aCenter) / d;
+		if(circleRadius) *circleRadius = h;
+		return P3;
+	}
+};
+
 Mesh generateCone(physx::PxVec4 a, physx::PxVec4 b, int segments, float grow, bool correctCone)
 {
 	Mesh mesh;
@@ -365,41 +379,64 @@ Mesh generateCone(physx::PxVec4 a, physx::PxVec4 b, int segments, float grow, bo
 	basis[2].normalize();
 	computeBasis(basis[2], &basis[0], &basis[1]);
 
-	physx::PxVec3 pa = aCenter + aRadius*basis[0];
-	physx::PxVec3 pb = bCenter + bRadius*basis[0];
-	physx::PxVec3 dir = pb - pa;
-
-	physx::PxVec3 n = basis[2].cross(dir);
-	physx::PxVec3 n2 = dir.cross(n);
-	physx::PxVec3 focusPoint = aCenter + ((pa - aCenter).dot(n2)) / basis[2].dot(n2) * basis[2];
-
 	if(correctCone)
 	{
+		//make the cone connect seamlessly to the spheres
+		{
+			//http://jwilson.coe.uga.edu/emt669/Student.Folders/Kertscher.Jeff/Essay.3/Tangents.html
+
+			//sphere a with smaller radius
+			float cRadius = aRadius - bRadius;
+			physx::PxVec3 cCenter = aCenter;
+
+			//sphere in between the a and b
+			physx::PxVec3 dCenter = (aCenter+bCenter)*0.5f;
+			float dRadius = (aCenter - bCenter).magnitude()*0.5f;
+
+			//intersection between c and d to get tangent point
+			float iRadius;
+			physx::PxVec3 iCenter = IntersectSpheres(&iRadius, dCenter, dRadius, cCenter, cRadius);
+			physx::PxVec3 iPoint = iCenter + basis[0] * iRadius; //tangent point on c
+			physx::PxVec3 offset = (iPoint - aCenter).getNormalized(); //offset direction
+
+			physx::PxVec3 aPoint = aCenter + offset*aRadius;
+			aCenter = (aPoint - aCenter).dot(basis[2])*basis[2] + aCenter;
+			aRadius = (aPoint - aCenter).magnitude();
+			physx::PxVec3 bPoint = bCenter + offset*bRadius;
+			bCenter = (bPoint - aCenter).dot(basis[2])*basis[2] + aCenter;
+			bRadius = (bPoint - bCenter).magnitude();
+
+
+		}
+
+		//old code, probably wrong
+		/*
+		physx::PxVec3 pa = aCenter + aRadius*basis[0];
+		physx::PxVec3 pb = bCenter + bRadius*basis[0];
+		physx::PxVec3 dir = pb - pa;
+
+		//construct plane containing pa and pb, with normal perpendicular to basis[0]
+		physx::PxVec3 n = basis[2].cross(dir);
+		physx::PxVec3 n2 = dir.cross(n);
+
+		//line plane intersection
+		physx::PxVec3 focusPoint = aCenter + ((pa - aCenter).dot(n2)) / basis[2].dot(n2) * basis[2];
+
 		{
 			float focusDistance = (focusPoint - aCenter).magnitude();
+			//make circle with center in mid point between focusPoint and aCenter
 			physx::PxVec3 cCenter = (focusPoint + aCenter)*0.5f;
 			float cRadius = focusDistance*0.5f;
-			float d = (aCenter - cCenter).magnitude();
-			float a = (aRadius*aRadius - cRadius*cRadius + d*d) / (2.0f*d);
-			float h = sqrtf(aRadius*aRadius - a*a);
-			physx::PxVec3 P3 = aCenter + a * (cCenter - aCenter) / d;
 
-			aCenter = P3;
-			aRadius = h;
+			aCenter = IntersectSpheres(&aRadius, aCenter, aRadius, cCenter, cRadius);
 		}
 
 		{
 			float focusDistance = (focusPoint - bCenter).magnitude();
 			physx::PxVec3 cCenter = (focusPoint + bCenter)*0.5f;
 			float cRadius = focusDistance*0.5f;
-			float d = (bCenter - cCenter).magnitude();
-			float a = (bRadius*bRadius - cRadius*cRadius + d*d) / (2.0f*d);
-			float h = sqrtf(bRadius*bRadius - a*a);
-			physx::PxVec3 P3 = bCenter + a * (cCenter - bCenter) / d;
-
-			bCenter = P3;
-			bRadius = h;
-		}
+			bCenter = IntersectSpheres(&bRadius, bCenter, bRadius, cCenter, cRadius);
+		}*/
 	}
 
 

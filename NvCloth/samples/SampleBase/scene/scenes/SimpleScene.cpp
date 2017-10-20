@@ -9,7 +9,7 @@
 */
 
 #include "SimpleScene.h"
-#include "Scene/SceneController.h"
+#include "scene/SceneController.h"
 #include <NvClothExt/ClothFabricCooker.h>
 #include "ClothMeshGenerator.h"
 #include <NvCloth/Fabric.h>
@@ -76,6 +76,7 @@ void SimpleScene::onInitialize()
 	mClothActor->mCloth->setPhaseConfig(nv::cloth::Range<nv::cloth::PhaseConfig>(&phases.front(), &phases.back()));
 	mClothActor->mCloth->setDragCoefficient(0.1f);
 	mClothActor->mCloth->setDragCoefficient(0.1f);
+	//mClothActor->mCloth->setSelfCollisionDistance(0.1f);
 
 	mSolver = getSceneController()->getFactory()->createSolver();
 	trackSolver(mSolver);

@@ -31,6 +31,7 @@
 #include "CuContextLock.h"
 #include "CuFactory.h"
 #include <PsUtilities.h>
+#include <limits.h>
 
 using namespace physx;
 

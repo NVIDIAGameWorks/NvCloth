@@ -297,7 +297,7 @@ class DxBatchedVector
 
 	void swap(DxBatchedVector<T>& other)
 	{
-		PX_ASSERT(&mStorage == &other.mStorage);
+		NV_CLOTH_ASSERT(&mStorage == &other.mStorage);
 		physx::shdfnd::swap(mOffset, other.mOffset);
 		physx::shdfnd::swap(mSize, other.mSize);
 		physx::shdfnd::swap(mCapacity, other.mCapacity);

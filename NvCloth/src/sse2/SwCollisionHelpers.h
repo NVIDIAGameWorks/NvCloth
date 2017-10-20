@@ -63,12 +63,15 @@ Simd4i intFloor(const Simd4f& v)
 {
 	Simd4i i = _mm_cvttps_epi32(v);
 	return _mm_sub_epi32(i, _mm_srli_epi32(simd4i(v), 31));
+	//Simd4i i = truncate(v);
+	//return i - (simd4i(v) >> 31);
 }
 
 Simd4i horizontalOr(const Simd4i& mask)
 {
 	Simd4i tmp = mask | _mm_shuffle_epi32(mask, 0xb1); // w z y x -> z w x y
 	return tmp | _mm_shuffle_epi32(tmp, 0x4e);         // w z y x -> y x w z
+//	return splat<0>(mask) | splat<1>(mask) | splat<2>(mask) | splat<3>(mask);
 }
 
 Gather<Simd4i>::Gather(const Simd4i& index)

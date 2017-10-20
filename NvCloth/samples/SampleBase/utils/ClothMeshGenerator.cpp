@@ -72,6 +72,7 @@ GeneratePlaneCloth(x,y,2,2) generates:
 					pos =	physx::PxVec3(((float)x / (float)segmentsX) * width,
 							((float)(y&2) / (float)segmentsY) * height,
 							((float)((y+1)&~1) / (float)segmentsY) * height);
+					break;
 				default:
 					pos =	physx::PxVec3(((float)x / (float)segmentsX) * width,
 							0.f,

@@ -37,23 +37,24 @@
 #endif
 
 using namespace nv;
+using namespace cloth;
 
 namespace
 {
 
-const Simd4fTupleFactory sMaskXYZ = simd4f(simd4i(~0, ~0, ~0, 0));
-
 // returns sorted indices, output needs to be at least 2*(last - first) + 1024
 void radixSort(const uint32_t* first, const uint32_t* last, uint16_t* out)
 {
+	// this sort uses a radix (bin) size of 256, requiring 4 bins to sort the 32 bit keys
 	uint16_t n = uint16_t(last - first);
 
 	uint16_t* buffer = out + 2 * n;
 	uint16_t* __restrict histograms[] = { buffer, buffer + 256, buffer + 512, buffer + 768 };
 
+	//zero the buffer memory used for the 4 buckets
 	memset(buffer, 0, 1024 * sizeof(uint16_t));
 
-	// build 3 histograms in one pass
+	// build 4 histograms in one pass
 	for (const uint32_t* __restrict it = first; it != last; ++it)
 	{
 		uint32_t key = *it;
@@ -64,7 +65,7 @@ void radixSort(const uint32_t* first, const uint32_t* last, uint16_t* out)
 	}
 
 	// convert histograms to offset tables in-place
-	uint16_t sums[4] = {};
+	uint16_t sums[4] = {0, 0, 0, 0};
 	for (uint32_t i = 0; i < 256; ++i)
 	{
 		uint16_t temp0 = uint16_t(histograms[0][i] + sums[0]);
@@ -133,6 +134,7 @@ bool isSelfCollisionEnabled(const cloth::SwCloth& cloth)
 	return std::min(cloth.mSelfCollisionDistance, -cloth.mSelfCollisionLogStiffness) > 0.0f;
 }
 
+// align x to a 2 byte boundary
 inline uint32_t align2(uint32_t x)
 {
 	return (x + 1) & ~1;
@@ -146,7 +148,7 @@ cloth::SwSelfCollision<T4f>::SwSelfCollision(cloth::SwClothData& clothData, clot
 {
 	mCollisionDistance = simd4f(mClothData.mSelfCollisionDistance);
 	mCollisionSquareDistance = mCollisionDistance * mCollisionDistance;
-	mStiffness = sMaskXYZ & static_cast<T4f>(simd4f(mClothData.mSelfCollisionStiffness));
+	mStiffness = gSimd4fMaskXYZ & static_cast<T4f>(simd4f(mClothData.mSelfCollisionStiffness));
 }
 
 template <typename T4f>
@@ -170,11 +172,12 @@ void cloth::SwSelfCollision<T4f>::operator()()
 	uint32_t hashAxis0 = (sweepAxis + 1) % 3;
 	uint32_t hashAxis1 = (sweepAxis + 2) % 3;
 
-	// reserve 0, 127, and 65535 for sentinel
+	// reserve 0, 255, and 65535 for sentinel
 	T4f cellSize = max(mCollisionDistance, simd4f(1.0f / 253) * edgeLength);
 	array(cellSize)[sweepAxis] = array(edgeLength)[sweepAxis] / 65533;
 
 	T4f one = gSimd4fOne;
+	// +1 for sentinel 0 offset
 	T4f gridSize = simd4f(254.0f);
 	array(gridSize)[sweepAxis] = 65534.0f;
 
@@ -194,6 +197,7 @@ void cloth::SwSelfCollision<T4f>::operator()()
 	// create keys
 	for (uint32_t i = 0; i < numIndices; ++i)
 	{
+		// use all particles when no self collision indices are set
 		uint32_t index = indices ? indices[i] : i;
 
 		// grid coordinate
@@ -207,28 +211,32 @@ void cloth::SwSelfCollision<T4f>::operator()()
 		keys[i] = uint32_t(ptr[sweepAxis] | (ptr[hashAxis0] << 16) | (ptr[hashAxis1] << 24));
 	}
 
-	// compute sorted keys indices
+	// compute sorted key indices
 	radixSort(keys, keys + numIndices, sortedIndices);
 
 	// snoop histogram: offset of first index with 8 msb > 1 (0 is sentinel)
-	uint16_t firstColumnSize = sortedIndices[2 * numIndices + 769];
+	// sortedIndices[2 * numIndices + 768 + 1] is actually histograms[3]+1 from radixSort
+	uint16_t firstColumnSize = sortedIndices[2 * numIndices + 768 + 1];
 
-	// sort keys
+	// sort keys using the sortedIndices
 	for (uint32_t i = 0; i < numIndices; ++i)
 		sortedKeys[i] = keys[sortedIndices[i]];
 	sortedKeys[numIndices] = uint32_t(-1); // sentinel
 
+	// do user provided index array indirection here if we have one
+	//  so we don't need to keep branching for this condition later
 	if (indices)
 	{
 		// sort indices (into no-longer-needed keys array)
-		const uint16_t* __restrict permutation = sortedIndices;
+		// the keys array is no longer used so we can reuse it to store indices[sortedIndices[i]]
+		const uint16_t* __restrict oldSortedIndices = sortedIndices;
 		sortedIndices = reinterpret_cast<uint16_t*>(keys);
 		for (uint32_t i = 0; i < numIndices; ++i)
-			sortedIndices[i] = uint16_t(indices[permutation[i]]);
+			sortedIndices[i] = uint16_t(indices[oldSortedIndices[i]]);
 	}
 
 	// calculate the number of buckets we need to search forward
-	const Simd4i data = intFloor(gridScale * mCollisionDistance);
+	const Simd4i data = intFloor(gridScale * mCollisionDistance); //equal to or larger than floor(mCollisionDistance)
 	uint32_t collisionDistance = 2 + static_cast<uint32_t>(array(data)[sweepAxis]);
 
 	// collide particles
@@ -310,7 +318,7 @@ void cloth::SwSelfCollision<T4f>::collideParticles(T4f& pos0, T4f& pos1, const T
 
 	T4f ratio = mCollisionDistance * rsqrt(distSqr);
 	T4f scale = mStiffness * recip(gSimd4fEpsilon + w0 + w1);
-	T4f delta = (scale * (diff - diff * ratio)) & sMaskXYZ;
+	T4f delta = (scale * (diff - diff * ratio)) & gSimd4fMaskXYZ;
 
 	pos0 = pos0 + delta * w0;
 	pos1 = pos1 - delta * w1;
@@ -325,42 +333,71 @@ template <bool useRestParticles>
 void cloth::SwSelfCollision<T4f>::collideParticles(const uint32_t* keys, uint16_t firstColumnSize,
                                                       const uint16_t* indices, uint32_t collisionDistance)
 {
+	//keys is an array of bucket keys for the particles
+	//indices is an array of particle indices
+	//collisionDistance is the number of buckets along the sweep axis we need to search after the current one
+
 	T4f* __restrict particles = reinterpret_cast<T4f*>(mClothData.mCurParticles);
 	T4f* __restrict restParticles =
 	    useRestParticles ? reinterpret_cast<T4f*>(mClothData.mRestPositions) : particles;
 
-	const uint32_t bucketMask = uint16_t(-1);
+	//16 lsb's are for the bucket
+	const uint32_t bucketMask = 0x0000ffff;
 
+	// offsets for cells (not along the sweep axis)
+	//										[1]		[3]-[1]			[3]		  [1]+[3]
 	const uint32_t keyOffsets[] = { 0, 0x00010000, 0x00ff0000, 0x01000000, 0x01010000 };
 
 	const uint32_t* __restrict kFirst[5];
 	const uint32_t* __restrict kLast[5];
+
+	/*
+	We use 5 first/last pairs to search the following cells
+	=====================
+	|   |   |   |   |   |
+	=====================
+	|   |   | 0 | 1 |   |
+	=====================
+	|   | 2 | 3 | 4 |   |
+	=====================
+	|   |   |   |   |   |
+	=====================
+	With 0 as the origin.
+	This way collisions won't be double reported.
+	*/
 
 	{
 		// optimization: scan forward iterator starting points once instead of 9 times
 		const uint32_t* __restrict kIt = keys;
 
 		uint32_t key = *kIt;
+		//clamp first/lastKey to bucket
 		uint32_t firstKey = key - std::min(collisionDistance, key & bucketMask);
 		uint32_t lastKey = std::min(key + collisionDistance, key | bucketMask);
 
+		//sweep 0
 		kFirst[0] = kIt;
+		//find next key in keys that is past lastKey
 		while (*kIt < lastKey)
 			++kIt;
 		kLast[0] = kIt;
 
+		//sweep 1...4
 		for (uint32_t k = 1; k < 5; ++k)
 		{
+			// scan forward start point
 			for (uint32_t n = firstKey + keyOffsets[k]; *kIt < n;)
 				++kIt;
 			kFirst[k] = kIt;
 
+			// scan forward end point
 			for (uint32_t n = lastKey + keyOffsets[k]; *kIt < n;)
 				++kIt;
 			kLast[k] = kIt;
 
-			// jump forward once to second column
-			kIt = keys + firstColumnSize;
+			// jump forward once to second column to go from cell offset 1 to 2 quickly
+			if(firstColumnSize)
+				kIt = keys + firstColumnSize;
 			firstColumnSize = 0;
 		}
 	}
@@ -371,7 +408,8 @@ void cloth::SwSelfCollision<T4f>::collideParticles(const uint32_t* keys, uint16_
 	const uint16_t* __restrict jIt;
 	const uint16_t* __restrict jEnd;
 
-	for (; iIt != iEnd; ++iIt, ++kFirst[0])
+	//loop through all indices
+	for (; iIt < iEnd; ++iIt, ++kFirst[0])
 	{
 		NV_CLOTH_ASSERT(*iIt < mClothData.mNumParticles);
 
@@ -390,8 +428,8 @@ void cloth::SwSelfCollision<T4f>::collideParticles(const uint32_t* keys, uint16_
 			++kLast[0];
 
 		// process potential colliders of same cell
-		jEnd = indices + (kLast[0] - keys);
-		for (jIt = iIt + 1; jIt != jEnd; ++jIt)
+		jEnd = indices + (kLast[0] - keys); //calculate index from key pointer
+		for (jIt = iIt + 1; jIt < jEnd; ++jIt)
 			collideParticles<useRestParticles>(particle, particles[*jIt], restParticle, restParticles[*jIt]);
 
 		// process neighbor cells
@@ -407,7 +445,7 @@ void cloth::SwSelfCollision<T4f>::collideParticles(const uint32_t* keys, uint16_
 
 			// process potential colliders
 			jEnd = indices + (kLast[k] - keys);
-			for (jIt = indices + (kFirst[k] - keys); jIt != jEnd; ++jIt)
+			for (jIt = indices + (kFirst[k] - keys); jIt < jEnd; ++jIt)
 				collideParticles<useRestParticles>(particle, particles[*jIt], restParticle, restParticles[*jIt]);
 		}
 

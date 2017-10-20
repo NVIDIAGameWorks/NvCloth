@@ -29,6 +29,8 @@
 
 #pragma once
 
+#include "PsMathUtils.h"
+
 namespace nv
 {
 namespace cloth
@@ -46,6 +48,7 @@ uint32_t findBitSet(uint32_t mask)
 
 inline Scalar4i intFloor(const Scalar4f& v)
 {
+	using physx::shdfnd::floor;
 	return Scalar4i(int(floor(v.f4[0])), int(floor(v.f4[1])), int(floor(v.f4[2])), int(floor(v.f4[3])));
 }
 

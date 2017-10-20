@@ -34,4 +34,13 @@ for /d %%G in (".\samples\compiler\vc*") do (
 rd %%G /s /q
 )
 
+for /d %%G in (".\compiler\android-*") do (
+rd %%G /s /q
+)
+
+for /d %%G in (".\test\compiler\android-*") do (
+rd %%G /s /q
+)
+
+
 pause

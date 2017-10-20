@@ -206,9 +206,9 @@ class PX_FOUNDATION_API ThreadImpl
 	static uint32_t getNbPhysicalCores();
 
 	/**
-   Size of this class.
-   */
-	static const uint32_t& getSize();
+	Size of this class.
+	*/
+	static uint32_t getSize();
 };
 
 /**

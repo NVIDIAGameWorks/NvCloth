@@ -64,6 +64,7 @@ class SwSolver : public Solver
 	virtual ~SwSolver();
 
 	virtual void addCloth(Cloth*) override;
+	virtual void addCloths(Range<Cloth*> cloths) override;
 	virtual void removeCloth(Cloth*) override;
 	virtual int getNumCloths() const override;
 	virtual Cloth * const * getClothList() const override;
@@ -112,6 +113,10 @@ class SwSolver : public Solver
 	}
 
   private:
+	// add cloth helper functions
+	void addClothAppend(Cloth* cloth);
+
+	// simulate helper functions
 	void beginFrame() const;
 	void endFrame() const;
 

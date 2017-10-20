@@ -104,7 +104,7 @@ void foo(const float* ptr)
 #define NV_SIMD_INLINE_ASSEMBLER 1
 #endif
 
-/*! \def NV_SIMD_USE_NAMESPACE
+/*! \def NV_CLOTH_NO_SIMD_NAMESPACE
 * \brief Set to 1 to define the SIMD library types and functions inside the nvidia::simd namespace.
 * By default, the types and functions defined in this header live in the global namespace.
 * This is because MSVC (prior to version 12, Visual Studio 2013) does an inferior job at optimizing
@@ -116,11 +116,11 @@ void foo(const float* ptr)
 * __m128i are wrapped into structs. Arguments need to be passed by reference in this mode.
 * \see NV_SIMD_VECTORCALL, Simd4fArg */
 
-#if defined NV_SIMD_USE_NAMESPACE&& NV_SIMD_USE_NAMESPACE
+#ifndef NV_CLOTH_NO_SIMD_NAMESPACE
 #define NV_SIMD_NAMESPACE_BEGIN                                                                                        \
 	namespace nv                                                                                                       \
 	{                                                                                                                  \
-	namespace simd                                                                                                     \
+	namespace cloth                                                                                                     \
 	{
 #define NV_SIMD_NAMESPACE_END                                                                                          \
 	}                                                                                                                  \

@@ -251,15 +251,15 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 	void cloth::DxFactory::extractCollisionData(const Cloth& cloth, Range<PxVec4> spheres, Range<uint32_t> capsules,
 		Range<PxVec4> planes, Range<uint32_t> convexes, Range<PxVec3> triangles) const
 	{
-		PX_ASSERT(&cloth.getFactory() == this);
+		NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
 		const DxCloth& dxCloth = static_cast<const DxCloth&>(cloth);
 
-		PX_ASSERT(spheres.empty() || spheres.size() == dxCloth.mStartCollisionSpheres.size());
-		PX_ASSERT(capsules.empty() || capsules.size() == dxCloth.mCapsuleIndices.size() * 2);
-		PX_ASSERT(planes.empty() || planes.size() == dxCloth.mStartCollisionPlanes.size());
-		PX_ASSERT(convexes.empty() || convexes.size() == dxCloth.mConvexMasks.size());
-		PX_ASSERT(triangles.empty() || triangles.size() == dxCloth.mStartCollisionTriangles.size());
+		NV_CLOTH_ASSERT(spheres.empty() || spheres.size() == dxCloth.mStartCollisionSpheres.size());
+		NV_CLOTH_ASSERT(capsules.empty() || capsules.size() == dxCloth.mCapsuleIndices.size() * 2);
+		NV_CLOTH_ASSERT(planes.empty() || planes.size() == dxCloth.mStartCollisionPlanes.size());
+		NV_CLOTH_ASSERT(convexes.empty() || convexes.size() == dxCloth.mConvexMasks.size());
+		NV_CLOTH_ASSERT(triangles.empty() || triangles.size() == dxCloth.mStartCollisionTriangles.size());
 
 		// collision spheres are in pinned memory, so memcpy directly
 		if (!dxCloth.mStartCollisionSpheres.empty() && !spheres.empty())
@@ -296,13 +296,13 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 
 	void cloth::DxFactory::extractMotionConstraints(const Cloth& cloth, Range<PxVec4> destConstraints) const
 	{
-		PX_ASSERT(&cloth.getFactory() == this);
+		NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
 		const DxCloth& dxCloth = static_cast<const DxCloth&>(cloth);
 
 		if (dxCloth.mMotionConstraints.mHostCopy.size())
 		{
-			PX_ASSERT(destConstraints.size() == dxCloth.mMotionConstraints.mHostCopy.size());
+			NV_CLOTH_ASSERT(destConstraints.size() == dxCloth.mMotionConstraints.mHostCopy.size());
 
 			memcpy(destConstraints.begin(), dxCloth.mMotionConstraints.mHostCopy.begin(),
 				sizeof(PxVec4) * dxCloth.mMotionConstraints.mHostCopy.size());
@@ -315,20 +315,20 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 				? dxCloth.mMotionConstraints.mTarget
 				: dxCloth.mMotionConstraints.mStart;
 
-			PX_ASSERT(destConstraints.size() == srcConstraints.size());
+			NV_CLOTH_ASSERT(destConstraints.size() == srcConstraints.size());
 			copyToHost(destConstraints.begin(), srcConstraints.buffer(), 0, destConstraints.size() * sizeof(PxVec4));
 		}
 	}
 
 	void cloth::DxFactory::extractSeparationConstraints(const Cloth& cloth, Range<PxVec4> destConstraints) const
 	{
-		PX_ASSERT(&cloth.getFactory() == this);
+		NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
 		const DxCloth& dxCloth = static_cast<const DxCloth&>(cloth);
 
 		if (dxCloth.mSeparationConstraints.mHostCopy.size())
 		{
-			PX_ASSERT(destConstraints.size() == dxCloth.mSeparationConstraints.mHostCopy.size());
+			NV_CLOTH_ASSERT(destConstraints.size() == dxCloth.mSeparationConstraints.mHostCopy.size());
 
 			memcpy(destConstraints.begin(), dxCloth.mSeparationConstraints.mHostCopy.begin(),
 				sizeof(PxVec4) * dxCloth.mSeparationConstraints.mHostCopy.size());
@@ -341,7 +341,7 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 				? dxCloth.mSeparationConstraints.mTarget
 				: dxCloth.mSeparationConstraints.mStart;
 
-			PX_ASSERT(destConstraints.size() == srcConstraints.size());
+			NV_CLOTH_ASSERT(destConstraints.size() == srcConstraints.size());
 
 			copyToHost(destConstraints.begin(), srcConstraints.buffer(), 0, destConstraints.size() * sizeof(PxVec4));
 		}
@@ -350,12 +350,12 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 	void cloth::DxFactory::extractParticleAccelerations(const Cloth& cloth, Range<PxVec4> destAccelerations) const
 	{
 		/*
-		PX_ASSERT(&cloth.getFactory() == this);
+		NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 		const DxCloth& dxCloth = static_cast<const DxClothImpl&>(cloth).mCloth;
 
 		if (dxCloth.mParticleAccelerationsHostCopy.size())
 		{
-			PX_ASSERT(dxCloth.mParticleAccelerationsHostCopy.size());
+			NV_CLOTH_ASSERT(dxCloth.mParticleAccelerationsHostCopy.size());
 
 			memcpy(destAccelerations.begin(), dxCloth.mParticleAccelerationsHostCopy.begin(),
 				sizeof(PxVec4) * dxCloth.mParticleAccelerationsHostCopy.size());
@@ -366,20 +366,20 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 
 			DxBatchedVector<PxVec4> const& srcAccelerations = dxCloth.mParticleAccelerations;
 
-			PX_ASSERT(destAccelerations.size() == srcAccelerations.size());
+			NV_CLOTH_ASSERT(destAccelerations.size() == srcAccelerations.size());
 
 			copyToHost(destAccelerations.begin(), srcAccelerations.buffer(), 0, destAccelerations.size() * sizeof(PxVec4));
 		}
 		*/
 		PX_UNUSED(&cloth);
 		PX_UNUSED(&destAccelerations);
-		PX_ASSERT(0);
+		NV_CLOTH_ASSERT(0);
 	}
 
 	void cloth::DxFactory::extractVirtualParticles(const Cloth& cloth, Range<uint32_t[4]> destIndices,
 		Range<PxVec3> destWeights) const
 	{
-		PX_ASSERT(&cloth.getFactory() == this);
+		NV_CLOTH_ASSERT(&cloth.getFactory() == this);
 
 		DxContextLock contextLock(*this);
 
@@ -400,7 +400,7 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 			for (; srcIt != srcEnd; ++srcIt, ++destIt)
 				*destIt = reinterpret_cast<const PxVec3&>(*srcIt);
 
-			PX_ASSERT(destIt <= destWeights.end());
+			NV_CLOTH_ASSERT(destIt <= destWeights.end());
 		}
 
 		if (destIndices.size() > 0)
@@ -418,14 +418,14 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 			for (; srcIt != srcEnd; ++srcIt, ++destIt)
 				*destIt = Vec4u(*srcIt);
 
-			PX_ASSERT(&array(*destIt) <= destIndices.end());
+			NV_CLOTH_ASSERT(&array(*destIt) <= destIndices.end());
 		}
 	}
 
 	void cloth::DxFactory::extractSelfCollisionIndices(const Cloth& cloth, Range<uint32_t> destIndices) const
 	{
 		const DxCloth& dxCloth = static_cast<const DxCloth&>(cloth);
-		PX_ASSERT(destIndices.size() == dxCloth.mSelfCollisionIndices.size());
+		NV_CLOTH_ASSERT(destIndices.size() == dxCloth.mSelfCollisionIndices.size());
 		intrinsics::memCopy(destIndices.begin(), dxCloth.mSelfCollisionIndicesHost.begin(),
 			destIndices.size() * sizeof(uint32_t));
 	}
@@ -433,7 +433,7 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 	void cloth::DxFactory::extractRestPositions(const Cloth& cloth, Range<PxVec4> destRestPositions) const
 	{
 		const DxCloth& dxCloth = static_cast<const DxCloth&>(cloth);
-		PX_ASSERT(destRestPositions.size() == dxCloth.mRestPositions.size());
+		NV_CLOTH_ASSERT(destRestPositions.size() == dxCloth.mRestPositions.size());
 		intrinsics::memCopy(destRestPositions.begin(), DxCloth::MappedVec4fVectorType(const_cast<DxCloth&>(dxCloth).mRestPositions).begin(),
 			destRestPositions.size() * sizeof(PxVec4));
 	}

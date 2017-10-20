@@ -279,7 +279,7 @@ class Cloth : public UserAllocated
 
 	/** \brief Set triangles for collision.
 		Each triangle in the list is defined by of 3 vertices.
-		The values currently in range [first, last[ will be replaced with the content of convexMasks.
+		The values currently in range [first, last[ will be replaced with the content of triangles.
 		*/
 	virtual void setTriangles(Range<const physx::PxVec3> triangles, uint32_t first, uint32_t last) = 0;
 	virtual void setTriangles(Range<const physx::PxVec3> triangles, Range<const physx::PxVec3>, uint32_t first) = 0;

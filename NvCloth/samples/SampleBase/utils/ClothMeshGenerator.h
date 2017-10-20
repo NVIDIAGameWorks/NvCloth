@@ -25,7 +25,7 @@ struct ClothMeshData
 			a(_a), b(_b), c(_c){}
 		uint32_t a, b, c;
 
-		Triangle operator+(uint32_t offset)const { return Triangle(a + offset, b + offset, c + offset); };
+		Triangle operator+(uint32_t offset)const { return Triangle(a + offset, b + offset, c + offset); }
 	};
 	struct Quad
 	{
@@ -34,7 +34,7 @@ struct ClothMeshData
 			a(_a), b(_b), c(_c), d(_d){}
 		uint32_t a, b, c, d;
 
-		Quad operator+(uint32_t offset)const { return Quad(a + offset, b + offset, c + offset, d + offset); };
+		Quad operator+(uint32_t offset)const { return Quad(a + offset, b + offset, c + offset, d + offset); }
 	};
 	std::vector<physx::PxVec3>	mVertices;
 	std::vector<physx::PxVec2>	mUvs;

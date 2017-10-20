@@ -451,6 +451,24 @@ void Scene::addClothToSolver(ClothActor* clothActor, nv::cloth::Solver* solver)
 	mClothSolverMap[clothActor] = solver;
 }
 
+void Scene::addClothsToSolver(nv::cloth::Range<ClothActor*> clothActors, nv::cloth::Solver* solver)
+{
+	// A temporary vector of Cloth*, to construct a Range from and pass to solver
+	std::vector<nv::cloth::Cloth*> cloths;
+
+	for (uint32_t i = 0; i < clothActors.size(); ++i)
+	{
+		auto* clothActor = clothActors[i];
+		assert(mClothSolverMap.find(clothActor) == mClothSolverMap.end());
+		mClothSolverMap[clothActor] = solver;
+
+		cloths.push_back(clothActor->mCloth);
+	}
+
+	auto clothsRange = nv::cloth::Range<nv::cloth::Cloth*>(&cloths.front(), &cloths.back() + 1);
+	solver->addCloths(clothsRange);
+}
+
 void Scene::trackRenderable(Renderable* renderable)
 {
 	trackT(mRenderableList, renderable);

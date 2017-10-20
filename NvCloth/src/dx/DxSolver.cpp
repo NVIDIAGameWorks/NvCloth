@@ -113,26 +113,9 @@ struct ClothSimCostGreater
 
 void cloth::DxSolver::addCloth(Cloth* cloth)
 {
-	DxCloth& dxCloth = static_cast<DxCloth&>(*cloth);
-
-	NV_CLOTH_ASSERT(mCloths.find(&dxCloth) == mCloths.end());
-
-	mCloths.pushBack(&dxCloth);
-	// trigger update of mClothData array
-	dxCloth.notifyChanged();
-
-	// sort cloth instances by size
-	shdfnd::sort(mCloths.begin(), mCloths.size(), ClothSimCostGreater(), NonTrackingAllocator());
-
-	DxContextLock contextLock(mFactory);
-
-	// resize containers and update kernel data
-	mClothDataHostCopy.resize(mCloths.size());
-	mClothData.resize(mCloths.size());
-	mFrameDataHostCopy.resize(mCloths.size());
-
-	// lazy compilation of compute shader
-	mComputeError |= mFactory.mSolverKernelComputeShader == nullptr;
+	addClothAppend(cloth);
+	addClothUpdateData();
+	
 #if 0
 	if (!mSortComputeShader && !mComputeError)
 	{
@@ -197,7 +180,7 @@ void cloth::DxSolver::addCloth(Cloth* cloth)
 				{
 					uint32_t key = sortElems[i] & ~0xffff;
 					uint32_t keyRef = _SortElemsRef[i] & ~0xffff;
-					PX_ASSERT(key == keyRef);
+					NV_CLOTH_ASSERT(key == keyRef);
 				}
 				_SortElemsHostCopy.unmap();
 			}
@@ -206,6 +189,15 @@ void cloth::DxSolver::addCloth(Cloth* cloth)
 		}
 	}
 #endif
+}
+
+void cloth::DxSolver::addCloths(Range<Cloth*> cloths)
+{
+	for (uint32_t i = 0; i < cloths.size(); ++i)
+	{
+		addClothAppend(*(cloths.begin() + i));
+	}
+	addClothUpdateData();
 }
 
 void cloth::DxSolver::removeCloth(Cloth* cloth)
@@ -232,10 +224,9 @@ int cloth::DxSolver::getNumCloths() const
 }
 cloth::Cloth * const * cloth::DxSolver::getClothList() const
 {
-	if(getNumCloths())
+	if (getNumCloths() != 0)
 		return reinterpret_cast<Cloth* const*>(&mCloths[0]);
-	else
-		return nullptr;
+	return nullptr;
 }
 
 bool cloth::DxSolver::beginSimulation(float dt)
@@ -260,7 +251,34 @@ void cloth::DxSolver::endSimulation()
 }
 int cloth::DxSolver::getSimulationChunkCount() const
 {
-	return 1;
+	// 0 chunks when no cloth present in the solver, 1 otherwise
+	return getNumCloths() != 0;
+}
+
+void cloth::DxSolver::addClothAppend(Cloth* cloth)
+{
+	DxCloth& dxCloth = static_cast<DxCloth&>(*cloth);
+	NV_CLOTH_ASSERT(mCloths.find(&dxCloth) == mCloths.end());
+
+	mCloths.pushBack(&dxCloth);
+	// trigger update of mClothData array
+	dxCloth.notifyChanged();
+}
+
+void cloth::DxSolver::addClothUpdateData()
+{
+	// sort cloth instances by size
+	shdfnd::sort(mCloths.begin(), mCloths.size(), ClothSimCostGreater(), NonTrackingAllocator());
+
+	DxContextLock contextLock(mFactory);
+
+	// resize containers and update kernel data
+	mClothDataHostCopy.resize(mCloths.size());
+	mClothData.resize(mCloths.size());
+	mFrameDataHostCopy.resize(mCloths.size());
+
+	// lazy compilation of compute shader
+	mComputeError |= mFactory.mSolverKernelComputeShader == nullptr;
 }
 
 void cloth::DxSolver::beginFrame()

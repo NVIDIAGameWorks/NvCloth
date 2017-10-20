@@ -75,7 +75,9 @@ protected:
 	void trackFabric(nv::cloth::Fabric* fabric);
 	void untrackFabric(nv::cloth::Fabric* fabric);
 
-	void addClothToSolver(ClothActor* clothActor, nv::cloth::Solver* solver); //Helps to detach cloths from solver at AutoDeinit.
+	//Help to detach cloths from solver at AutoDeinit.
+	void addClothToSolver(ClothActor* clothActor, nv::cloth::Solver* solver); 
+	void addClothsToSolver(nv::cloth::Range<ClothActor*> clothActors, nv::cloth::Solver* solver); 
 
 	void trackRenderable(Renderable* renderMesh);
 	void untrackRenderable(Renderable* renderMesh);

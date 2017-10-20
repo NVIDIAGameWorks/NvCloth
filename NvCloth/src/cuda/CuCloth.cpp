@@ -423,7 +423,7 @@ void CuCloth::clearParticleAccelerations()
 {
 	CuContextLock contextLock(mFactory);
 	CuDeviceVector<PxVec4>(mFactory.mContext).swap(mParticleAccelerations);
-	CuHostVector<PxVec4, CU_MEMHOSTALLOC_DEVICEMAP>::Type().swap(mParticleAccelerationsHostCopy);
+	CuHostVector<PxVec4, CU_MEMHOSTALLOC_DEVICEMAP>::Type(mFactory.mContext).swap(mParticleAccelerationsHostCopy);
 	wakeUp();
 }
 

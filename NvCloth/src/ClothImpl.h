@@ -1220,7 +1220,7 @@ inline float ClothImpl<T>::getLiftCoefficient() const
 template <typename T>
 inline void ClothImpl<T>::setFluidDensity(float fluidDensity)
 {
-	NV_CLOTH_ASSERT(fluidDensity < 0.f);
+	NV_CLOTH_ASSERT(fluidDensity > 0.f);
 	if (fluidDensity == mFluidDensity)
 		return;
 

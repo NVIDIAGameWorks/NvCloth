@@ -9,7 +9,7 @@
 */
 
 #include "DistanceConstraintScene.h"
-#include "Scene/SceneController.h"
+#include "scene/SceneController.h"
 #include <NvClothExt/ClothFabricCooker.h>
 #include "ClothMeshGenerator.h"
 #include <NvCloth/Fabric.h>

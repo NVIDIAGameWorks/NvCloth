@@ -1,57 +1,101 @@
 NvCloth Release notes.
 
-[1.1.2]
+***************************
+Release Notes 
+***************************
+
+1.1.3
+===========================================================================================
 Supported platforms:
+
 * Windows (CPU, CUDA, DX11)
 * Mac (beta, tested on Sierra)
 * Linux (beta, tested on Ubuntu 16.04.1 LTS x64)
 * PlayStation 4 (beta) with PS4 SDK 4.5
 * Xbox one (CPU, DX11, beta)
+* Android (arm64-v8a, API >= 21), tested on Shield TV
+
 Note: beta platforms are not yet optimized.
 
 Supported compilers (via cmake 3.7)
+
 * Windows: Visual Studio 12, 14 (2013, 2015)
-* Linux: gcc (only x64)
+* Linux: gcc 5.4 (only x64)
 * Mac: xcode 
 * PlayStation 4: Visual studio 14 (2015)
 * Xbox one: Visual studio 14 (2015)
+* Android: NDK r12b and above
+
 
 Fixed:
-Dynamic allocations at runtime removed from MovingAverage.
-Possible error when starting samples due to gpu incompatible with dx debug mode.
-Cuda crash on older hardware.
+
+- Incorrect assertion in ClothImpl::setFluidDensity.
+- Make the simulation with MultithreadedSolverHelper work when no cloth present in the solver.
+- Correct number of simulation chunks calculation for DX11/CUDA solvers when no cloths were added to the solver.
+- Cuda wind simulation crashed on older hardware.
+- Internal simd library now lives inside the nv::cloth namespace to avoid issues when statically linked with PhysX.
+
 
 New:
-Added cmake flags to disable dx11 and/or cuda support.
+
+- Introduce addCloths() method for all the solvers, which allows to perform a fast batch addition of multiple cloths.
+- Cuda support on linux (experimental)
+- Android support
+
 
 Known issues:
-DirectX 11 solver has issues with ccd sphere/capsule collision.
+- DirectX 11 solver has issues with ccd sphere/capsule collision.
 
 
-[1.1.1]
+1.1.2
+===========================================================================================
 Fixed:
-Air drag/lift did react to flow speed only linearly, model was changed to be more physically correct.
-Fixed issue where scaling units would result in different air drag/lift behavior (by adding fluid density parameter).
-Fixed "unused typedef `__t100`" warning in xcode.
 
-Known issues:
-DirectX 11 solver has issues with ccd sphere/capsule collision.
+- Dynamic allocations at runtime removed from MovingAverage.
+- Possible error when starting samples due to gpu incompatible with dx debug mode.
 
-[1.1.0]
-Fixed:
-DirectX 11 solver now supports triangle collision shapes and air drag/lift.
-Fixed bug where changing friction on cloth already in simulation would cause assert or crash.
-Optimization flag now working on PS4 release build.
 
 New:
-Solver::getNumCloths and Solver::getClothList interface.
-Improved samples (new scenes and debug visualization)
+
+- Added cmake flags to disable dx11 and/or cuda support.
 
 
 Known issues:
-DirectX 11 solver has issues with ccd sphere/capsule collision.
+- DirectX 11 solver has issues with ccd sphere/capsule collision.
 
-[1.0.0]
+
+1.1.1
+===========================================================================================
+Fixed:
+
+- Air drag/lift did react to flow speed only linearly, model was changed to be more physically correct.
+- Fixed issue where scaling units would result in different air drag/lift behavior (by adding fluid density parameter).
+- Fixed "unused typedef `__t100`" warning in xcode.
+
+
 Known issues:
-DirectX 11 solver doesn’t support triangle collision shapes and air drag/lift
+- DirectX 11 solver has issues with ccd sphere/capsule collision.
 
+
+1.1.0
+===========================================================================================
+Fixed:
+
+- DirectX 11 solver now supports triangle collision shapes and air drag/lift.
+- Fixed bug where changing friction on cloth already in simulation would cause assert or crash.
+- Optimization flag now working on PS4 release build.
+
+
+New:
+
+- Solver::getNumCloths and Solver::getClothList interface.
+- Improved samples (new scenes and debug visualization)
+
+
+Known issues:
+- DirectX 11 solver has issues with ccd sphere/capsule collision.
+
+1.0.0
+===========================================================================================
+Known issues:
+- DirectX 11 solver doesn't support triangle collision shapes and air drag/lift

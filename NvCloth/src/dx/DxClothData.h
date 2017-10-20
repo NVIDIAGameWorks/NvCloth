@@ -31,7 +31,7 @@
 #pragma once
 
 #include <foundation/Px.h>
-#include "simd.h"
+#include "Simd.h"
 
 namespace nv
 {

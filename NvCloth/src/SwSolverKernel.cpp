@@ -103,6 +103,7 @@ const uint32_t sAvxSupport = getAvxSupport(); // 0: no AVX, 1: AVX, 2: AVX+FMA
 #endif
 
 using namespace nv;
+using namespace cloth;
 
 namespace
 {
@@ -209,11 +210,14 @@ void constrainMotion(T4f* __restrict curIt, const T4f* __restrict curEnd, const 
 		T4f isPositive;
 		if (anyGreater(slack, gSimd4fZero, isPositive))
 		{
-			// set invMass to zero if radius is zero
+			// set invMass to zero if radius is zero (xyz will be unchanged)
+			// curPos.w = radius > 0 ? curPos.w : 0
+			// the first three components are compared against -FLT_MAX which is always true
 			curPos0 = curPos0 & (splat<0>(radius) > sMinusFloatMaxXYZ);
 			curPos1 = curPos1 & (splat<1>(radius) > sMinusFloatMaxXYZ);
 			curPos2 = curPos2 & (splat<2>(radius) > sMinusFloatMaxXYZ);
 			curPos3 = curPos3 & ((radius) > sMinusFloatMaxXYZ);
+			// we don't have to splat the last one as the 4th element is already in the right place
 
 			slack = slack * stiffness & isPositive;
 
@@ -367,7 +371,7 @@ void solveConstraints(float* __restrict posIt, const float* __restrict rIt, cons
 	}
 }
 
-#if PX_WINDOWS_FAMILY
+#if PX_WINDOWS_FAMILY && NV_SIMD_SSE2
 #include "sse2/SwSolveConstraints.h"
 #endif
 

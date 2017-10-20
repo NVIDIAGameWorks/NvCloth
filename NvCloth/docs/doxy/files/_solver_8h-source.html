@@ -65,59 +65,62 @@
 <a name="l00030"></a>00030 <span class="preprocessor">#pragma once</span>
 <a name="l00031"></a>00031 <span class="preprocessor"></span>
 <a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="_allocator_8h.html" title="This file together with Callbacks.h define most memory management interfaces for...">NvCloth/Allocator.h</a>"</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#include "PsArray.h"</span>
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="keyword">namespace </span>nv
-<a name="l00036"></a>00036 {
-<a name="l00037"></a>00037 <span class="keyword">namespace </span>cloth
-<a name="l00038"></a>00038 {
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040 <span class="keyword">class </span>Cloth;
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042 <span class="comment">// called during inter-collision, user0 and user1 are the user data from each cloth</span>
-<a name="l00043"></a>00043 <span class="keyword">typedef</span> bool (*InterCollisionFilter)(<span class="keywordtype">void</span>* user0, <span class="keywordtype">void</span>* user1);
-<a name="l00044"></a>00044 
-<a name="l00046"></a><a class="code" href="classnv_1_1cloth_1_1_solver.html">00046</a> <span class="keyword">class </span><a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a> : <span class="keyword">public</span> UserAllocated
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048   <span class="keyword">protected</span>:
-<a name="l00049"></a><a class="code" href="classnv_1_1cloth_1_1_solver.html#8955bbdbea66b33486f0588ab2f80c46">00049</a>     <a class="code" href="classnv_1_1cloth_1_1_solver.html#8955bbdbea66b33486f0588ab2f80c46">Solver</a>() {}
-<a name="l00050"></a>00050     <a class="code" href="classnv_1_1cloth_1_1_solver.html#8955bbdbea66b33486f0588ab2f80c46">Solver</a>(<span class="keyword">const</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a>&amp;);
-<a name="l00051"></a>00051     <a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a>&amp; <a class="code" href="classnv_1_1cloth_1_1_solver.html#0bc438b310a4989a96c426c83a1e0beb">operator = </a>(<span class="keyword">const</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a>&amp;);
-<a name="l00052"></a>00052 
-<a name="l00053"></a>00053   <span class="keyword">public</span>:
-<a name="l00054"></a><a class="code" href="classnv_1_1cloth_1_1_solver.html#4830e23f5fbaa9dfa7c8c0ce32fa85bd">00054</a>     <span class="keyword">virtual</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#4830e23f5fbaa9dfa7c8c0ce32fa85bd">~Solver</a>() {}
-<a name="l00055"></a>00055 
-<a name="l00057"></a>00057     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#63e732712c5a43c44e6018cca6c1fb82" title="Adds cloth object.">addCloth</a>(<a class="code" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a>* cloth) = 0;
-<a name="l00058"></a>00058 
-<a name="l00060"></a>00060     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#1ed765a15ab2dabbb5186d14bc5f70b1" title="Removes cloth object.">removeCloth</a>(<a class="code" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a>* cloth) = 0;
-<a name="l00061"></a>00061 
-<a name="l00063"></a>00063     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#de377e651711ebbb9e70f928cbb682e2" title="Returns the numer of cloths added to the solver.">getNumCloths</a>() <span class="keyword">const</span> = 0;
-<a name="l00064"></a>00064 
-<a name="l00066"></a>00066     <span class="keyword">virtual</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> * <span class="keyword">const</span> * <a class="code" href="classnv_1_1cloth_1_1_solver.html#a3e121ffbccc07180e08a2387eb4f6ac" title="Returns the pointer to the first cloth added to the solver.">getClothList</a>() <span class="keyword">const</span> = 0;
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068     <span class="comment">// functions executing the simulation work.</span>
-<a name="l00074"></a>00074 <span class="comment"></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#d2efbe447bf07138c615973c349ab839" title="Begins a simulation frame.">beginSimulation</a>(<span class="keywordtype">float</span> dt) = 0;
-<a name="l00075"></a>00075 
-<a name="l00081"></a>00081     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#62d209d861c8f5aa0523536d851de093" title="Do the computationally heavy part of the simulation.">simulateChunk</a>(<span class="keywordtype">int</span> idx) = 0;
-<a name="l00082"></a>00082 
-<a name="l00086"></a>00086     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#19d777a3882814910f8a024d92072d48" title="Finishes up the simulation.">endSimulation</a>() = 0;
-<a name="l00087"></a>00087 
-<a name="l00090"></a>00090     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#54e393ba3b9fd5305385e2f57d3ca165" title="Returns the number of chunks that need to be simulated this frame.">getSimulationChunkCount</a>() <span class="keyword">const</span> = 0;
+<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="_range_8h.html">NvCloth/Range.h</a>"</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include "PsArray.h"</span>
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 <span class="keyword">namespace </span>nv
+<a name="l00037"></a>00037 {
+<a name="l00038"></a>00038 <span class="keyword">namespace </span>cloth
+<a name="l00039"></a>00039 {
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="keyword">class </span>Cloth;
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043 <span class="comment">// called during inter-collision, user0 and user1 are the user data from each cloth</span>
+<a name="l00044"></a>00044 <span class="keyword">typedef</span> bool (*InterCollisionFilter)(<span class="keywordtype">void</span>* user0, <span class="keywordtype">void</span>* user1);
+<a name="l00045"></a>00045 
+<a name="l00047"></a><a class="code" href="classnv_1_1cloth_1_1_solver.html">00047</a> <span class="keyword">class </span><a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a> : <span class="keyword">public</span> UserAllocated
+<a name="l00048"></a>00048 {
+<a name="l00049"></a>00049   <span class="keyword">protected</span>:
+<a name="l00050"></a><a class="code" href="classnv_1_1cloth_1_1_solver.html#8955bbdbea66b33486f0588ab2f80c46">00050</a>     <a class="code" href="classnv_1_1cloth_1_1_solver.html#8955bbdbea66b33486f0588ab2f80c46">Solver</a>() {}
+<a name="l00051"></a>00051     <a class="code" href="classnv_1_1cloth_1_1_solver.html#8955bbdbea66b33486f0588ab2f80c46">Solver</a>(<span class="keyword">const</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a>&amp;);
+<a name="l00052"></a>00052     <a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a>&amp; <a class="code" href="classnv_1_1cloth_1_1_solver.html#0bc438b310a4989a96c426c83a1e0beb">operator = </a>(<span class="keyword">const</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html" title="base class for solvers">Solver</a>&amp;);
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054   <span class="keyword">public</span>:
+<a name="l00055"></a><a class="code" href="classnv_1_1cloth_1_1_solver.html#4830e23f5fbaa9dfa7c8c0ce32fa85bd">00055</a>     <span class="keyword">virtual</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#4830e23f5fbaa9dfa7c8c0ce32fa85bd">~Solver</a>() {}
+<a name="l00056"></a>00056 
+<a name="l00058"></a>00058     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#63e732712c5a43c44e6018cca6c1fb82" title="Adds cloth object.">addCloth</a>(<a class="code" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a>* cloth) = 0;
+<a name="l00059"></a>00059 
+<a name="l00061"></a>00061     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#ea0f778230b2a0f211bdb5d36d3b54f3" title="Adds an array of cloth objects.">addCloths</a>(<a class="code" href="structnv_1_1cloth_1_1_range.html">Range&lt;Cloth*&gt;</a> cloths) = 0;
+<a name="l00062"></a>00062 
+<a name="l00064"></a>00064     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#1ed765a15ab2dabbb5186d14bc5f70b1" title="Removes cloth object.">removeCloth</a>(<a class="code" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a>* cloth) = 0;
+<a name="l00065"></a>00065 
+<a name="l00067"></a>00067     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#de377e651711ebbb9e70f928cbb682e2" title="Returns the numer of cloths added to the solver.">getNumCloths</a>() <span class="keyword">const</span> = 0;
+<a name="l00068"></a>00068 
+<a name="l00070"></a>00070     <span class="keyword">virtual</span> <a class="code" href="classnv_1_1cloth_1_1_cloth.html">Cloth</a> * <span class="keyword">const</span> * <a class="code" href="classnv_1_1cloth_1_1_solver.html#a3e121ffbccc07180e08a2387eb4f6ac" title="Returns the pointer to the first cloth added to the solver.">getClothList</a>() <span class="keyword">const</span> = 0;
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072     <span class="comment">// functions executing the simulation work.</span>
+<a name="l00078"></a>00078 <span class="comment"></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#d2efbe447bf07138c615973c349ab839" title="Begins a simulation frame.">beginSimulation</a>(<span class="keywordtype">float</span> dt) = 0;
+<a name="l00079"></a>00079 
+<a name="l00085"></a>00085     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#62d209d861c8f5aa0523536d851de093" title="Do the computationally heavy part of the simulation.">simulateChunk</a>(<span class="keywordtype">int</span> idx) = 0;
+<a name="l00086"></a>00086 
+<a name="l00090"></a>00090     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#19d777a3882814910f8a024d92072d48" title="Finishes up the simulation.">endSimulation</a>() = 0;
 <a name="l00091"></a>00091 
-<a name="l00092"></a>00092     <span class="comment">// inter-collision parameters</span>
-<a name="l00093"></a>00093     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#5043adf6727bf66b966de6393e7d67d9">setInterCollisionDistance</a>(<span class="keywordtype">float</span> distance) = 0;
-<a name="l00094"></a>00094     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#6a72529d713f46dbd17a5b541aaec6df">getInterCollisionDistance</a>() <span class="keyword">const</span> = 0;
-<a name="l00095"></a>00095     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#4f15accbaeff04edbebd31bf7dd9be3e">setInterCollisionStiffness</a>(<span class="keywordtype">float</span> stiffness) = 0;
-<a name="l00096"></a>00096     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#09e4be9b50229213a837d00a3f2f6a3f">getInterCollisionStiffness</a>() <span class="keyword">const</span> = 0;
-<a name="l00097"></a>00097     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#3046ea1153c1f9decfc161155cc9810b">setInterCollisionNbIterations</a>(uint32_t nbIterations) = 0;
-<a name="l00098"></a>00098     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_solver.html#124dc836903890185934c6eaedec2079">getInterCollisionNbIterations</a>() <span class="keyword">const</span> = 0;
-<a name="l00099"></a>00099     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#31b3d4d36f2025f10cb04a32e28fada4">setInterCollisionFilter</a>(InterCollisionFilter filter) = 0;
-<a name="l00100"></a>00100 
-<a name="l00102"></a>00102     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#12a60f43b537d78499e30508bd9a6d3c" title="Returns true if an unrecoverable error has occurred.">hasError</a>() <span class="keyword">const</span> = 0;
-<a name="l00103"></a>00103 };
+<a name="l00094"></a>00094     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#54e393ba3b9fd5305385e2f57d3ca165" title="Returns the number of chunks that need to be simulated this frame.">getSimulationChunkCount</a>() <span class="keyword">const</span> = 0;
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096     <span class="comment">// inter-collision parameters</span>
+<a name="l00097"></a>00097     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#5043adf6727bf66b966de6393e7d67d9">setInterCollisionDistance</a>(<span class="keywordtype">float</span> distance) = 0;
+<a name="l00098"></a>00098     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#6a72529d713f46dbd17a5b541aaec6df">getInterCollisionDistance</a>() <span class="keyword">const</span> = 0;
+<a name="l00099"></a>00099     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#4f15accbaeff04edbebd31bf7dd9be3e">setInterCollisionStiffness</a>(<span class="keywordtype">float</span> stiffness) = 0;
+<a name="l00100"></a>00100     <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#09e4be9b50229213a837d00a3f2f6a3f">getInterCollisionStiffness</a>() <span class="keyword">const</span> = 0;
+<a name="l00101"></a>00101     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#3046ea1153c1f9decfc161155cc9810b">setInterCollisionNbIterations</a>(uint32_t nbIterations) = 0;
+<a name="l00102"></a>00102     <span class="keyword">virtual</span> uint32_t <a class="code" href="classnv_1_1cloth_1_1_solver.html#124dc836903890185934c6eaedec2079">getInterCollisionNbIterations</a>() <span class="keyword">const</span> = 0;
+<a name="l00103"></a>00103     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#31b3d4d36f2025f10cb04a32e28fada4">setInterCollisionFilter</a>(InterCollisionFilter filter) = 0;
 <a name="l00104"></a>00104 
-<a name="l00105"></a>00105 } <span class="comment">// namespace cloth</span>
-<a name="l00106"></a>00106 } <span class="comment">// namespace nv</span>
+<a name="l00106"></a>00106     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classnv_1_1cloth_1_1_solver.html#12a60f43b537d78499e30508bd9a6d3c" title="Returns true if an unrecoverable error has occurred.">hasError</a>() <span class="keyword">const</span> = 0;
+<a name="l00107"></a>00107 };
+<a name="l00108"></a>00108 
+<a name="l00109"></a>00109 } <span class="comment">// namespace cloth</span>
+<a name="l00110"></a>00110 } <span class="comment">// namespace nv</span>
 </pre></div></div>
 <!-- start footer part -->
 <div class="footer">

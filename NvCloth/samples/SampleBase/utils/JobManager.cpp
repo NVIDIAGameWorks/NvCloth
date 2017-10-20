@@ -124,13 +124,16 @@ void MultithreadedSolverHelper::StartSimulation(float dt)
 		for (int j = 0; j < mSolver->getSimulationChunkCount(); j++)
 			mSimulationChunkJobs[j].Reset();
 	}
+
 	mStartSimulationJob.Reset();
 	mEndSimulationJob.Reset(mSolver->getSimulationChunkCount());
 	mStartSimulationJob.RemoveReference();
-	
 }
 
 void MultithreadedSolverHelper::WaitForSimulation()
 {
+	if (mSolver->getSimulationChunkCount() == 0)
+		return;
+
 	mEndSimulationJob.Wait();
 }

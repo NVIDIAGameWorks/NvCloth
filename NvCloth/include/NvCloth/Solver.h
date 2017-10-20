@@ -30,6 +30,7 @@
 #pragma once
 
 #include "NvCloth/Allocator.h"
+#include "NvCloth/Range.h"
 #include "PsArray.h"
 
 namespace nv
@@ -55,6 +56,9 @@ class Solver : public UserAllocated
 
 	/// Adds cloth object.
 	virtual void addCloth(Cloth* cloth) = 0;
+
+	/// Adds an array of cloth objects.
+	virtual void addCloths(Range<Cloth*> cloths) = 0;
 
 	/// Removes cloth object.
 	virtual void removeCloth(Cloth* cloth) = 0;
