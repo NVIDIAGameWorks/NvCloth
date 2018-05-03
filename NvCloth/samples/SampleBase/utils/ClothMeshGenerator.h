@@ -18,6 +18,17 @@
 
 struct ClothMeshData
 {
+	template <typename T>
+	static nv::cloth::BoundedData ToBoundedData(T& vector)
+	{
+		nv::cloth::BoundedData d;
+		d.data = &vector[0];
+		d.stride = sizeof(vector[0]);
+		d.count = (physx::PxU32)vector.size();
+
+		return d;
+	}
+
 	struct Triangle
 	{
 		Triangle(){}
@@ -46,9 +57,17 @@ struct ClothMeshData
 
 	void Clear();
 	void GeneratePlaneCloth(float width, float height, int segmentsX, int segmentsY, bool createQuads = false, physx::PxMat44 transform = physx::PxIdentity, bool alternatingDiagonals = true, int zigzag = 0);
-
+	void GenerateCylinderWave(float radiusTop, float radiusBottom, float height, float frequency, float ampitudeTop, float ampitudeBottom, int segmentsX, int segmentsY, physx::PxMat44 transform = physx::PxIdentity, bool attachTop = false, bool attachBottom = false, bool createQuads = false, int missingXsegments = 0);
 	void AttachClothPlaneByAngles(int segmentsX, int segmentsY, bool  attachByWidth = true);
 	void AttachClothPlaneBySide(int segmentsX, int segmentsY, bool  attachByWidth = true);
+
+	bool ReadClothFromFile(const std::string& verticesPath, const std::string& indicesPath, physx::PxMat44 transform = physx::PxIdentity);
+
+	//positions as float (3 elements per position)
+	template<typename PositionType = float, typename IndexType = uint16_t>
+	bool InitializeFromData(nv::cloth::BoundedData positions, nv::cloth::BoundedData indices, physx::PxMat44 transform = physx::PxMat44(physx::PxIdentity));
+
+	void AttachClothUsingTopVertices(float thresholdY = 0.5f);
 
 	void SetInvMasses(float invMass);
 	void SetInvMassesFromDensity(float density); 	// Todo

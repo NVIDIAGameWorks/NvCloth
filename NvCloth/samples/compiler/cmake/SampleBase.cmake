@@ -12,11 +12,13 @@ SET(SB_RENDERER_SOURCE_DIR ${SB_SOURCE_DIR}/renderer)
 SET(SB_SCENE_SOURCE_DIR ${SB_SOURCE_DIR}/scene)
 SET(SB_UI_SOURCE_DIR ${SB_SOURCE_DIR}/ui)
 SET(SB_UTILS_SOURCE_DIR ${SB_SOURCE_DIR}/utils)
+SET(SB_TASK_SOURCE_DIR ${SB_SOURCE_DIR}/task)
 
 FIND_PACKAGE(PxShared "1.0.21467209.1" REQUIRED)
 FIND_PACKAGE(DXUT "9.15.2016.1" REQUIRED)
 FIND_PACKAGE(DirectXTex "10.5.2016.2" REQUIRED)
 FIND_PACKAGE(imgui "1.49" REQUIRED)
+FIND_PACKAGE(Assimp "4.1.0" REQUIRED)
 #FIND_PACKAGE(tinyObjLoader $ENV{PM_tinyObjLoader_VERSION} REQUIRED)
 #FIND_PACKAGE(tclap $ENV{PM_tclap_VERSION} REQUIRED)
 
@@ -64,6 +66,10 @@ SET(RENDERER_FILES
 	${SB_RENDERER_SOURCE_DIR}/ShaderUtils.h
 	${SB_RENDERER_SOURCE_DIR}/SkinnedRenderMesh.cpp
 	${SB_RENDERER_SOURCE_DIR}/SkinnedRenderMesh.h
+	${SB_RENDERER_SOURCE_DIR}/WeightedSkinRenderMesh.cpp
+	${SB_RENDERER_SOURCE_DIR}/WeightedSkinRenderMesh.h
+	${SB_RENDERER_SOURCE_DIR}/Model.cpp
+	${SB_RENDERER_SOURCE_DIR}/Model.h
 )
 
 SET(SCENE_FILES
@@ -108,10 +114,18 @@ SET(SCENES_FILES
 	${SB_SCENE_SOURCE_DIR}/scenes/CapsuleScene.h
 	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene.cpp
 	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene2.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/CCDScene2.h
 	${SB_SCENE_SOURCE_DIR}/scenes/MultiSolverScene.cpp
 	${SB_SCENE_SOURCE_DIR}/scenes/MultiSolverScene.h
 	${SB_SCENE_SOURCE_DIR}/scenes/ScaledScene.cpp
 	${SB_SCENE_SOURCE_DIR}/scenes/ScaledScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/TimeStepScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/TimeStepScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/VirtualParticleScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/VirtualParticleScene.h
+	${SB_SCENE_SOURCE_DIR}/scenes/TeleportScene.cpp
+	${SB_SCENE_SOURCE_DIR}/scenes/TeleportScene.h
 )
 
 SET(UI_FILES
@@ -138,7 +152,19 @@ SET(UTIL_FILES
 	${SB_UTILS_SOURCE_DIR}/DebugLineRenderBuffer.h
 	${SB_UTILS_SOURCE_DIR}/MeshGenerator.cpp
 	${SB_UTILS_SOURCE_DIR}/MeshGenerator.h
+	${SB_UTILS_SOURCE_DIR}/DataStream.cpp
+	${SB_UTILS_SOURCE_DIR}/DataStream.h
+	${SB_UTILS_SOURCE_DIR}/AnimatedModelUtilities.cpp
+	${SB_UTILS_SOURCE_DIR}/AnimatedModelUtilities.h
 	
+)
+SET(TASK_FILES
+	${SB_TASK_SOURCE_DIR}/PxCpuDispatcher.h
+	${SB_TASK_SOURCE_DIR}/PxGpuDispatcher.h
+	${SB_TASK_SOURCE_DIR}/PxGpuTask.h
+	${SB_TASK_SOURCE_DIR}/PxTask.h
+	${SB_TASK_SOURCE_DIR}/PxTaskDefine.h
+	${SB_TASK_SOURCE_DIR}/PxTaskManager.h
 )
 
 SET(ROOT_FILES
@@ -154,6 +180,7 @@ ADD_EXECUTABLE(SampleBase
 	
 	${UI_FILES}
 	${UTIL_FILES}
+	${TASK_FILES}
 	${ROOT_FILES}
 	
 	
@@ -169,6 +196,8 @@ SOURCE_GROUP("Source\\scene" FILES ${SCENE_FILES})
 SOURCE_GROUP("Source\\scene\\scenes" FILES ${SCENES_FILES})
 SOURCE_GROUP("Source\\ui" FILES ${UI_FILES})
 SOURCE_GROUP("Source\\utils" FILES ${UTIL_FILES})
+SOURCE_GROUP("Source\\task" FILES ${TASK_FILES})
+
 
 # Target specific compile options
 
@@ -176,6 +205,7 @@ TARGET_INCLUDE_DIRECTORIES(SampleBase
 	PRIVATE ${SAMPLEBASE_PLATFORM_INCLUDES}
 
 	PRIVATE ${DIRECTXTEX_INCLUDE_DIRS}
+	PRIVATE ${ASSIMP_INCLUDE_DIRS}
 	PRIVATE ${DXUT_INCLUDE_DIRS}
 	
 	PRIVATE ${NVCLOTH_ROOT_DIR}/samples/external/shadow_lib
@@ -214,7 +244,7 @@ TARGET_COMPILE_OPTIONS(SampleBase PRIVATE /wd4005 /wd4244)
 # Do final direct sets after the target has been defined
 TARGET_LINK_LIBRARIES(SampleBase 
 	PUBLIC d3dcompiler.lib d3d11.lib dxgi.lib comctl32.lib
-	PUBLIC ${HBAO_LIB} ${SHADOW_LIB} ${DXUT_LIBRARIES} ${DIRECTXTEX_LIBRARIES})
+	PUBLIC ${HBAO_LIB} ${SHADOW_LIB} ${DXUT_LIBRARIES} ${DIRECTXTEX_LIBRARIES} ${ASSIMP_LIBRARIES})
 	
 TARGET_LINK_LIBRARIES(SampleBase PUBLIC PxFoundation)
 TARGET_LINK_LIBRARIES(SampleBase PUBLIC NvCloth)

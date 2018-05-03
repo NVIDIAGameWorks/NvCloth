@@ -30,24 +30,17 @@
 #include "foundation/PxVec4.h"
 #include "foundation/PxIO.h"
 #include "foundation/PxStrideIterator.h"
+#include "PsSort.h"
+#include "PsMathUtils.h"
+
 #include "NvClothExt/ClothFabricCooker.h"
 #include "NvClothExt/ClothTetherCooker.h"
-#include "PsSort.h"
 #include "NvCloth/Fabric.h"
 #include "NvCloth/Allocator.h"
 #include "NvCloth/Range.h"
+#include "ClothClone.h"
 
 #include <algorithm>
-#include "PsMathUtils.h"
-
-namespace
-{
-float safeLog2(float x)
-{
-	float saturated = std::max(0.0f, std::min(x, 1.0f));
-	return saturated ? physx::shdfnd::log2(saturated) : -FLT_MAX_EXP;
-}
-}
 
 using namespace physx;
 

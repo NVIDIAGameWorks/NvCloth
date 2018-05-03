@@ -23,8 +23,8 @@
 #include <queue>
 #include <atomic>
 
-#include <task/PxTaskManager.h>
-#include <task/PxTask.h>
+#include "task/PxTaskManager.h"
+#include "task/PxTask.h"
 
 namespace nv
 {
@@ -78,9 +78,10 @@ class Job
 public:
 	Job() = default;
 	Job(const Job&);
+	~Job() { mValid = false; }
 	void Initialize(JobManager* parent, std::function<void(Job*)> function = std::function<void(Job*)>(), int refcount = 1);
 	void Reset(int refcount = 1); //Call this before reusing a job that doesn't need to be reinitialized
-	void Execute();
+	virtual void Execute();
 	void AddReference();
 	void RemoveReference();
 	void Wait(); //Block until job is finished
@@ -94,6 +95,22 @@ private:
 	bool mFinished;
 	std::mutex mFinishedLock;
 	std::condition_variable mFinishedEvent;
+	bool mValid = true;
+};
+
+//this Job is a dependency to another job
+class JobDependency : public Job
+{
+public:
+	void SetDependentJob(Job* job) { mDependendJob = job; }
+	virtual void Execute() override
+	{ 
+		auto dependendJob = mDependendJob; 
+		Job::Execute();
+		dependendJob->RemoveReference();
+	}
+private:
+	Job* mDependendJob;
 };
 
 class JobManager
@@ -134,10 +151,11 @@ public:
 			function(i);*/
 		Job finalJob;
 		finalJob.Initialize(this, std::function<void(Job*)>(), count);
-		Job jobs[count];
+		JobDependency jobs[count];
 		for(int j = 0; j < count; j++)
 		{
-			jobs[j].Initialize(this, [j, &finalJob, function](Job*) {function(j); finalJob.RemoveReference(); });
+			jobs[j].Initialize(this, [j, &finalJob, function](Job*) {function(j); });
+			jobs[j].SetDependentJob(&finalJob);
 			jobs[j].RemoveReference();
 		}
 		finalJob.Wait();
@@ -166,7 +184,7 @@ public:
 private:
 	Job mStartSimulationJob;
 	Job mEndSimulationJob;
-	std::vector<Job> mSimulationChunkJobs;
+	std::vector<JobDependency> mSimulationChunkJobs;
 
 	float mDt;
 

@@ -61,7 +61,7 @@ void SelfCollisionScene::initializeCloth(int index, physx::PxMat44 transform)
 	particlesCopy.resize(clothMesh.mVertices.size());
 
 	physx::PxVec3 clothOffset = transform.getPosition();
-	for(int i = 0; i < (int)clothMesh.mVertices.size(); i++)
+	for (int i = 0; i < (int)clothMesh.mVertices.size(); i++)
 	{
 		// To put attachment point closer to each other
 		if(clothMesh.mInvMasses[i] < 1e-6)
@@ -79,9 +79,10 @@ void SelfCollisionScene::initializeCloth(int index, physx::PxMat44 transform)
 
 	nv::cloth::Range<const physx::PxVec4> planesR(&planes[0], &planes[0] + planes.size());
 	mClothActor[index]->mCloth->setPlanes(planesR, 0, mClothActor[index]->mCloth->getNumPlanes());
+
 	std::vector<uint32_t> indices;
 	indices.resize(planes.size());
-	for(int i = 0; i < (int)indices.size(); i++)
+	for (int i = 0; i < (int)indices.size(); i++)
 		indices[i] = 1 << i;
 	nv::cloth::Range<uint32_t> cind(&indices[0], &indices[0] + indices.size());
 	mClothActor[index]->mCloth->setConvexes(cind, 0, mClothActor[index]->mCloth->getNumConvexes());
@@ -97,20 +98,21 @@ void SelfCollisionScene::initializeCloth(int index, physx::PxMat44 transform)
 	std::vector<uint32_t> selfCollisionIndices;
 
 	//only enable every other particle for self collision
-	for(int y = 0; y < 5*h + 1; y++)
-		for(int x = 0; x < 5 * w + 1; x++)
-			if((x & 1) ^ (y & 1)) selfCollisionIndices.push_back(x + y*(5 * w + 1));
+	for (int y = 0; y < 5*h + 1; y++)
+		for (int x = 0; x < 5 * w + 1; x++)
+			if ((x & 1) ^ (y & 1)) selfCollisionIndices.push_back(x + y*(5 * w + 1));
 
-	for(int y = 0; y < 5 * h2 + 1; y++)
-		for(int x = 0; x < 5 * w2 + 1; x++)
-			if((x & 1) ^ (y & 1)) selfCollisionIndices.push_back(FirstParticleIndexCloth2 + x + y*(5 * w2 + 1));
+	for (int y = 0; y < 5 * h2 + 1; y++)
+		for (int x = 0; x < 5 * w2 + 1; x++)
+			if ((x & 1) ^ (y & 1)) 
+				selfCollisionIndices.push_back(FirstParticleIndexCloth2 + x + y*(5 * w2 + 1));
 
 	nv::cloth::Range<uint32_t> selfCollisionIndicesRange (&selfCollisionIndices[0], &selfCollisionIndices[0] + selfCollisionIndices.size());
 	mClothActor[index]->mCloth->setSelfCollisionIndices(selfCollisionIndicesRange);
 
 	// Setup phase configs
 	std::vector<nv::cloth::PhaseConfig> phases(mFabric[index]->getNumPhases());
-	for(int i = 0; i < (int)phases.size(); i++)
+	for (int i = 0; i < (int)phases.size(); i++)
 	{
 		phases[i].mPhaseIndex = i;
 		phases[i].mStiffness = 1.0f;
@@ -137,6 +139,7 @@ void SelfCollisionScene::onInitialize()
 		return true;
 	}
 	);*/
+
 	trackSolver(mSolver);
 
 	physx::PxMat44 posTrans(physx::PxIdentity);

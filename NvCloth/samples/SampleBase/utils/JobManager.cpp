@@ -41,9 +41,10 @@ void Job::Execute()
 	else
 		ExecuteInternal();
 
-	mFinishedLock.lock();
-	mFinished = true;
-	mFinishedLock.unlock();
+	{
+		std::lock_guard<std::mutex> lock(mFinishedLock);
+		mFinished = true;
+	}
 	mFinishedEvent.notify_one();
 }
 
@@ -53,16 +54,19 @@ void Job::AddReference()
 }
 void Job::RemoveReference()
 {
-	if (0 == --mRefCount)
+	int refCount = --mRefCount;
+	if (0 == refCount)
 	{
 		mParent->Submit(this);
 	}
+	assert(refCount >= 0);
 }
 
 void Job::Wait()
 {
 	std::unique_lock<std::mutex> lock(mFinishedLock);
 	mFinishedEvent.wait(lock, [this](){return mFinished;} );
+	lock.unlock();
 	return;
 }
 
@@ -115,9 +119,12 @@ void MultithreadedSolverHelper::StartSimulation(float dt)
 
 	if (mSolver->getSimulationChunkCount() != mSimulationChunkJobs.size())
 	{
-		mSimulationChunkJobs.resize(mSolver->getSimulationChunkCount(), Job());
+		mSimulationChunkJobs.resize(mSolver->getSimulationChunkCount(), JobDependency());
 		for (int j = 0; j < mSolver->getSimulationChunkCount(); j++)
-			mSimulationChunkJobs[j].Initialize(mJobManager, [this, j](Job*) {mSolver->simulateChunk(j); mEndSimulationJob.RemoveReference(); });
+		{
+			mSimulationChunkJobs[j].Initialize(mJobManager, [this, j](Job*) {mSolver->simulateChunk(j); });
+			mSimulationChunkJobs[j].SetDependentJob(&mEndSimulationJob);
+		}
 	}
 	else
 	{

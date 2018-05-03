@@ -77,6 +77,10 @@ StructuredBuffer<float> bPerConstraintStiffness : register(t16);
 //Note that the buffer actually contains uint16_t values
 StructuredBuffer<uint32_t> bTriangles : register(t17);
 
+StructuredBuffer<int32_t> bVirtualParticleSetSizes : register(t18);
+StructuredBuffer<uint4>   bVirtualParticleIndices : register(t19);
+StructuredBuffer<float4>  bVirtualParticleWeights : register(t20);
+
 groupshared DxClothData gClothData;
 groupshared DxFrameData gFrameData;
 groupshared DxIterationData gIterData;
@@ -864,7 +868,7 @@ void collideCapsules(IParticles curParticles, IParticles prevParticles, uint32_t
 
 static const float gSkeletonWidth = (1.f - 0.2f) * (1.f - 0.2f) - 1.f;
 
-uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevAlpha, out float3 outDelta, out float3 outVelocity)
+uint32_t collideCapsules(float3 curPosAbsolute, float3 prevPosAbsolute, float alpha, float prevAlpha, out float3 outDelta, out float3 outVelocity)
 {
 	outDelta = float3(0.0f, 0.0f, 0.0f);
 	outVelocity = float3(0.0f, 0.0f, 0.0f);
@@ -881,87 +885,87 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 	{
 		IndexPair indices = bCapsuleIndices[capsuleOffset + i];
 
-		// current
+		// load sphere data
 		float4 startSphere0 = bCollisionSpheres[startSphereOffset + indices.first];
 		float4 targetSphere0 = bCollisionSpheres[targetSphereOffset + indices.first];
 
 		float4 startSphere1 = bCollisionSpheres[startSphereOffset + indices.second];
 		float4 targetSphere1 = bCollisionSpheres[targetSphereOffset + indices.second];
 
-		// prev
+		// interpolate sphere data to end of previous iteration
 		float4 prevSphere0 = lerp(startSphere0, targetSphere0, prevAlpha);
 		float4 prevSphere1 = lerp(startSphere1, targetSphere1, prevAlpha);
 
 		prevSphere0.w = max(prevSphere0.w, 0.0f);
 		prevSphere1.w = max(prevSphere1.w, 0.0f);
 
-		float4 prevAxis = (prevSphere1 - prevSphere0) * 0.5f;
 		float3 prevConeCenter = (prevSphere1.xyz + prevSphere0.xyz) * 0.5f;
+		float4 prevHalfAxis = (prevSphere1 - prevSphere0) * 0.5f; //half axis
+		//axis.w = half of radii difference
 
-		float3 prevDelta = prevPos - prevConeCenter;
+		float3 prevPos = prevPosAbsolute - prevConeCenter;
 
-		float prevSqrAxisLength = dot(prevAxis.xyz, prevAxis.xyz);
-		float prevSqrConeLength = prevSqrAxisLength - prevAxis.w * prevAxis.w;
+		float prevSqrAxisHalfLength = dot(prevHalfAxis.xyz, prevHalfAxis.xyz);
+		float prevSqrConeHalfLength = prevSqrAxisHalfLength - prevHalfAxis.w * prevHalfAxis.w;
 
-		if (prevSqrAxisLength <= 0.0f)
+		if (prevSqrConeHalfLength <= 0.0f)
 			continue;
 
-		float prevInvAxisLength = rsqrt(prevSqrAxisLength);
-		float prevInvConeLength = rsqrt(prevSqrConeLength);
+		float prevInvAxisHalfLength = rsqrt(prevSqrAxisHalfLength);
+		float prevInvConeHalfLength = rsqrt(prevSqrConeHalfLength);
 
-		float prevAxisLength = prevSqrAxisLength * prevInvAxisLength;
+		float prevAxisHalfLength = prevSqrAxisHalfLength * prevInvAxisHalfLength;
 
-		float prevConeRadius = (prevAxis.w + prevSphere0.w) * prevInvConeLength * prevAxisLength;
+		float prevConeRadius = (prevHalfAxis.w + prevSphere0.w) * prevInvConeHalfLength * prevAxisHalfLength;
 
-		float3 prevConeAxis = prevAxis.xyz * prevInvAxisLength;
-		float prevConeSlope = prevAxis.w * prevInvConeLength;
+		float3 prevConeAxis = prevHalfAxis.xyz * prevInvAxisHalfLength;
+		float prevConeSlope = prevHalfAxis.w * prevInvConeHalfLength;
 
-		float3 prevCross = cross(prevDelta, prevConeAxis);
+		float3 prevCross = cross(prevPos, prevConeAxis);
 		float prevDot = dot(prevPos, prevConeAxis);
 
-		// current
-		float4 sphere0 = lerp(startSphere0, targetSphere0, alpha);
-		float4 sphere1 = lerp(startSphere1, targetSphere1, alpha);
+		// interpolate sphere data to end of current iteration
+		float4 curSphere0 = lerp(startSphere0, targetSphere0, alpha);
+		float4 curSphere1 = lerp(startSphere1, targetSphere1, alpha);
 
-		sphere0.w = max(sphere0.w, 0.0f);
-		sphere1.w = max(sphere1.w, 0.0f);
+		curSphere0.w = max(curSphere0.w, 0.0f);
+		curSphere1.w = max(curSphere1.w, 0.0f);
 
-		float4 curAxis = (sphere1 - sphere0) * 0.5f;
-		float3 curConeCenter = (sphere1.xyz + sphere0.xyz) * 0.5f;
+		float3 curConeCenter = (curSphere1.xyz + curSphere0.xyz) * 0.5f;
+		float4 curHalfAxis = (curSphere1 - curSphere0) * 0.5f; //half axis
+		//axis.w = half of radii difference
 
-		float3 curDelta = curPos - curConeCenter;
+		float3 curPos = curPosAbsolute - curConeCenter;
 
-		float sqrAxisLength = dot(curAxis.xyz, curAxis.xyz);
-		float sqrConeLength = sqrAxisLength - curAxis.w * curAxis.w;
+		float curSqrAxisHalfLength = dot(curHalfAxis.xyz, curHalfAxis.xyz);
+		float curSqrConeHalfLength = curSqrAxisHalfLength - curHalfAxis.w * curHalfAxis.w;
 
-		if (sqrConeLength <= 0.0f)
+		if(curSqrConeHalfLength <= 0.0f)
 			continue;
 
-		float invAxisLength = rsqrt(sqrAxisLength);
-		float invConeLength = rsqrt(sqrConeLength);
+		float curInvAxisHalfLength = rsqrt(curSqrAxisHalfLength);
+		float curInvConeHalfLength = rsqrt(curSqrConeHalfLength);
 
-		float axisLength = sqrAxisLength * invAxisLength;
+		float curAxisHalfLength = curSqrAxisHalfLength * curInvAxisHalfLength;
 
-		float3 coneCenter = (sphere1.xyz + sphere0.xyz) * 0.5f;
-		float coneRadius = (curAxis.w + sphere0.w) * invConeLength * axisLength;
+		float curConeRadius = (curHalfAxis.w + curSphere0.w) * curInvConeHalfLength * curAxisHalfLength;
 
-		float3 curConeAxis = curAxis.xyz * invAxisLength;
+		float3 curConeAxis = curHalfAxis.xyz * curInvAxisHalfLength;
 
-		float3 curCross = cross(curDelta, curConeAxis);
+		float3 curCross = cross(curPos, curConeAxis);
 		float curDot = dot(curPos, curConeAxis);
 
 		float curSqrDistance = FLT_EPSILON + dot(curCross, curCross);
 
-		float prevRadius = max(prevDot * prevConeSlope + coneRadius, 0.0f);
+		float prevRadius = max(prevDot * prevConeSlope + prevConeRadius, 0.0f);
 
-		float curSlope = curAxis.w * invConeLength;
-		float curRadius = max(curDot * curSlope + coneRadius, 0.0f);
+		float curConeSlope = curHalfAxis.w * curInvConeHalfLength;
+		float curRadius = max(curDot * curConeSlope + curConeRadius, 0.0f);
 
-		float sine = curAxis.w * invAxisLength;
-		float coneSqrCosine = 1.f - sine * sine;
-		float curHalfLength = axisLength;
+		float sine = curHalfAxis.w * curInvAxisHalfLength;
+		float coneSqrCosine = 1.f - (sine * sine);
 
-		float dotPrevPrev = dot(prevCross, prevCross) - prevCross.x * prevCross.x - prevRadius * prevRadius;
+		float dotPrevPrev = dot(prevCross, prevCross) - prevRadius * prevRadius;
 		float dotPrevCur = dot(prevCross, curCross) - prevRadius * curRadius;
 		float dotCurCur = curSqrDistance - curRadius * curRadius;
 
@@ -972,7 +976,7 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 
 		// time of impact or 0 if prevPos inside cone
 		float toi = min(0.0f, halfB + sqrtD) / minusA;
-		bool hasCollision = toi < 1.0f && halfB < sqrtD;
+		bool hasCollision = (toi < 1.0f) && (halfB < sqrtD);
 
 		// skip continuous collision if the (un-clamped) particle
 		// trajectory only touches the outer skin of the cone.
@@ -990,46 +994,29 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 			// interpolate delta at toi
 			float3 pos = prevPos - delta * toi;
 
-	//		float axisLength = sqrAxisLength * invAxisLength;
-
-	//		float curHalfLength = axisLength; // ?
-			float3 curConeAxis = curAxis.xyz * invAxisLength;
-			float3 curScaledAxis = curAxis.xyz * curHalfLength;
-
-			float4 prevAxis = (prevSphere1 - prevSphere0) * 0.5f;
-			float3 prevConeCenter = (prevSphere1.xyz + prevSphere0.xyz) * 0.5f;
-
-			float prevSqrAxisLength = dot(prevAxis.xyz, prevAxis.xyz);
-			float prevSqrConeLength = prevSqrAxisLength - prevAxis.w * prevAxis.w;
-
-			float prevInvAxisLength = rsqrt(prevSqrAxisLength);
-			float prevInvConeLength = rsqrt(prevSqrConeLength);
-
-			float prevAxisLength = prevSqrAxisLength * prevInvAxisLength;
-			float prevConeRadius = (prevAxis.w + prevSphere0.w) * prevInvConeLength * prevAxisLength;
-
-			float3 prevConeAxis = prevAxis.xyz * prevInvAxisLength;
-
-			float prevHalfLength = prevAxisLength;
-
-			float3 deltaScaledAxis = curScaledAxis - prevAxis.xyz * prevHalfLength;
+			float3 curScaledAxis = curConeAxis.xyz * curAxisHalfLength;
+			float3 deltaScaledAxis = curScaledAxis - prevConeAxis * prevAxisHalfLength;
 
 			float oneMinusToi = 1.0f - toi;
 
 			// interpolate axis at toi
 			float3 axis = curScaledAxis - deltaScaledAxis * oneMinusToi;
 
-			float slope = prevConeSlope * oneMinusToi + curSlope * toi;
+			float slope = prevConeSlope * oneMinusToi + curConeSlope * toi;
 
-			float sqrHalfLength = dot(axis, axis); // axisX * axisX + axisY * axisY + axisZ * axisZ;
+			float sqrHalfLength = dot(axis, axis);
 			float invHalfLength = rsqrt(sqrHalfLength);
+			// distance along toi cone axis (from center)
 			float dotf = dot(pos, axis) * invHalfLength;
 
+			//point line distance
 			float sqrDistance = dot(pos, pos) - dotf * dotf;
 			float invDistance = sqrDistance > 0.0f ? rsqrt(sqrDistance) : 0.0f;
 
+			//offset base to take slope in to account
 			float base = dotf + slope * sqrDistance * invDistance;
 			float scale = base * invHalfLength;
+			// use invHalfLength to map base from [-HalfLength, +HalfLength]=inside to [-1, +1] =inside
 
 			if (abs(scale) < 1.0f)
 			{
@@ -1037,99 +1024,49 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 
 				// reduce ccd impulse if (clamped) particle trajectory stays in cone skin,
 				// i.e. scale by exp2(-k) or 1/(1+k) with k = (tmin - toi) / (1 - toi)
-				float minusK = sqrtD / (minusA * oneMinusToi);
+				float minusK = (oneMinusToi > FLT_EPSILON) ? sqrtD / (minusA * oneMinusToi) : 0.0f;
 				oneMinusToi = oneMinusToi / (1.f - minusK);
 
-				curDelta += delta * oneMinusToi;
+				curPos += delta * oneMinusToi;
 
-				curDot = dot(curDelta, curAxis.xyz);
-				float curConeRadius = (curAxis.w + sphere0.w) * invConeLength * axisLength;
+				curDot = dot(curPos, curConeAxis.xyz);
+				curRadius = max(curDot * curConeSlope + curConeRadius, 0.0f);
+				curSqrDistance = dot(curPos, curPos) - curDot * curDot;
 
-				curRadius = max(curDot * curSlope + curConeRadius, 0.0f);    // Duplicate?
-				curSqrDistance = dot(curDelta, curDelta) - curDot * curDot;
-
-				curPos = coneCenter + curDelta;
+				//curPos is relative to coneCenter so we don't need to do this:
+				//curPos = coneCenter + curPos;
 			}
 		}
-
-		{
-			float3 delta = curPos - coneCenter;
 		
-			float deltaDotAxis = dot(delta, curConeAxis);
-			float radius = max(deltaDotAxis * curSlope + coneRadius, 0.0f);
-			float sqrDistance = dot(delta, delta) - deltaDotAxis * deltaDotAxis;
-		
-			if (sqrDistance > radius * radius)
+		{		
+			if (curSqrDistance > curRadius * curRadius)
 				continue;
 		
-			sqrDistance = max(sqrDistance, FLT_EPSILON);
-			float invDistance = rsqrt(sqrDistance);
+			curSqrDistance = max(curSqrDistance, FLT_EPSILON);
+			float invDistance = rsqrt(curSqrDistance);
 		
-			float base = deltaDotAxis + curSlope * sqrDistance * invDistance;
-			float halfLength = axisLength;
-		//	float halfLength = coneHalfLength;
+			float base = curDot + curConeSlope * curSqrDistance * invDistance;
+			float halfLength = curAxisHalfLength;
 		
 			if (abs(base) < halfLength)
 			{
-				delta = delta - base * curAxis;
+				float3 delta = curPos - base * curConeAxis;
 		
 				float sqrCosine = coneSqrCosine;
-				float scale = radius * invDistance * sqrCosine - sqrCosine;
+				float scale = curRadius * invDistance * sqrCosine - sqrCosine;
 		
-				outDelta += delta * scale;
+				outDelta += delta *scale;
 		
 				if (frictionEnabled)
 				{
-					// get previous sphere pos
-					float4 prevSphere0 = lerp(startSphere0, targetSphere0, prevAlpha);
-					float4 prevSphere1 = lerp(startSphere1, targetSphere1, prevAlpha);
-		
 					// interpolate velocity between the two spheres
-					float t = deltaDotAxis * 0.5f + 0.5f;
-					outVelocity += lerp(sphere0.xyz - prevSphere0.xyz, sphere1.xyz - prevSphere1.xyz, t);
+					float t = curDot * 0.5f + 0.5f;
+					outVelocity += lerp(curSphere0.xyz - prevSphere0.xyz, curSphere1.xyz - prevSphere1.xyz, t);
 				}
 		
 				++numCollisions;
 			}
 		}
-
-		// curPos inside cone (discrete collision)
-		bool hasContact = curRadius * curRadius > curSqrDistance;
-
-		if (!hasContact)
-			continue;
-
-		float invDistance = curSqrDistance > 0.0f ? rsqrt(curSqrDistance) : 0.0f;
-		float base = curDot + curSlope * curSqrDistance * invDistance;
-
-	//	float axisLength = sqrAxisLength * invAxisLength;
-
-	//	float halfLength = axisLength; // ?
-	//	float halfLength = coneHalfLength;
-		/*
-		if (abs(base) < halfLength)
-		{
-			float3 delta = curPos - base * curAxis.xyz;
-
-			float sine = axis.w * invAxisLength; // Remove?
-			float sqrCosine = 1.f - sine * sine;
-
-			float scale = curRadius * invDistance * coneSqrCosine - coneSqrCosine;
-
-
-	//		delta += de
-
-			outDelta += delta * scale;
-			
-			if (frictionEnabled)
-			{
-				// interpolate velocity between the two spheres
-				float t = curDot * 0.5f + 0.5f;
-				outVelocity += lerp(sphere0.xyz - prevSphere0.xyz, sphere1.xyz - prevSphere1.xyz, t);
-			}
-
-			++numCollisions;
-		}*/
 	}
 
 	// sphere collision
@@ -1147,8 +1084,8 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 		float prevRadius = prevSphere.w;
 
 		{
-			float3 curDelta = curPos - sphere.xyz;
-			float3 prevDelta = prevPos - prevSphere.xyz;
+			float3 curDelta = curPosAbsolute - sphere.xyz;
+			float3 prevDelta = prevPosAbsolute - prevSphere.xyz;
 
 			float sqrDistance = FLT_EPSILON + dot(curDelta, curDelta);
 
@@ -1186,7 +1123,7 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 				oneMinusToi = oneMinusToi / (1.f - minusK);
 
 				curDelta += delta * oneMinusToi;
-				curPos = sphere.xyz + curDelta;
+				curPosAbsolute = sphere.xyz + curDelta;
 
 				sqrDistance = FLT_EPSILON + dot(curDelta, curDelta);
 			}
@@ -1210,6 +1147,125 @@ uint32_t collideCapsules(float3 curPos, float3 prevPos, float alpha, float prevA
 	}
 
 	return numCollisions;
+}
+
+float3 barycentricLerp(float3 pA, float3 pB, float3 pC, float3 weights)
+{
+	float3 outP;
+	outP.x = pA.x * weights.x + pB.x * weights.y + pC.x * weights.z;
+	outP.y = pA.y * weights.x + pB.y * weights.y + pC.y * weights.z;
+	outP.z = pA.z * weights.x + pB.z * weights.y + pC.z * weights.z;
+	return outP;
+}
+
+void applyVirtualImpulse(IParticles particles, uint3 indices, float3 weights, float3 delta, float scale)
+//apply
+{
+	float4 pA = particles.get(indices.x);
+	float4 pB = particles.get(indices.y);
+	float4 pC = particles.get(indices.z);
+
+	delta *= scale;
+
+	pA.x += delta.x * weights.x;	pB.x += delta.x * weights.y;	pC.x += delta.x * weights.z;
+	pA.y += delta.y * weights.x;	pB.y += delta.y * weights.y;	pC.y += delta.y * weights.z;
+	pA.z += delta.z * weights.x;	pB.z += delta.z * weights.y;	pC.z += delta.z * weights.z;
+
+	//if(particle is not static) store new position
+	if(pA.w != 0.0f) particles.set(indices.x, pA);
+	if(pB.w != 0.0f) particles.set(indices.y, pB);
+	if(pC.w != 0.0f) particles.set(indices.z, pC);
+}
+
+void collideVirtualCapsules(IParticles curParticles, IParticles prevParticles, uint32_t threadIdx, float alpha, float prevAlpha)
+{
+	uint virtualParticleSetSizesCount = gClothData.mNumVirtualParticleSetSizes;
+	
+	if(virtualParticleSetSizesCount == 0)
+		return;
+
+	bool frictionEnabled = gClothData.mFrictionScale > 0.0f;
+	bool massScaleEnabled = gClothData.mCollisionMassScale > 0.0f;
+
+	if(gClothData.mEnableContinuousCollision)
+	{
+		//???
+	}
+
+	uint indicesEnd = 0;
+	for(uint vpSetSizeIt = 0; vpSetSizeIt < virtualParticleSetSizesCount; vpSetSizeIt++)
+	{
+		GroupMemoryBarrierWithGroupSync();
+		uint indicesIt = indicesEnd + threadIdx * 4;
+		for(indicesEnd += bVirtualParticleSetSizes[vpSetSizeIt]*4; indicesIt < indicesEnd; indicesIt += blockDim * 4)
+		{
+			uint4 indices;
+			{
+				uint4 tmp = bVirtualParticleIndices[indicesIt>>1];
+				if(indicesIt & 1 == 1)
+				{
+					indices.x = tmp.z & 0xffff;
+					indices.y = tmp.z >> 16;
+					indices.z = tmp.w & 0xffff;
+					indices.w = tmp.w >> 16;
+				}
+				else
+				{
+					indices.x = tmp.x & 0xffff;
+					indices.y = tmp.x >> 16;
+					indices.z = tmp.y & 0xffff;
+					indices.w = tmp.y >> 16;
+				}
+			}
+
+			float4 weights = bVirtualParticleWeights[indices.w];
+
+			float3 curPos = barycentricLerp(curParticles.get(indices.x).xyz, curParticles.get(indices.y).xyz, curParticles.get(indices.z).xyz, weights.xyz);
+
+			float3 delta, velocity;
+			uint32_t numCollisions = collideCapsules(curPos.xyz, alpha, prevAlpha, delta, velocity);
+			if(numCollisions > 0)
+			{
+				float scale = 1.0f / (float)numCollisions;
+				float wscale = weights.w * scale;
+
+				applyVirtualImpulse(curParticles, indices.xyz, weights.xyz, delta, scale);
+
+				if(frictionEnabled)
+				{
+					float3 prevPos = barycentricLerp(prevParticles.get(indices.x).xyz, prevParticles.get(indices.y).xyz, prevParticles.get(indices.z).xyz, weights.xyz);
+					
+					float3 frictionImpulse =
+						calcFrictionImpulse(prevPos.xyz, curPos.xyz, velocity, scale, delta);
+
+					applyVirtualImpulse(prevParticles, indices.xyz, weights.xyz, frictionImpulse, -weights.w);
+				}
+
+				if(massScaleEnabled)
+				{
+					float deltaLengthSq = dot(delta.xyz, delta.xyz) * scale * scale;
+					float invMassScale = 1.0f / (1.0f + gClothData.mCollisionMassScale * deltaLengthSq);
+
+					// not multiplying by weights[3] here because unlike applying velocity
+					// deltas where we want the interpolated position to obtain a particular
+					// value, we instead just require that the total change is equal to invMassScale
+					invMassScale = invMassScale - 1.0f;
+
+					float4 pA = curParticles.get(indices.x);
+					float4 pB = curParticles.get(indices.y);
+					float4 pC = curParticles.get(indices.z);
+
+					pA.w *= 1.0f + weights.x * invMassScale;
+					pB.w *= 1.0f + weights.y * invMassScale;
+					pC.w *= 1.0f + weights.z * invMassScale;
+
+					curParticles.set(indices.x,pA); 
+					curParticles.set(indices.y,pB); 
+					curParticles.set(indices.z,pC);
+				}
+			}
+		}
+	}
 }
 
 void collideContinuousCapsules(IParticles curParticles, IParticles prevParticles, uint32_t threadIdx, float alpha, float prevAlpha)
@@ -1261,6 +1317,7 @@ void collideParticles(IParticles curParticles, IParticles prevParticles, uint32_
 		collideContinuousCapsules(curParticles, prevParticles, threadIdx, alpha, prevAlpha);
 	else
 		collideCapsules(curParticles, prevParticles, threadIdx, alpha, prevAlpha);
+	collideVirtualCapsules(curParticles, prevParticles, threadIdx, alpha, prevAlpha);
 }
 
 void constrainSeparation(IParticles curParticles, uint32_t threadIdx, float alpha)

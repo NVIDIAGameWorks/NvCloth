@@ -46,7 +46,7 @@ typedef unsigned int uint32_t;
 typedef int int32_t;
 #endif
 
-static const uint32_t MaxParticlesInSharedMem = 1971;
+static const uint32_t MaxParticlesInSharedMem = 1969;
 
 
 struct DxPhaseConfig
@@ -123,6 +123,8 @@ struct DxClothData
 	uint32_t mConvexMasksOffset;
 
 	uint32_t mNumCollisionTriangles;
+
+	uint32_t mNumVirtualParticleSetSizes;
 
 	uint32_t mEnableContinuousCollision; //bool stored in uint32_t for dx alignment
 	float mCollisionMassScale;

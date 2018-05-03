@@ -178,6 +178,8 @@ class Renderer : public ISampleController
 	{
 		DirectX::XMMATRIX world;
 		DirectX::XMFLOAT4 color;
+		uint32_t boneoffsetoffset;
+		uint32_t submesh;
 	};
 
 

@@ -183,11 +183,15 @@ cloth::IterationStateFactory::IterationStateFactory(MyCloth& cloth, float frameD
 	mPrevLinearVelocity = cloth.mLinearVelocity;
 	mPrevAngularVelocity = cloth.mAngularVelocity;
 
-	// update cloth
-	float invFrameDt = 1.0f / frameDt;
-	cloth.mLinearVelocity = invFrameDt * (cloth.mTargetMotion.p - cloth.mCurrentMotion.p);
-	physx::PxQuat dq = cloth.mTargetMotion.q * cloth.mCurrentMotion.q.getConjugate();
-	cloth.mAngularVelocity = log(dq) * invFrameDt;
+	if(!cloth.mIgnoreVelocityDiscontinuityNextFrame)
+	{
+		// update cloth
+		float invFrameDt = 1.0f / frameDt;
+		cloth.mLinearVelocity = invFrameDt * (cloth.mTargetMotion.p - cloth.mCurrentMotion.p);
+		physx::PxQuat dq = cloth.mTargetMotion.q * cloth.mCurrentMotion.q.getConjugate();
+		cloth.mAngularVelocity = log(dq) * invFrameDt;
+	}
+	cloth.mIgnoreVelocityDiscontinuityNextFrame = false;
 
 	cloth.mPrevIterDt = mIterDt;
 	cloth.mIterDtAvg.push(static_cast<uint32_t>(mNumIterations), mIterDt);

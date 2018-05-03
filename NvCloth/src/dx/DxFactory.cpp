@@ -96,6 +96,12 @@ typedef Vec4T<uint32_t> Vec4u;
 		, mCollisionPlanesDeviceCopy(mContextManager)
 		, mCollisionTriangles(mContextManager, DxStagingBufferPolicy())
 		, mCollisionTrianglesDeviceCopy(mContextManager)
+		, mVirtualParticleSetSizes(mContextManager, DxStagingBufferPolicy())
+		, mVirtualParticleSetSizesDeviceCopy(mContextManager)
+		, mVirtualParticleIndices(mContextManager, DxStagingBufferPolicy())
+		, mVirtualParticleIndicesDeviceCopy(mContextManager)
+		, mVirtualParticleWeights(mContextManager, DxStagingBufferPolicy())
+		, mVirtualParticleWeightsDeviceCopy(mContextManager)
 		, mMotionConstraints(mContextManager)
 		, mSeparationConstraints(mContextManager)
 		, mRestPositions(mContextManager, DxStagingBufferPolicy())
@@ -205,7 +211,7 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 
 	if (!sets.empty())
 	{
-		// need to skip copying the first element
+		// we don't skip first element here
 		NV_CLOTH_ASSERT(sets.size() == dxFabric.mSets.size());
 		memcpy(sets.begin(), dxFabric.mSets.begin(), sets.size() * sizeof(uint32_t));
 	}
@@ -390,8 +396,11 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 			uint32_t numWeights = cloth.getNumVirtualParticleWeights();
 
 			Vector<PxVec4>::Type hostWeights(numWeights, PxVec4(0.0f));
-			copyToHost(hostWeights.begin(), dxCloth.mVirtualParticleWeights.mBuffer.mBuffer, 0,
-				hostWeights.size() * sizeof(PxVec4));
+			//copyToHost(hostWeights.begin(), dxCloth.mVirtualParticleWeights.mBuffer.mBuffer, 0,
+			//	hostWeights.size() * sizeof(PxVec4));
+			NV_CLOTH_ASSERT(hostWeights.size() == dxCloth.mVirtualParticleWeights.size());
+			intrinsics::memCopy(hostWeights.begin(), DxCloth::MappedVec4fVectorType(const_cast<DxCloth&>(dxCloth).mVirtualParticleWeights).begin(),
+				destIndices.size() * sizeof(uint32_t));
 
 			// convert weights to Vec3f
 			PxVec3* destIt = reinterpret_cast<PxVec3*>(destWeights.begin());
@@ -408,8 +417,11 @@ void cloth::DxFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 			uint32_t numIndices = cloth.getNumVirtualParticles();
 
 			Vector<Vec4us>::Type hostIndices(numIndices);
-			copyToHost(hostIndices.begin(), dxCloth.mVirtualParticleIndices.mBuffer.mBuffer, 0,
-				hostIndices.size() * sizeof(Vec4us));
+			//copyToHost(hostIndices.begin(), dxCloth.mVirtualParticleIndices.mBuffer.mBuffer, 0,
+			//	hostIndices.size() * sizeof(Vec4us));
+			NV_CLOTH_ASSERT(hostIndices.size() == dxCloth.mVirtualParticleIndices.size());
+			intrinsics::memCopy(hostIndices.begin(), DxCloth::MappedVec4usVectorType(const_cast<DxCloth&>(dxCloth).mVirtualParticleIndices).begin(),
+				destIndices.size() * sizeof(uint32_t));
 
 			// convert indices to 32 bit
 			Vec4u* destIt = reinterpret_cast<Vec4u*>(destIndices.begin());

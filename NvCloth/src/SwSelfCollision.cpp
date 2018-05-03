@@ -45,6 +45,7 @@ namespace
 // returns sorted indices, output needs to be at least 2*(last - first) + 1024
 void radixSort(const uint32_t* first, const uint32_t* last, uint16_t* out)
 {
+	// Note: This function is almost exactly duplicated in SwInterCollision.cpp
 	// this sort uses a radix (bin) size of 256, requiring 4 bins to sort the 32 bit keys
 	uint16_t n = uint16_t(last - first);
 

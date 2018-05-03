@@ -97,6 +97,7 @@ void cloth::checkSuccessImpl(CUresult err, const char* file, const int line)
 			ADD_CASE(CUDA_ERROR_LAUNCH_OUT_OF_RESOURCES);
 			ADD_CASE(CUDA_ERROR_LAUNCH_TIMEOUT);
 			ADD_CASE(CUDA_ERROR_LAUNCH_INCOMPATIBLE_TEXTURING);
+			ADD_CASE(CUDA_ERROR_ILLEGAL_ADDRESS);
 		default:
 			ADD_CASE(CUDA_ERROR_UNKNOWN);
 #undef ADD_CASE
@@ -115,8 +116,9 @@ uint32_t getMaxThreadsPerBlock(CUcontext context)
 	CUdevice device;
 	checkSuccess(cuCtxGetDevice(&device));
 
-	int major = 0;
+	int major = 0, minor = 0;
 	checkSuccess(cuDeviceGetAttribute(&major, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR, device));
+	checkSuccess(cuDeviceGetAttribute(&minor, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR, device));
 
 	checkSuccess(cuCtxPopCurrent(nullptr));
 
@@ -149,7 +151,7 @@ cloth::Fabric* cloth::CuFactory::createFabric(uint32_t numParticles, Range<const
                                               Range<const float> tetherLengths, Range<const uint32_t> triangles)
 {
 	return NV_CLOTH_NEW(CuFabric)(*this, numParticles, phaseIndices, sets, restvalues, stiffnessValues, indices, anchors, tetherLengths, triangles,
-	                    getNextFabricId());
+								  getNextFabricId());
 }
 
 cloth::Cloth* cloth::CuFactory::createCloth(Range<const PxVec4> particles, Fabric& fabric)
@@ -210,6 +212,7 @@ void cloth::CuFactory::extractFabricData(const Fabric& fabric, Range<uint32_t> p
 
 	if (!sets.empty())
 	{
+		// need to skip copying the first element
 		NV_CLOTH_ASSERT(sets.size() == cuFabric.mSets.size() - 1);
 		const uint32_t* deviceSets = cuFabric.mSets.begin().get();
 		copyToHost(deviceSets + 1, deviceSets + cuFabric.mSets.size(), sets.begin());

@@ -350,6 +350,9 @@ void cloth::DxSolver::beginFrame()
 	mFactory.mConvexMasksDeviceCopy = mFactory.mConvexMasks.mBuffer;
 	mFactory.mCollisionPlanesDeviceCopy = mFactory.mCollisionPlanes.mBuffer;
 	mFactory.mCollisionTrianglesDeviceCopy = mFactory.mCollisionTriangles.mBuffer;
+	mFactory.mVirtualParticleSetSizesDeviceCopy = mFactory.mVirtualParticleSetSizes.mBuffer;
+	mFactory.mVirtualParticleIndicesDeviceCopy = mFactory.mVirtualParticleIndices.mBuffer;
+	mFactory.mVirtualParticleWeightsDeviceCopy = mFactory.mVirtualParticleWeights.mBuffer;
 //	mFactory.mParticleAccelerations = mFactory.mParticleAccelerationsHostCopy;
 	mFactory.mRestPositionsDeviceCopy = mFactory.mRestPositions.mBuffer;
 }
@@ -369,7 +372,8 @@ void cloth::DxSolver::executeKernel()
 	{
 		context->CSSetShader(mFactory.mSolverKernelComputeShader, NULL, 0);
 
-		ID3D11ShaderResourceView* resourceViews[18] = {
+		// Set shader StructuredBuffer registers t0-t20
+		ID3D11ShaderResourceView* resourceViews[21] = {
 			mClothData.mBuffer.resourceView(), /*mFrameData.mBuffer.resourceView()*/NULL,
 			mIterationData.mBuffer.resourceView(), mFactory.mPhaseConfigs.mBuffer.resourceView(),
 			mFactory.mConstraints.mBuffer.resourceView(), mFactory.mTethers.mBuffer.resourceView(),
@@ -382,10 +386,15 @@ void cloth::DxSolver::executeKernel()
 			mFactory.mRestPositionsDeviceCopy.resourceView(),
 			mFactory.mSelfCollisionIndices.mBuffer.resourceView(),
 			mFactory.mStiffnessValues.mBuffer.resourceView(),
-			mFactory.mTriangles.mBuffer.resourceView()
-		};
-		context->CSSetShaderResources(0, 18, resourceViews);
+			mFactory.mTriangles.mBuffer.resourceView(),
 
+			mFactory.mVirtualParticleSetSizesDeviceCopy.resourceView(),
+			mFactory.mVirtualParticleIndicesDeviceCopy.resourceView(),
+			mFactory.mVirtualParticleWeightsDeviceCopy.resourceView()
+		};
+		context->CSSetShaderResources(0, 21, resourceViews);
+
+		// Set shader RWStructuredBuffer registers u0-u4
 		ID3D11UnorderedAccessView* accessViews[4] = {
 			mFactory.mParticles.mBuffer.accessViewRaw(),
 			mFactory.mSelfCollisionParticles.mBuffer.accessView(),
@@ -398,10 +407,10 @@ void cloth::DxSolver::executeKernel()
 
 		context->CSSetShader(NULL, NULL, 0);
 
-		ID3D11ShaderResourceView* resourceViewsNULL[17] = {
-			NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+		ID3D11ShaderResourceView* resourceViewsNULL[21] = {
+			NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 		};
-		context->CSSetShaderResources(0, 17, resourceViewsNULL);
+		context->CSSetShaderResources(0, 21, resourceViewsNULL);
 		ID3D11UnorderedAccessView* accessViewsNULL[4] = { NULL, NULL, NULL, NULL };
 		context->CSSetUnorderedAccessViews(0, 4, accessViewsNULL, NULL);
 #if 0

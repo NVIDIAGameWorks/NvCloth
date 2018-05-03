@@ -35,7 +35,7 @@ if [ "$(printf "$req_ver\n$cur_ver" | sort -V | head -n1)" == "$cur_ver" ] && [ 
 # Install cmake using packman
 export PACKMAN="scripts/packman/packman.sh"
 source $PACKMAN pull -p linux "scripts/packman/packages/cmake.packman.xml" || exit 1
-export CMAKE="$PM_PACKAGES_ROOT/cmake-linux-x86_64/3.7.2/bin/cmake"
+export CMAKE="$PM_cmake_PATH/bin/cmake"
 
 
 # You can enable/disable cuda support here

@@ -31,6 +31,7 @@ inline float memorySizeOutput(const char*& prefix, float value)
 
 CommonUIController::CommonUIController()
 {
+	m_drawGui = true;
 }
 
 HRESULT CommonUIController::DeviceCreated(ID3D11Device* pDevice)
@@ -104,6 +105,10 @@ LRESULT CommonUIController::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 				getRenderer().reloadShaders();
 				break;
 			}
+			case VK_OEM_3: //`~ key
+			{
+				m_drawGui = !m_drawGui;
+			}
 			default:
 				break;
 		}
@@ -123,7 +128,8 @@ void CommonUIController::Animate(double fElapsedTimeSeconds)
 void CommonUIController::Render(ID3D11Device*, ID3D11DeviceContext*, ID3D11RenderTargetView*, ID3D11DepthStencilView*)
 {
 	ImGui_ImplDX11_NewFrame();
-	drawUI();
+	if(m_drawGui)
+		drawUI();
 	ImGui::Render();
 }
 

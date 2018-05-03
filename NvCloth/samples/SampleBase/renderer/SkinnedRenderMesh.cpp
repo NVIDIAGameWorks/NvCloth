@@ -200,7 +200,7 @@ void SkinnedRenderMesh::updateVisibleMeshTransforms(std::vector<PxMat44>& transf
 	}
 }
 
-void SkinnedRenderMesh::render(ID3D11DeviceContext& context) const
+void SkinnedRenderMesh::render(ID3D11DeviceContext& context, int submesh) const
 {
 	context.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

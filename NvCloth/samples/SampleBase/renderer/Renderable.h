@@ -27,14 +27,22 @@ RenderMesh interface, used by Renderable
 class IRenderMesh
 {
 public:
+	IRenderMesh(){ m_submeshCount = 1; }
 	virtual ~IRenderMesh() {}
 	virtual const std::vector<D3D11_INPUT_ELEMENT_DESC>& getInputElementDesc() const = 0;
-	virtual void render(ID3D11DeviceContext& context) const = 0;
+	virtual void render(ID3D11DeviceContext& context, int submesh) const = 0;
+	virtual physx::PxMat44 getRenderSubmeshTransform(int submesh) { return physx::PxMat44(physx::PxIdentity); }
+	virtual bool isRenderSubmeshHidden(int submesh) { return false; }
+
+	virtual int getBoneCount() const { return 0; }
+	int getSubMeshCount() const { return m_submeshCount; }
+protected:
+	int m_submeshCount;
 };
 
 /**
 Renderable, represents single object renderer by Renderer.
-Basically Renderable = RenderMaterial + RenderMesh
+Basically Renderable = RenderMaterial(s) + RenderMesh(es)
 */
 class Renderable
 {
@@ -42,6 +50,10 @@ public:
 	//////// public API ////////
 
 	void setMaterial(RenderMaterial& material);
+	void clearMaterials() { m_materialInstances.clear(); }
+	void addMaterial(RenderMaterial& material);
+	RenderMaterial& getMaterial(int id) const { return m_materialInstances[id]->getMaterial(); }
+	int getMaterialCount() const { return (int)m_materialInstances.size(); }
 
 	PxMat44 getModelMatrix() const
 	{
@@ -70,12 +82,17 @@ public:
 
 	void setColor(DirectX::XMFLOAT4 color)
 	{
-		m_color = color;
+		m_colors.clear();
+		m_colors.push_back(color);
 	}
-	DirectX::XMFLOAT4 getColor() const
+	void addColor(DirectX::XMFLOAT4 color)
 	{
-		return m_color;
+		m_colors.push_back(color);
 	}
+	DirectX::XMFLOAT4& getColor(int id) { return m_colors[id]; }
+	DirectX::XMFLOAT4 const& getColor(int id) const { return m_colors[id]; }
+	int getColorCount() const { return (int)m_colors.size(); }
+	int getBoneCount() const { return m_mesh.getBoneCount(); }
 
 	void setHidden(bool hidden)
 	{
@@ -89,10 +106,13 @@ public:
 
 	bool isTransparent() const
 	{
-		return !(m_materialInstance->getMaterial().getBlending() == RenderMaterial::BLEND_NONE);
+		for(int i = 0; i < (int)m_materialInstances.size(); i++)
+		{
+			if(!(m_materialInstances[i]->getMaterial().getBlending() == RenderMaterial::BLEND_NONE))
+				return true;
+		}
+		return false;
 	}
-
-	RenderMaterial& getMaterial() const { return m_materialInstance->getMaterial(); }
 
 private:
 	//////// methods used by Renderer ////////
@@ -116,11 +136,11 @@ private:
 
 	//////// internal data ////////
 
-	DirectX::XMFLOAT4           m_color;
+	std::vector<DirectX::XMFLOAT4> m_colors;
 	PxTransform                 m_transform;
 	PxVec3                      m_scale;
 
-	RenderMaterial::InstancePtr m_materialInstance;
+	std::vector<RenderMaterial::InstancePtr> m_materialInstances;
 	IRenderMesh&                m_mesh;
 	bool                        m_hidden;
 };

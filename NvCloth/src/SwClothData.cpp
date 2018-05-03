@@ -73,6 +73,7 @@ cloth::SwClothData::SwClothData(SwCloth& cloth, const SwFabric& fabric)
 
 	mTethers = fabric.mTethers.begin();
 	mNumTethers = uint32_t(fabric.mTethers.size());
+	//1-(1 - stiffness)^stiffnessExponent
 	mTetherConstraintStiffness = 1.0f - expf(stiffnessExponent * cloth.mTetherConstraintLogStiffness);
 	mTetherConstraintScale = cloth.mTetherConstraintScale * fabric.mTetherLengthScale;
 

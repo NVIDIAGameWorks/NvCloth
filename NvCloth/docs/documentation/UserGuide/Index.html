@@ -106,11 +106,64 @@
 <li class="toctree-l3"><a class="reference internal" href="#collision-detection">Collision detection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#local-space-simulation">Local space simulation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#drag-lift-and-wind">Drag lift and wind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distance-motion-constraints">Distance/Motion constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#attaching-cloth-to-animated-characters">Attaching cloth to animated characters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unit-scaling">Unit scaling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parts-of-cloth-disappearing-for-single-frame">Parts of cloth disappearing (for single frame)</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Solver/Index.html">Internal solver function/algorithm documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#particle-invmass-w-component">Particle invMass w component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#integration">Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#wind-simulation">Wind simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#distance-constraints">Distance constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#tether-constraints">Tether constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#edge-constraints">Edge constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#separation-constraints">Separation constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#fabric-data-structure">Fabric data structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CollisionDetection/Index.html">Internal collision detection documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CollisionDetection/Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html">Sphere Capsule collision detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-capsule-generation">Sphere/ Capsule generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-acceleration-structure">Sphere acceleration structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#collideparticles">collideParticles()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#capsule-collision-detection">Capsule collision detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#cone-collision-detection">Cone collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-collision-detection">Sphere collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#ccd-sphere-collision-detection">CCD sphere collision detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../CollisionDetection/SelfCollision.html">Self Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#grid-setup">Grid setup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#particle-sorting">Particle sorting</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#capsule-collision-detection">Capsule collision detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#key-range-sweep">Key range sweep</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#collision-detection-and-response">Collision detection and response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../CollisionDetection/Index.html#todo">Todo</a></li>
+</ul>
+</li>
 </ul>
 
   </div>
@@ -142,7 +195,7 @@
             
   <div class="section" id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
-<p>In this section we describe how to set up NvCloth and guide you through some common features.</p>
+<p>In this section, we describe how to set up NvCloth and guide you through some common features.</p>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
 <p>Some setup is required before we can start simulating.
@@ -500,7 +553,101 @@ cloth-&gt;setLiftCoefficient(0.6f);</pre>
 <p>We can also add wind to the simulation:</p>
 <div class="highlight-python"><pre>cloth-&gt;setWindVelocity(physx::PxVec3(x,y,z));</pre>
 </div>
-<p>It is a good idea to vary this parameter continuously to simulate gusts, making the simulation more lively.</p>
+<p>It is a good idea to vary this parameter continuously to simulate gusts, making the simulation livelier.</p>
+</div>
+<div class="section" id="distance-motion-constraints">
+<h3>Distance/Motion constraints<a class="headerlink" href="#distance-motion-constraints" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes it is useful to constrain the movements of the cloth to some limited space for stability or artistic control.
+Motion constraints can be used to limit the movement of individual cloth particles to the volume of a sphere.
+The following snippets show the motion constraints are setup:</p>
+<div class="highlight-python"><pre>nv::cloth::Range&lt;physx::PxVec4&gt; motionConstraints = cloth-&gt;getMotionConstraints();
+for(int i = 0; i &lt; (int)motionConstraints.size(); i++)
+{
+       motionConstraints[i] = physx::PxVec4(sphereCenter[i], sphereRadius[i]);
+}</pre>
+</div>
+<p>All motion constraints can be removed using <tt class="code docutils literal"><span class="pre">cloth-&gt;clearMotionConstraints()</span></tt>.</p>
+<p>The radius of all the motion constraints can be changed by setting a scale and bias using <tt class="code docutils literal"><span class="pre">cloth-&gt;setMotionConstraintScaleBias(scale,</span> <span class="pre">bias)</span></tt>.
+The resulting radius of the constraints will be <tt class="code docutils literal"><span class="pre">newRadius</span> <span class="pre">=</span> <span class="pre">scale*oldRadius</span> <span class="pre">+</span> <span class="pre">bias</span></tt> (clamped to avoid negative numbers).</p>
+<p>The stiffness of the motion constraints can be set using <tt class="code docutils literal"><span class="pre">cloth-&gt;setMotionConstraintStiffness(stiffness)</span></tt>.</p>
+</div>
+<div class="section" id="attaching-cloth-to-animated-characters">
+<h3>Attaching cloth to animated characters<a class="headerlink" href="#attaching-cloth-to-animated-characters" title="Permalink to this headline">¶</a></h3>
+<p>Cloth can be attached in two ways:
+* Updating positions of locked particles (with inverse mass set to zero)
+* Using motion constraints</p>
+<p>Sometimes a combination of both is used.</p>
+<p>The following snippet shows how to update particle positions directly:</p>
+<div class="highlight-python"><pre>{ //do this inside a scope, particle update will be triggered when MappedRange is destroyed
+       nv::cloth::MappedRange&lt;physx::PxVec4&gt; particles = cloth-&gt;getCurrentParticles();
+       for all attached particles i
+       {
+       particles[attachmentVertices[i]] = physx::PxVec4(attachmentPositions[i], mAttachmentVertexOriginalPositions[i].w);
+       }
+}</pre>
+</div>
+<p>Note that you can also set the position of non-locked particles, but that will probably result in undesirable behavior.
+Note that you can also change the mass by providing different w components. This can also be used to lock and unlock particles dynamically.</p>
+<p>Distance/motion constraints can be used in a similar way (locking the particle with a sphere radius of zero).
+Motion constraints can also be used to make particles stay within a set distance from the skinned mesh of a character.
+Limiting the motion of particles can improve stability and avoid unwanted cloth configurations.
+Gradually decreasing the motion constraint radius along the mesh can be used to blend between skinned and physical meshes.</p>
+</div>
+<div class="section" id="unit-scaling">
+<h3>Unit scaling<a class="headerlink" href="#unit-scaling" title="Permalink to this headline">¶</a></h3>
+<p>Using SI units makes it easy to use physical plausible values, but is not always desirable due to precision issues or compatibility with game engines.
+It is often the case that the positional units need to be scaled by some factor.
+It is easy to do this when following these rules.</p>
+<p>When scaling the distance units by factor \(n\):</p>
+<dl class="docutils">
+<dt>All linear distance values should be scaled by \(n\) including</dt>
+<dd><ul class="first last simple">
+<li>Vertex positions</li>
+<li>Compression and Stretch limits</li>
+<li>Tether and rest lengths (usually taken care of by the cooker)</li>
+<li>Collision shape radii</li>
+<li>Collision shape positions</li>
+<li>Gravity (gravity value in the cooker doesn&#8217;t matter as it is only used for the direction)</li>
+<li>Wind velocity</li>
+<li>Collision distances</li>
+</ul>
+</dd>
+<dt>All stiffness, scale, time, and dimensionless parameters remain unchanged including</dt>
+<dd><ul class="first last simple">
+<li>Stiffness</li>
+<li>Damping</li>
+<li>Stiffness multipliers</li>
+<li>Tether scales</li>
+<li>delta time</li>
+<li>Lift/Drag coefficients</li>
+</ul>
+</dd>
+</dl>
+<p>Fluid density (for wind simulation) should be scaled by \(n^{-3}\)</p>
+<p>So \(n = 100\) if your data is stored in SI units (meters for linear distance) but you need the simulation to run in centimeters while keeping all other base units the same.</p>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>Here we describe some potential problems one may run into when simulating cloth.</p>
+<div class="section" id="parts-of-cloth-disappearing-for-single-frame">
+<h3>Parts of cloth disappearing (for single frame)<a class="headerlink" href="#parts-of-cloth-disappearing-for-single-frame" title="Permalink to this headline">¶</a></h3>
+<p>Parts of the (or the whole) cloth can disappear when the simulation generates floating point NANs.
+In some cases the simulation recovers after a single frame, sometimes parts of the cloth, or even the whole cloth disappear without coming back.
+The most common cause for this behavior are large constraint errors.</p>
+<p>Things too look out for are rapidly moving collision shapes, especially while air drag/lift or damping are applied.</p>
+<p>Having air drag/lift enabled while large constraint errors are present (stretching the cloth) can generate very large impulses as drag/lift is dependent on triangle area.
+Damping is less sensitive to these problems, as it doesn&#8217;t depend on other properties of the cloth.</p>
+<dl class="docutils">
+<dt>Things to try:</dt>
+<dd><ul class="first last simple">
+<li>Increasing the solver frequency to be higher than the frame rate <tt class="code docutils literal"><span class="pre">cloth-&gt;setSolverFrequency(300);</span></tt>
+This helps for both decreasing collision shape penetration and improving cloth stiffness.</li>
+<li>Reduce collision shape penetration (switching to local space simulation)</li>
+<li>Reduce/disable air drag/lift</li>
+</ul>
+</dd>
+</dl>
 </div>
 </div>
 </div>

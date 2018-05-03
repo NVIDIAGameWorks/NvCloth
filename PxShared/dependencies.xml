@@ -1,0 +1,62 @@
+<project toolsVersion="4.0">
+	<platform name="common">
+		<dependency name="CMakeModules" version="1.27.trunk.23612594"/>
+	</platform>
+	<platform name="windows-common" inherit="common">
+		<dependency name="cmake-x64" version="3.10.1" exportAs="cmake"/>		
+	</platform>
+	<platform name="windows-switch" inherit="common">
+		<dependency name="cmake-x64" version="3.7.0" exportAs="cmake"/>		
+	</platform>	
+	<platform name="windows-vc15" inherit="windows-common">		
+		<dependency name="VsWhere" version="1.0.0"/>
+	</platform>	
+	<platform name="linux-common" inherit="common">
+		<dependency name="cmake-linux-x86_64" version="3.7.2" exportAs="cmake"/>		
+	</platform>
+	<platform name="mac-common" inherit="common">
+		<dependency name="cmake-mac-x86_64" version="3.7.2" exportAs="cmake"/>		
+	</platform>
+	<platform name="vc11win" inherit="windows-common">
+		<dependency name="nvToolsExt" version="1.0"/>
+	</platform>
+	<platform name="vc12win" inherit="windows-common">
+		<dependency name="nvToolsExt" version="1.0"/>
+		<dependency name="CUDA" version="8.0.61"/>
+	</platform>
+	<platform name="vc14win" inherit="windows-common">
+		<dependency name="nvToolsExt" version="1.0"/>
+	</platform>
+	<platform name="vc15win" inherit="windows-vc15">
+		<dependency name="nvToolsExt" version="1.0"/>
+	</platform>
+	<platform name="vc14uwp" inherit="windows-common">	
+	</platform>	
+	<platform name="vc15uwp" inherit="windows-vc15">	
+	</platform>	
+	<platform name="vc14ps4" inherit="windows-common">
+	</platform>
+	<platform name="vc15ps4" inherit="windows-vc15">
+	</platform>
+	<platform name="vc14xboxone" inherit="windows-common">
+	</platform>
+	<platform name="vc15xboxone" inherit="windows-vc15">
+	</platform>
+	<platform name="vc14switch" inherit="windows-switch">
+	</platform>
+	<platform name="vc15switch" inherit="windows-switch">
+	</platform>
+	<platform name="linux" inherit="linux-common">
+	</platform>
+	<platform name="linux-crosscompile" inherit="windows-common">
+		<dependency name="MinGW" version="0.6.2"/>
+		<dependency name="clang-crosscompile" version="3.7.0" exportAs="ClangCrosscompile"/>
+	</platform>
+	<platform name="mac" inherit="mac-common">
+	</platform>
+	<platform name="ios" inherit="mac-common">
+	</platform>
+	<platform name="android" inherit="windows-common">
+		<dependency name="android-ndk" version="13.2" exportAs="AndroidNDK"/>
+	</platform>	
+</project>

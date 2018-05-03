@@ -23,7 +23,7 @@ PrimitiveRenderMesh::PrimitiveRenderMesh(const float v[], UINT numVertices)
 	layout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 	layout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 
-	initialize(v, numVertices, sizeof(float) * 6, layout, nullptr, 0);
+	initialize(v, numVertices, sizeof(float) * 6, layout, nullptr, 0, 0);
 }
 
 
@@ -103,7 +103,7 @@ PlaneRenderMesh::PlaneRenderMesh()
 	layout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 	layout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 
-	initialize(planeVertices, sizeof(planeVertices) / (8 * sizeof(planeVertices[0])), sizeof(float) * 8, layout, nullptr, 0);
+	initialize(planeVertices, sizeof(planeVertices) / (8 * sizeof(planeVertices[0])), sizeof(float) * 8, layout, nullptr, 0, 0);
 }
 
 
@@ -196,7 +196,7 @@ SphereRenderMesh::SphereRenderMesh()
 	layout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 	layout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 
-	initialize(vertices.data(), (uint32_t)vertices.size(), sizeof(SphereVertex), layout, g_sphereIndices, g_numSphereIndices);
+	initialize(vertices.data(), (uint32_t)vertices.size(), sizeof(SphereVertex), layout, g_sphereIndices, g_numSphereIndices, 0);
 }
 
 

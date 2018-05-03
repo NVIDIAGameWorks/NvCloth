@@ -71,6 +71,8 @@ cloth::DxClothData::DxClothData(DxCloth& cloth)
 
 	mNumCollisionTriangles = uint32_t(cloth.mStartCollisionTriangles.size()) / 3;
 
+	mNumVirtualParticleSetSizes = cloth.mVirtualParticleSetSizes.size();
+
 	mEnableContinuousCollision = cloth.mEnableContinuousCollision;
 	mCollisionMassScale = cloth.mCollisionMassScale;
 	mFrictionScale = cloth.mFriction;

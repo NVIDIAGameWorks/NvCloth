@@ -117,6 +117,8 @@ void InterCollisionScene::onInitialize()
 	initializeCloth(0, posTrans);
 	posTrans.setPosition(physx::PxVec3(0.0f, 0.8f, -1.2f));
 	initializeCloth(1, posTrans);
+	posTrans.setPosition(physx::PxVec3(0.0f, 1.6f, -1.4f));
+	initializeCloth(2, posTrans);
 
 	{
 		IRenderMesh* mesh = getSceneController()->getRenderer().getPrimitiveRenderMesh(PrimitiveRenderMeshType::Plane);

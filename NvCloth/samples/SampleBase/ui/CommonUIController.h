@@ -85,7 +85,7 @@ class CommonUIController : public ISampleController
 	std::queue<DelayedCall>		m_delayedCalls;
 
 	float m_dt;
-
+	bool m_drawGui;
 };
 
 #endif

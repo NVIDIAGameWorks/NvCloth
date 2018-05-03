@@ -64,6 +64,7 @@ void initialize(Cloth& cloth, const physx::PxVec4* pIt, const physx::PxVec4* pEn
 	cloth.mCurrentMotion = physx::PxTransform(physx::PxIdentity);
 	cloth.mLinearVelocity = physx::PxVec3(0.0f);
 	cloth.mAngularVelocity = physx::PxVec3(0.0f);
+	cloth.mIgnoreVelocityDiscontinuityNextFrame = false;
 	cloth.mPrevIterDt = 0.0f;
 	cloth.mIterDtAvg = MovingAverage(30);
 	cloth.mTetherConstraintLogStiffness = float(-FLT_MAX_EXP);

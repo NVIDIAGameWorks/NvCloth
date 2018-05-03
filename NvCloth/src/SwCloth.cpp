@@ -269,28 +269,13 @@ void SwCloth::setVirtualParticles(Range<const uint32_t[4]> indices, Range<const 
 
 	// shuffle indices to form independent SIMD sets
 	uint16_t numParticles = uint16_t(mCurParticles.size());
-	TripletScheduler scheduler(indices);
+	TripletScheduler scheduler(indices); //the TripletScheduler makes a copy so indices is not modified
 	scheduler.simd(numParticles, 4);
 
-	// convert indices to byte offset
-	Vec4us dummy(numParticles, uint16_t(numParticles + 1), uint16_t(numParticles + 2), 0);
-	Vector<uint32_t>::Type::ConstIterator sIt = scheduler.mSetSizes.begin();
-	Vector<uint32_t>::Type::ConstIterator sEnd = scheduler.mSetSizes.end();
-	TripletScheduler::ConstTripletIter tIt = scheduler.mTriplets.begin(), tLast;
-	mVirtualParticleIndices.resize(0);
-	mVirtualParticleIndices.reserve(indices.size() + 3 * uint32_t(sEnd - sIt));
-	for (; sIt != sEnd; ++sIt)
-	{
-		uint32_t setSize = *sIt;
-		for (tLast = tIt + setSize; tIt != tLast; ++tIt, ++mNumVirtualParticles)
-			mVirtualParticleIndices.pushBack(Vec4us(*tIt));
-		mVirtualParticleIndices.resize((mVirtualParticleIndices.size() + 3) & ~3, dummy);
-	}
-	Vector<Vec4us>::Type(mVirtualParticleIndices.begin(), mVirtualParticleIndices.end())
-	    .swap(mVirtualParticleIndices);
+	mVirtualParticleIndices.swap(scheduler.mPaddedTriplets);
 
 	// precompute 1/dot(w,w)
-	Vector<PxVec4>::Type().swap(mVirtualParticleWeights);
+	Vector<PxVec4>::Type().swap(mVirtualParticleWeights); //clear and trim
 	mVirtualParticleWeights.reserve(weights.size());
 	for (; !weights.empty(); weights.popFront())
 	{

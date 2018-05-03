@@ -49,6 +49,7 @@ const Simd4fTupleFactory sMaskW = simd4f(simd4i(0, 0, 0, ~0));
 const Simd4fScalarFactory sEpsilon = simd4f(FLT_EPSILON);
 const Simd4fTupleFactory sZeroW = simd4f(-FLT_MAX, -FLT_MAX, -FLT_MAX, 0.0f);
 
+// Same as radixSort from SwSelfCollision.cpp but with uint32_t instead of uint16_t
 // returns sorted indices, output needs to be at least 2*(last - first) + 1024
 void radixSort(const uint32_t* first, const uint32_t* last, uint32_t* out)
 {
@@ -226,13 +227,15 @@ uint32_t calculatePotentialColliders(const cloth::SwInterCollisionData* cBegin, 
 
 	uint32_t* sortedIndices = static_cast<uint32_t*>(allocator.allocate(numCloths * sizeof(uint32_t)));
 
+	// fill clothBounds, sortedIndices, and calculate totalClothBounds in world space
 	for (uint32_t i = 0; i < numCloths; ++i)
 	{
 		const SwInterCollisionData& c = cBegin[i];
 
-		// transform bounds from b local space to local space of a
+		// grow bounds with the collision distance colDist
 		PxBounds3 lcBounds = PxBounds3::centerExtents(c.mBoundsCenter, c.mBoundsHalfExtent + PxVec3(array(colDist)[0]));
 		NV_CLOTH_ASSERT(!lcBounds.isEmpty());
+		// transform bounds to world space
 		PxBounds3 cWorld = PxBounds3::transformFast(c.mGlobalPose,lcBounds);
 
 		BoundingBox cBounds = { simd4f(cWorld.minimum.x, cWorld.minimum.y, cWorld.minimum.z, 0.0f),
@@ -244,9 +247,11 @@ uint32_t calculatePotentialColliders(const cloth::SwInterCollisionData* cBegin, 
 		totalClothBounds = expandBounds(totalClothBounds, cBounds);
 	}
 
-	// sort indices by their minimum extent on the longest axis
+	// The sweep axis is the longest extent of totalClothBounds
+	// 0 = x axis, 1 = y axis, etc. so that vectors can be indexed using v[sweepAxis]
 	const uint32_t sweepAxis = longestAxis(totalClothBounds.mUpper - totalClothBounds.mLower);
 
+	// sort indices by their minimum extent on the sweep axis
 	ClothSorter<T4f> predicate(clothBounds, numCloths, sweepAxis);
 	shdfnd::sort(sortedIndices, numCloths, predicate, nv::cloth::NonTrackingAllocator());
 
@@ -270,10 +275,10 @@ uint32_t calculatePotentialColliders(const cloth::SwInterCollisionData* cBegin, 
 		uint32_t overlapMask = 0;
 		uint32_t numOverlaps = 0;
 
-		// scan back to find first intersecting bounding box
-		uint32_t startIndex = i;
-		while (startIndex > 0 && array(clothBounds[sortedIndices[startIndex]].mUpper)[sweepAxis] > axisMin)
-			--startIndex;
+		// scan forward to skip non intersecting bounds
+		uint32_t startIndex = 0;
+		while(startIndex < numCloths && array(clothBounds[sortedIndices[startIndex]].mUpper)[sweepAxis] < axisMin)
+			startIndex++;
 
 		// compute all overlapping bounds
 		for (uint32_t j = startIndex; j < numCloths; ++j)
@@ -361,7 +366,7 @@ uint32_t calculatePotentialColliders(const cloth::SwInterCollisionData* cBegin, 
 
 				// output each particle only once
 				++numParticles;
-				break;
+				break; // the particle only has to be inside one of the bounds, it doesn't matter if they are in more than one
 			}
 		}
 	}
@@ -401,7 +406,7 @@ void cloth::SwInterCollision<T4f>::operator()()
 		// world bounds of particles
 		BoundingBox<T4f> bounds = emptyBounds<T4f>();
 
-		// calculate potentially colliding set
+		// calculate potentially colliding set (based on bounding boxes)
 		{
 			NV_CLOTH_PROFILE_ZONE("cloth::SwInterCollision::BroadPhase", /*ProfileContext::None*/ 0);
 
@@ -415,6 +420,8 @@ void cloth::SwInterCollision<T4f>::operator()()
 		{
 			NV_CLOTH_PROFILE_ZONE("cloth::SwInterCollision::Collide", /*ProfileContext::None*/ 0);
 
+			//Note: this code is almost the same as cloth::SwSelfCollision<T4f>::operator()
+
 			T4f lowerBound = bounds.mLower;
 			T4f edgeLength = max(bounds.mUpper - lowerBound, sEpsilon);
 
@@ -423,11 +430,12 @@ void cloth::SwInterCollision<T4f>::operator()()
 			uint32_t hashAxis0 = (sweepAxis + 1) % 3;
 			uint32_t hashAxis1 = (sweepAxis + 2) % 3;
 
-			// reserve 0, 127, and 65535 for sentinel
+			// reserve 0, 255, and 65535 for sentinel
 			T4f cellSize = max(mCollisionDistance, simd4f(1.0f / 253) * edgeLength);
 			array(cellSize)[sweepAxis] = array(edgeLength)[sweepAxis] / 65533;
 
 			T4f one = gSimd4fOne;
+			// +1 for sentinel 0 offset
 			T4f gridSize = simd4f(254.0f);
 			array(gridSize)[sweepAxis] = 65534.0f;
 
@@ -564,6 +572,7 @@ size_t cloth::SwInterCollision<T4f>::getBufferSize(uint32_t numParticles)
 template <typename T4f>
 void cloth::SwInterCollision<T4f>::collideParticle(uint32_t index)
 {
+	// The other particle is passed through member variables (mParticle)
 	uint16_t clothIndex = mClothIndices[index];
 
 	if ((1 << clothIndex) & ~mClothMask)
@@ -574,6 +583,8 @@ void cloth::SwInterCollision<T4f>::collideParticle(uint32_t index)
 	uint32_t particleIndex = mParticleIndices[index];
 	T4f& particle = reinterpret_cast<T4f&>(instance->mParticles[particleIndex]);
 
+
+	//very similar to cloth::SwSelfCollision<T4f>::collideParticles
 	T4f diff = particle - mParticle;
 	T4f distSqr = dot3(diff, diff);
 
@@ -609,6 +620,8 @@ void cloth::SwInterCollision<T4f>::collideParticles(const uint32_t* keys, uint32
                                                        const uint32_t* indices, uint32_t numParticles,
                                                        uint32_t collisionDistance)
 {
+	//very similar to cloth::SwSelfCollision<T4f>::collideParticles
+
 	const uint32_t bucketMask = uint16_t(-1);
 
 	const uint32_t keyOffsets[] = { 0, 0x00010000, 0x00ff0000, 0x01000000, 0x01010000 };
@@ -639,8 +652,9 @@ void cloth::SwInterCollision<T4f>::collideParticles(const uint32_t* keys, uint32
 				++kIt;
 			kLast[k] = kIt;
 
-			// jump forward once to second column
-			kIt = keys + firstColumnSize;
+			// jump forward once to second column to go from cell offset 1 to 2 quickly
+			if(firstColumnSize)
+				kIt = keys + firstColumnSize;
 			firstColumnSize = 0;
 		}
 	}

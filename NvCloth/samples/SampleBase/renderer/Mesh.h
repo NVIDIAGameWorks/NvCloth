@@ -18,7 +18,7 @@
 
 class Mesh
 {
-	virtual uint32_t getVertexStride() = 0;
+	virtual uint32_t getVertexStride() const = 0;
 	// ... TBD
 };
 
@@ -38,7 +38,7 @@ public:
 		physx::PxVec2 uv;
 	};
 
-	virtual uint32_t getVertexStride() { return sizeof(Vertex); }
+	virtual uint32_t getVertexStride() const { return sizeof(Vertex); }
 
 	std::vector<Vertex> vertices;
 	std::vector<uint16_t> indices;

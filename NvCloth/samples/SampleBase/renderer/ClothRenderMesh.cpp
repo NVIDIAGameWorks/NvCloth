@@ -34,15 +34,21 @@ void gatherIndices(std::vector<uint16_t>& indices,
 		indices.push_back(static_cast<uint16_t>(tIt.ptr()[1]));
 		indices.push_back(static_cast<uint16_t>(tIt.ptr()[2]));
 	}
-	qIt = PxMakeIterator(reinterpret_cast<const T*>(quads.data), quads.stride);
-	for (PxU32 i = 0; i < quads.count; ++i, ++qIt)
+	
+	//Only do quads in case there wasn't triangle data provided
+	// otherwise we risk to render triangles double
+	if(indices.size() == 0)
 	{
-		indices.push_back(static_cast<uint16_t>(qIt.ptr()[0]));
-		indices.push_back(static_cast<uint16_t>(qIt.ptr()[1]));
-		indices.push_back(static_cast<uint16_t>(qIt.ptr()[2]));
-		indices.push_back(static_cast<uint16_t>(qIt.ptr()[0]));
-		indices.push_back(static_cast<uint16_t>(qIt.ptr()[2]));
-		indices.push_back(static_cast<uint16_t>(qIt.ptr()[3]));
+		qIt = PxMakeIterator(reinterpret_cast<const T*>(quads.data), quads.stride);
+		for (PxU32 i = 0; i < quads.count; ++i, ++qIt)
+		{
+			indices.push_back(static_cast<uint16_t>(qIt.ptr()[0]));
+			indices.push_back(static_cast<uint16_t>(qIt.ptr()[1]));
+			indices.push_back(static_cast<uint16_t>(qIt.ptr()[2]));
+			indices.push_back(static_cast<uint16_t>(qIt.ptr()[0]));
+			indices.push_back(static_cast<uint16_t>(qIt.ptr()[2]));
+			indices.push_back(static_cast<uint16_t>(qIt.ptr()[3]));
+		}
 	}
 }
 
@@ -147,6 +153,9 @@ void ClothRenderMesh::initialize(const void* vertices, uint32_t numVertices, uin
 
 		V(mDevice->CreateBuffer(&bufferDesc, &indexBufferData, &mIndexBuffer));
 	}
+	std::vector<uint32_t> offsets;
+	offsets.push_back(0);
+	setSubmeshOffsets(offsets);
 }
 
 ClothRenderMesh::~ClothRenderMesh()
@@ -197,7 +206,7 @@ void ClothRenderMesh::update(const PxVec3* positions, uint32_t numVertices)
 	}
 }
 
-void ClothRenderMesh::render(ID3D11DeviceContext& context) const
+void ClothRenderMesh::render(ID3D11DeviceContext& context, int submesh) const
 {
 	context.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -207,8 +216,11 @@ void ClothRenderMesh::render(ID3D11DeviceContext& context) const
 
 	context.IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
+	int firstIndex = mSubmeshOffsets[submesh];
+	int indexCount = mSubmeshOffsets[submesh+1] - firstIndex;
+
 	if (mIndexBuffer)
-		context.DrawIndexed(mNumFaces*3, 0, 0);
+		context.DrawIndexed(indexCount, firstIndex, 0);
 	else
 		context.Draw(mNumVertices, 0);
 }

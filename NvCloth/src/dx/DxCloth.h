@@ -91,11 +91,9 @@ class DxCloth : protected DxContextLock, public ClothImpl<DxCloth>
 	typedef DxFabric FabricType;
 	typedef DxContextLock ContextLockType;
 
-	template <typename>
-	struct MapTraits;
-
 	typedef DxVectorMap<DxBatchedVector<physx::PxVec3> > MappedVec3fVectorType;
 	typedef DxVectorMap<DxBatchedVector<physx::PxVec4> > MappedVec4fVectorType;
+	typedef DxVectorMap<DxBatchedVector<Vec4us> > MappedVec4usVectorType;
 	typedef DxVectorMap<DxBatchedVector<IndexPair> > MappedIndexVectorType;
 	typedef DxVectorMap<DxBatchedVector<uint32_t> > MappedMaskVectorType;
 
@@ -190,9 +188,9 @@ class DxCloth : protected DxContextLock, public ClothImpl<DxCloth>
 	float mFriction;
 
 	// virtual particles
-	DxDeviceVector<uint32_t> mVirtualParticleSetSizes;
-	DxDeviceVector<Vec4us> mVirtualParticleIndices;
-	DxDeviceVector<physx::PxVec4> mVirtualParticleWeights;
+	DxBatchedVector<uint32_t> mVirtualParticleSetSizes;
+	DxBatchedVector<Vec4us> mVirtualParticleIndices;
+	DxBatchedVector<physx::PxVec4> mVirtualParticleWeights;
 
 	// self collision
 	float mSelfCollisionDistance;

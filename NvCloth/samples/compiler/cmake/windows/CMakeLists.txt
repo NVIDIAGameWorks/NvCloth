@@ -1,16 +1,14 @@
 #Platform specific compile flags and project includes
 
+MESSAGE("Windows/CMakeLists.txt [begin]")
 SET(GW_DEPS_ROOT $ENV{GW_DEPS_ROOT})
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/sw/physx/tools/CMakeModules)
-
-IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-ENDIF()
 
 
 IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
 	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
+ELSE()
+	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/sw/physx/tools/CMakeModules)
 ENDIF()
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/..")
@@ -80,3 +78,5 @@ ADD_SUBDIRECTORY(${NVCLOTH_ROOT_DIR}/compiler/cmake/windows "${CMAKE_CURRENT_BIN
 INCLUDE(${PROJECT_CMAKE_FILES_DIR}/SampleBase.cmake)
 
 
+
+MESSAGE("Windows/CMakeLists.txt [end]")

@@ -28,7 +28,7 @@ struct Vertex
 };
 
 /**
-Simple ñloth render mesh
+Simple cloth render mesh
 */
 class ClothRenderMesh : public IRenderMesh
 {
@@ -41,7 +41,14 @@ public:
 	void update(const PxVec3* positions, uint32_t numVertices);
 
 	const std::vector<D3D11_INPUT_ELEMENT_DESC>& getInputElementDesc() const { return mInputDesc; }
-	void render(ID3D11DeviceContext& context) const;
+	void render(ID3D11DeviceContext& context, int submesh) const;
+
+	void setSubmeshOffsets(std::vector<uint32_t>const & offsets)
+	{ 
+		mSubmeshOffsets = offsets;
+		m_submeshCount = (int)offsets.size();
+		mSubmeshOffsets.push_back((uint32_t)mIndices.size()); 
+	}
 
 protected:
 	ClothRenderMesh();
@@ -56,6 +63,7 @@ private:
 
 	std::vector<Vertex> mVertices;
 	std::vector<uint16_t> mIndices;
+	std::vector<uint32_t> mSubmeshOffsets;
 
 	uint32_t      mNumFaces;
 	uint32_t      mNumVertices;

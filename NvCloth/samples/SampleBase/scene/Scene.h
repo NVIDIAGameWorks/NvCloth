@@ -15,6 +15,7 @@
 #include <map>
 #include "scene/SceneController.h"
 #include "foundation/PxMat44.h"
+#include <functional>
 namespace nv
 {
 	namespace cloth
@@ -44,13 +45,15 @@ public:
 	Scene(SceneController* sceneController):mSceneController(sceneController) {}
 	virtual ~Scene();
 
-	virtual void Animate(double dt) { doSimulationStep(dt); drawDebugVisualization(); }
+	virtual void Animate(double dt) { doSimulationStep(dt); }
 	void UpdateParticleDragging(float dt);
 	virtual bool HandleEvent(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	bool HandlePickingEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, physx::PxMat44 viewProjectionMatrix);
 	virtual void drawUI();
+	virtual bool drawSubScenes() { return false; } //returns true if scene needs to be reinitialized
 	virtual void drawStatsUI() {}
 	virtual void drawDebugVisualization();
+	bool debugVisualizationUpdateRequested() const;
 
 	virtual void onInitialize() = 0;
 	virtual void onTerminate() { autoDeinitialize(); }
@@ -82,6 +85,9 @@ protected:
 	void trackRenderable(Renderable* renderMesh);
 	void untrackRenderable(Renderable* renderMesh);
 
+	//add a callback that is run at the end of autoDeinitialize
+	void trackCleanupCallback(std::function<void(void)> cleanupCallback);
+
 	void autoDeinitialize();
 
 
@@ -111,6 +117,7 @@ private:
 	std::vector<nv::cloth::Fabric*> mFabricList;
 	std::map<ClothActor*, nv::cloth::Solver*> mClothSolverMap;
 	std::vector<Renderable*> mRenderableList;
+	std::vector<std::function<void(void)>> mCleanupCallbackList;
 
 	static std::vector<SceneFactory> sSceneFactories;
 
@@ -131,6 +138,7 @@ private:
 	};
 
 	static unsigned int mDebugVisualizationFlags;
+	static bool mDebugVisualizationUpdateRequested;
 
 	struct SceneDebugRenderParams
 	{

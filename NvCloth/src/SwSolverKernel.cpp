@@ -276,6 +276,8 @@ void constrainSeparation(T4f* __restrict curIt, const T4f* __restrict curEnd, co
 	}
 }
 
+
+
 /**
     traditional gauss-seidel internal constraint solver
  */
@@ -350,7 +352,7 @@ void solveConstraints(float* __restrict posIt, const float* __restrict rIt, cons
 			erij = erij - multiplier * max(compressionLimit, min(erij, stretchLimit));
 		}
 
-		//ex = er * stiffness / sqrt(epsilon + vw)
+		//ex = er * stiffness / (epsilon + inMass sum)
 		T4f exij = erij * stij * recip(gSimd4fEpsilon + vwij);
 
 		//h = h * ex
@@ -375,7 +377,7 @@ void solveConstraints(float* __restrict posIt, const float* __restrict rIt, cons
 #include "sse2/SwSolveConstraints.h"
 #endif
 
-// calculates upper bound of all position deltas
+// Calculates upper bound of all position deltas
 template <typename T4f>
 T4f calculateMaxDelta(const T4f* prevIt, const T4f* curIt, const T4f* curEnd)
 {
@@ -391,6 +393,11 @@ void applyWind(T4f* __restrict curIt, const T4f* __restrict prevIt, const uint16
                const uint16_t* __restrict tEnd, float itrDtf, float dragCoefficientf, float liftCoefficientf, float fluidDensityf, T4f wind,
                const T4f (&rotation)[3])
 {
+	// Note: Enabling wind can amplify bad behavior since the impulse scales with area,
+	//  and the area of triangles increases when constraints are violated.
+	// Using the initial triangle area based on the rest length is one possible way to
+	//  prevent this, but is expensive (and incorrect for intentionally stretchy cloth).
+
 	const T4f dragCoefficient = simd4f(dragCoefficientf);
 	const T4f liftCoefficient = simd4f(liftCoefficientf);
 	const T4f fluidDensity = simd4f(fluidDensityf);

@@ -387,56 +387,28 @@ Mesh generateCone(physx::PxVec4 a, physx::PxVec4 b, int segments, float grow, bo
 
 			//sphere a with smaller radius
 			float cRadius = aRadius - bRadius;
-			physx::PxVec3 cCenter = aCenter;
+			if(cRadius > 0.00001)
+			{
+				physx::PxVec3 cCenter = aCenter;
 
-			//sphere in between the a and b
-			physx::PxVec3 dCenter = (aCenter+bCenter)*0.5f;
-			float dRadius = (aCenter - bCenter).magnitude()*0.5f;
+				//sphere in between the a and b
+				physx::PxVec3 dCenter = (aCenter + bCenter)*0.5f;
+				float dRadius = (aCenter - bCenter).magnitude()*0.5f;
 
-			//intersection between c and d to get tangent point
-			float iRadius;
-			physx::PxVec3 iCenter = IntersectSpheres(&iRadius, dCenter, dRadius, cCenter, cRadius);
-			physx::PxVec3 iPoint = iCenter + basis[0] * iRadius; //tangent point on c
-			physx::PxVec3 offset = (iPoint - aCenter).getNormalized(); //offset direction
+				//intersection between c and d to get tangent point
+				float iRadius;
+				physx::PxVec3 iCenter = IntersectSpheres(&iRadius, dCenter, dRadius, cCenter, cRadius);
+				physx::PxVec3 iPoint = iCenter + basis[0] * iRadius; //tangent point on c
+				physx::PxVec3 offset = (iPoint - aCenter).getNormalized(); //offset direction
 
-			physx::PxVec3 aPoint = aCenter + offset*aRadius;
-			aCenter = (aPoint - aCenter).dot(basis[2])*basis[2] + aCenter;
-			aRadius = (aPoint - aCenter).magnitude();
-			physx::PxVec3 bPoint = bCenter + offset*bRadius;
-			bCenter = (bPoint - aCenter).dot(basis[2])*basis[2] + aCenter;
-			bRadius = (bPoint - bCenter).magnitude();
-
-
+				physx::PxVec3 aPoint = aCenter + offset*aRadius;
+				aCenter = (aPoint - aCenter).dot(basis[2])*basis[2] + aCenter;
+				aRadius = (aPoint - aCenter).magnitude();
+				physx::PxVec3 bPoint = bCenter + offset*bRadius;
+				bCenter = (bPoint - aCenter).dot(basis[2])*basis[2] + aCenter;
+				bRadius = (bPoint - bCenter).magnitude();
+			}
 		}
-
-		//old code, probably wrong
-		/*
-		physx::PxVec3 pa = aCenter + aRadius*basis[0];
-		physx::PxVec3 pb = bCenter + bRadius*basis[0];
-		physx::PxVec3 dir = pb - pa;
-
-		//construct plane containing pa and pb, with normal perpendicular to basis[0]
-		physx::PxVec3 n = basis[2].cross(dir);
-		physx::PxVec3 n2 = dir.cross(n);
-
-		//line plane intersection
-		physx::PxVec3 focusPoint = aCenter + ((pa - aCenter).dot(n2)) / basis[2].dot(n2) * basis[2];
-
-		{
-			float focusDistance = (focusPoint - aCenter).magnitude();
-			//make circle with center in mid point between focusPoint and aCenter
-			physx::PxVec3 cCenter = (focusPoint + aCenter)*0.5f;
-			float cRadius = focusDistance*0.5f;
-
-			aCenter = IntersectSpheres(&aRadius, aCenter, aRadius, cCenter, cRadius);
-		}
-
-		{
-			float focusDistance = (focusPoint - bCenter).magnitude();
-			physx::PxVec3 cCenter = (focusPoint + bCenter)*0.5f;
-			float cRadius = focusDistance*0.5f;
-			bCenter = IntersectSpheres(&bRadius, bCenter, bRadius, cCenter, cRadius);
-		}*/
 	}
 
 
@@ -491,7 +463,7 @@ Mesh generateCollisionCapsules(physx::PxVec4* spheres, int sphereCount, uint32_t
 	Mesh finalMesh;
 	for(int i = 0; i < sphereCount; i++)
 	{
-		Mesh sphere = generateIcosahedron(spheres[i].w+ grow, 4);
+		Mesh sphere = generateIcosahedron(spheres[i].w+ grow, 2);
 		sphere.applyTransfom(physx::PxTransform(spheres[i].getXYZ()));
 		finalMesh.merge(sphere);
 	}
@@ -502,6 +474,272 @@ Mesh generateCollisionCapsules(physx::PxVec4* spheres, int sphereCount, uint32_t
 	}
 
 	return finalMesh;
+}
+
+::SimpleMesh generateFastSphere(int segmentsX, int segmentY, physx::PxMat44 transform)
+{
+	SimpleMesh mesh;
+	const int xSegments = segmentsX;
+	const int ySegments = segmentY;
+
+	{
+		//bottom
+		SimpleMesh::Vertex v;
+		v.position = physx::PxVec3(0.0f, -1.0f, 0.0f);
+		v.normal = transform.rotate(physx::PxVec4(v.position, 0.0f)).getXYZ();
+		v.position = transform.transform(v.position);
+		v.uv = physx::PxVec2(0.0f, 0.0f);
+		mesh.vertices.push_back(v);
+	}
+
+	//middle
+	for(int y = 1; y < ySegments; y++)
+	{
+		for(int x = 0; x < xSegments; x++)
+		{
+			float xf = (float)x / (xSegments - 1.0f);
+			float yaw = xf*physx::PxTwoPi;
+			float yf = (float)y / (ySegments);
+			float pitch = (yf - 0.5f)*physx::PxPi;
+
+			SimpleMesh::Vertex v;
+			v.position = physx::PxVec3(cos(yaw)*cos(pitch), sin(pitch), sin(yaw)*cos(pitch));
+			v.uv = physx::PxVec2(xf, yf);
+			v.normal = transform.rotate(physx::PxVec4(v.position, 0.0f)).getXYZ();
+			v.position = transform.transform(v.position);
+			mesh.vertices.push_back(v);
+		}
+	}
+
+	{
+		//top
+		SimpleMesh::Vertex v;
+		v.position = physx::PxVec3(0.0f, 1.0f, 0.0f);
+		v.normal = transform.rotate(physx::PxVec4(v.position,0.0f)).getXYZ();
+		v.position = transform.transform(v.position);
+		v.uv = physx::PxVec2(0.0f, 1.0f);
+		mesh.vertices.push_back(v);
+	}
+
+	//bottom cap
+	for(int x = 0; x < xSegments; x++)
+	{
+		mesh.indices.push_back(0);
+		mesh.indices.push_back(1 + x);
+		mesh.indices.push_back(1 + (x + 1) % xSegments);
+	}
+
+	const auto RingVertex = [xSegments, ySegments](int x, int y)
+	{
+		return 1 + y*xSegments + x%xSegments;
+	};
+
+	//middle
+	for(int y = 0; y < ySegments - 2; y++)
+	{
+		for(int x = 0; x < xSegments; x++)
+		{
+			mesh.indices.push_back(RingVertex(x, y));
+			mesh.indices.push_back(RingVertex(x + 1, y));
+			mesh.indices.push_back(RingVertex(x, y + 1));
+
+			mesh.indices.push_back(RingVertex(x + 1, y));
+			mesh.indices.push_back(RingVertex(x + 1, y + 1));
+			mesh.indices.push_back(RingVertex(x, y + 1));
+		}
+	}
+
+	//bottom cap
+	for(int x = 0; x < xSegments; x++)
+	{
+		mesh.indices.push_back((uint16_t)mesh.vertices.size() - 1);
+		mesh.indices.push_back(RingVertex(x, ySegments - 2));
+		mesh.indices.push_back(RingVertex(x + 1, ySegments - 2));
+	}
+
+	return mesh;
+}
+
+::SimpleMesh generateFastCylinder(int segmentsX, int segmentY, physx::PxMat44 transform)
+{
+	SimpleMesh mesh;
+	const int xSegments = segmentsX;
+	const int ySegments = segmentY;
+
+	
+	//middle
+	for(int y = 0; y < ySegments+1; y++)
+	{
+		for(int x = 0; x < xSegments; x++)
+		{
+			float xf = (float)x / (xSegments - 1.0f);
+			float yaw = xf*physx::PxTwoPi;
+			float yf = (float)y / (ySegments) * 2.0f - 1.0f;
+
+			SimpleMesh::Vertex v;
+			v.position = physx::PxVec3(cos(yaw), yf, sin(yaw));
+			v.uv = physx::PxVec2(xf, yf);
+			v.normal = transform.rotate(physx::PxVec4(physx::PxVec3(cos(yaw), 0.0f, sin(yaw)), 0.0f)).getXYZ();
+			v.position = transform.transform(v.position);
+			mesh.vertices.push_back(v);
+		}
+	}
+
+
+	const auto RingVertex = [xSegments, ySegments](int x, int y)
+	{
+		return y*xSegments + x%xSegments;
+	};
+
+	//middle
+	for(int y = 0; y < ySegments; y++)
+	{
+		for(int x = 0; x < xSegments; x++)
+		{
+			mesh.indices.push_back(RingVertex(x, y));
+			mesh.indices.push_back(RingVertex(x + 1, y));
+			mesh.indices.push_back(RingVertex(x, y + 1));
+
+			mesh.indices.push_back(RingVertex(x + 1, y));
+			mesh.indices.push_back(RingVertex(x + 1, y + 1));
+			mesh.indices.push_back(RingVertex(x, y + 1));
+		}
+	}
+
+	return mesh;
+}
+
+::SimpleMesh generateCollisionCapsulesFast(physx::PxVec4* spheres, int sphereCount, uint32_t* indices, int indexCount, float grow)
+{
+	static ::SimpleMesh sphere = generateFastSphere(24,12,physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f), physx::PxQuat(0.0f, physx::PxVec3(0.0f, 1.0f, 0.0f))));
+	static ::SimpleMesh cylinder = generateFastCylinder(24, 1, physx::PxTransform(physx::PxVec3(0.0f, 1.0f, 0.0f), physx::PxQuat(0.0f, physx::PxVec3(0.0f, 1.0f, 0.0f))));
+
+	::SimpleMesh mesh;
+	mesh.vertices.resize(sphere.vertices.size()*sphereCount + cylinder.vertices.size()*(indexCount / 2));
+	mesh.indices.resize(sphere.indices.size()*sphereCount + cylinder.indices.size()*(indexCount / 2));
+
+	int nextVertex = 0;
+	int nextIndex = 0;
+	for(int i = 0; i < sphereCount; i++)
+	{
+		int baseIndex = nextVertex;
+		physx::PxMat44 transform =
+			physx::PxMat44(physx::PxMat33(physx::PxIdentity), spheres[i].getXYZ())
+			* physx::PxMat44(PxVec4(spheres[i].w + grow, spheres[i].w + grow, spheres[i].w + grow, 1.0f));
+
+		for(int vi = 0; vi<(int)sphere.vertices.size(); vi++)
+		{
+			SimpleMesh::Vertex v = sphere.vertices[vi];
+			v.normal = transform.rotate(physx::PxVec4(v.normal, 0.0f)).getXYZ();
+			v.position = transform.transform(v.position);
+			mesh.vertices[nextVertex++] = v;
+		}
+
+		for(int ii = 0; ii < (int)sphere.indices.size(); ii++)
+		{
+			mesh.indices[nextIndex++] = sphere.indices[ii]+ baseIndex;
+		}
+	}
+
+	for(int i = 0; i < indexCount; i+=2)
+	{
+		int baseIndex = nextVertex;
+
+		physx::PxVec3 spherePosA = spheres[indices[i]].getXYZ();
+		physx::PxVec3 spherePosB = spheres[indices[i+1]].getXYZ();
+		float sphereRadiusA = spheres[indices[i]].w + grow;
+		float sphereRadiusB = spheres[indices[i + 1]].w + grow;
+
+		if(sphereRadiusA < sphereRadiusB)
+		{
+			std::swap(sphereRadiusA, sphereRadiusB);
+			std::swap(spherePosA, spherePosB);
+		}
+
+		{
+			//http://jwilson.coe.uga.edu/emt669/Student.Folders/Kertscher.Jeff/Essay.3/Tangents.html
+
+			//sphere a with smaller radius
+			float cRadius = sphereRadiusA - sphereRadiusB;
+			if(cRadius > 0.00001)
+			{
+				physx::PxVec3 basis[3];
+				basis[2] = spherePosB - spherePosA;
+				basis[2].normalize();
+				computeBasis(basis[2], &basis[0], &basis[1]);
+
+				physx::PxVec3 cCenter = spherePosA;
+
+				//sphere in between the a and b
+				physx::PxVec3 dCenter = (spherePosA + spherePosB)*0.5f;
+				float dRadius = (spherePosA - spherePosB).magnitude()*0.5f;
+
+				//intersection between c and d to get tangent point
+				float iRadius;
+				physx::PxVec3 iCenter = IntersectSpheres(&iRadius, dCenter, dRadius, cCenter, cRadius);
+				physx::PxVec3 iPoint = iCenter + basis[0] * iRadius; //tangent point on c
+				physx::PxVec3 offset = (iPoint - spherePosA).getNormalized(); //offset direction
+
+				physx::PxVec3 aPoint = spherePosA + offset*sphereRadiusA;
+				spherePosA = (aPoint - spherePosA).dot(basis[2])*basis[2] + spherePosA;
+				sphereRadiusA = (aPoint - spherePosA).magnitude();
+				physx::PxVec3 bPoint = spherePosB + offset*sphereRadiusB;
+				spherePosB = (bPoint - spherePosA).dot(basis[2])*basis[2] + spherePosA;
+				sphereRadiusB = (bPoint - spherePosB).magnitude();
+			}
+		}
+
+		float length = (spherePosB - spherePosA).magnitude();
+
+
+		physx::PxMat44 scaleA = physx::PxMat44(PxVec4(sphereRadiusA, length/2.0f, sphereRadiusA+grow, 1.0f));
+		physx::PxMat44 scaleB = physx::PxMat44(PxVec4(sphereRadiusB, length/2.0f, sphereRadiusB, 1.0f));
+
+		physx::PxQuat orientation;
+		{
+			physx::PxVec3 u = physx::PxVec3(0.0f, 1.0f, 0.0f);
+			physx::PxVec3 v = spherePosB - spherePosA;
+			v.normalize();
+
+			if(u.dot(v) < -0.9999)
+				orientation = physx::PxQuat(physx::PxTwoPi, physx::PxVec3(1.0f, 0.0f, 0.0f));
+			else if(u.dot(v) > 0.9999)
+				orientation = physx::PxQuat(0.0f, physx::PxVec3(1.0f, 0.0f, 0.0f));
+			else
+			{
+				physx::PxVec3 half = u + v;
+				half.normalize();
+				physx::PxVec3 imaginary = u.cross(half);
+				orientation = physx::PxQuat(imaginary.x, imaginary.y, imaginary.z, u.dot(half));
+			}
+		}
+
+		physx::PxMat44 transform = physx::PxMat44(physx::PxTransform(spherePosA, orientation))*scaleA;
+
+		int firstRing = (int)cylinder.vertices.size() / 2;
+		for(int vi = 0; vi<firstRing; vi++)
+		{
+			SimpleMesh::Vertex v = cylinder.vertices[vi];
+			v.normal = transform.rotate(physx::PxVec4(v.normal, 0.0f)).getXYZ();
+			v.position = transform.transform(v.position);
+			mesh.vertices[nextVertex++] = v;
+		}
+		transform = physx::PxMat44(physx::PxTransform(spherePosA, orientation))*scaleB;
+		for(int vi = firstRing; vi<(int)cylinder.vertices.size(); vi++)
+		{
+			SimpleMesh::Vertex v = cylinder.vertices[vi];
+			v.normal = transform.rotate(physx::PxVec4(v.normal, 0.0f)).getXYZ();
+			v.position = transform.transform(v.position);
+			mesh.vertices[nextVertex++] = v;
+		}
+
+		for(int ii = 0; ii < (int)cylinder.indices.size(); ii++)
+		{
+			mesh.indices[nextIndex++] = cylinder.indices[ii] + baseIndex;
+		}
+	}
+
+	return mesh;
 }
 
 uint32_t generateConvexPolyhedronPlanes(int segmentsX, int segmentsY, physx::PxVec3 center, float radius, std::vector<physx::PxVec4>* planes)
@@ -546,7 +784,7 @@ MeshGeneratorRenderMesh::MeshGeneratorRenderMesh(const Mesh mesh)
 	layout.push_back({"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0});
 	layout.push_back({"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0});
 
-	initialize(vertices, (uint32_t)vertexCount, sizeof(RenderVertex), layout, indices, indexCount);
+	initialize(vertices, (uint32_t)vertexCount, sizeof(RenderVertex), layout, indices, indexCount, 0);
 
 	delete vertices;
 	delete indices;
@@ -567,11 +805,22 @@ MeshGeneratorRenderMeshSmooth::MeshGeneratorRenderMeshSmooth(const Mesh mesh)
 	layout.push_back({"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0});
 	layout.push_back({"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0});
 
-	initialize(vertices, (uint32_t)vertexCount, sizeof(RenderVertex), layout, indices, indexCount);
+	initialize(vertices, (uint32_t)vertexCount, sizeof(RenderVertex), layout, indices, indexCount, 0);
 
 	delete vertices;
 	delete indices;
 }
+
+MeshGeneratorRenderMeshSmooth::MeshGeneratorRenderMeshSmooth(const ::SimpleMesh mesh, int flags)
+{
+	std::vector<D3D11_INPUT_ELEMENT_DESC> layout;
+	layout.push_back({"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0});
+	layout.push_back({"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0});
+	layout.push_back({"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0});
+
+	initialize(mesh.vertices.data(), (uint32_t)mesh.vertices.size(), sizeof(::SimpleMesh::Vertex), layout, mesh.indices.data(), (uint32_t)mesh.indices.size(), flags);
+}
+
 MeshGeneratorRenderMeshSmooth::~MeshGeneratorRenderMeshSmooth()
 {
 

@@ -93,7 +93,8 @@ class Solver : public UserAllocated
 	*/
 	virtual int getSimulationChunkCount() const = 0;
 
-	// inter-collision parameters
+	/// inter-collision parameters
+	/// Note that using intercollision with more than 32 cloths added to the solver will cause undefined behavior
 	virtual void setInterCollisionDistance(float distance) = 0;
 	virtual float getInterCollisionDistance() const = 0;
 	virtual void setInterCollisionStiffness(float stiffness) = 0;

@@ -19,7 +19,8 @@
 #include <foundation/PxVec2.h>
 
 std::vector<SceneFactory> Scene::sSceneFactories;
-unsigned int Scene::mDebugVisualizationFlags;
+unsigned int Scene::mDebugVisualizationFlags = 0;
+bool Scene::mDebugVisualizationUpdateRequested = true;
 Scene::SceneDebugRenderParams Scene::sSceneDebugRenderParams;
 
 Scene::~Scene()
@@ -78,6 +79,13 @@ void Scene::UpdateParticleDragging(float dt)
 		tmp = physx::PxMat44((float*)&tmp2.r);
 		physx::PxMat44 invMatrix = tmp;
 
+		tmp = modelMatrix;
+		tmp2 = DirectX::XMMatrixInverse(nullptr, DirectX::XMMATRIX(tmp.front()));
+		tmp = physx::PxMat44((float*)&tmp2.r);
+		physx::PxMat44 invModelMatrix = tmp;
+
+		float clothScale = modelMatrix.transform(physx::PxVec4(1.0f, 1.0f, 1.0f, 0)).magnitude()/ 1.732;
+
 		physx::PxVec3 particleWorld = modelMatrix.transform(particles[mDraggingParticle.mParticleIndex].getXYZ());
 		physx::PxVec4 mousePointWorldT = invMatrix.transform(physx::PxVec4(mousePoint.x, mousePoint.y, 1.0, 1.0));
 		physx::PxVec3 mousePointWorld = mousePointWorldT.getXYZ() / mousePointWorldT.w;
@@ -91,14 +99,20 @@ void Scene::UpdateParticleDragging(float dt)
 		if(offset.magnitudeSquared() > 2.5f*2.5f)
 			offset = offset.getNormalized()*2.5f;
 
+		offset = invModelMatrix.transform(physx::PxVec4(offset,0.0f)).getXYZ();
+
 		for(int i = 0; i < (int)particles.size(); i++)
 		{
-			physx::PxVec4 p = particles[i];
+			physx::PxVec4 p = modelMatrix.transform(particles[i]);
 			float dist = (p.getXYZ() - particleWorld).magnitude();
 
 			if(p.w > 0.0f) //Only move dynamic points
 			{
-				float weight = max(0.0,min(1.0,0.4-dist));
+				const float softSelectionRadius = 0.4f;
+				const float maxWeight = 0.4f;
+				float weight = max(0.0,min(1.0,1.0f-(dist/softSelectionRadius)))*maxWeight;
+				if(weight <= 0.0f)
+					continue;
 				physx::PxVec3 point0(prevParticles[i].x, prevParticles[i].y, prevParticles[i].z);
 				point0 = point0 - weight*offset;
 				point0 = point0*0.99f + p.getXYZ()*0.01f;
@@ -112,6 +126,44 @@ void Scene::UpdateParticleDragging(float dt)
 
 bool Scene::HandleEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (uMsg == WM_KEYDOWN)
+	{
+		int iKeyPressed = static_cast<int>(wParam);
+
+		switch (iKeyPressed)
+		{
+		case 'T':
+			mDebugVisualizationFlags ^= DEBUG_VIS_TETHERS;
+			break;
+		case 'C':
+			mDebugVisualizationFlags ^= DEBUG_VIS_CONSTRAINTS;
+			break;
+		case 'F':
+			mDebugVisualizationFlags ^= DEBUG_VIS_CONSTRAINTS_STIFFNESS;
+			break;
+		case 'R':
+			mDebugVisualizationFlags ^= DEBUG_VIS_CONSTRAINT_ERROR;
+			break;
+		case 'X':
+			mDebugVisualizationFlags ^= DEBUG_VIS_BOUNDING_BOX;
+			break;
+		case 'Z':
+			mDebugVisualizationFlags ^= DEBUG_VIS_DISTANCE_CONSTRAINTS;
+			break;
+		case 'L':
+			mDebugVisualizationFlags ^= DEBUG_VIS_POSITION_DELTA;
+			break;
+		case 'N':
+			mDebugVisualizationFlags ^= DEBUG_VIS_NORMALS;
+			break;
+		default:
+			return false;
+		}
+
+		mDebugVisualizationUpdateRequested = true;
+		return true;
+	}
+
 	auto camera = mSceneController->getRenderer().getCamera();
 	auto m1 = camera.GetViewMatrix();
 	auto m2 = camera.GetProjMatrix();
@@ -183,6 +235,7 @@ bool Scene::HandlePickingEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, physx::P
 			{
 				physx::PxVec4 p = particles[i];
 				physx::PxVec4 point(p.x, p.y, p.z, 1.0f);
+				point = modelMatrix.transform(point);
 
 				float dist = mouseRayDir.dot(point.getXYZ() - mouseRayStart);
 				float offset = (point.getXYZ() - (dist*mouseRayDir + mouseRayStart)).magnitude();
@@ -271,6 +324,38 @@ void Scene::drawUI()
 				cloth->setLinearInertia(physx::PxVec3(f, f, f));
 		}
 		{
+			physx::PxVec3 f3 = cloth->getAngularInertia();
+			if(ImGui::DragFloat3("Angular Inertia", &f3.x, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setAngularInertia(f3);
+			float f = f3.maxElement();
+			if(ImGui::DragFloat("Angular Inertia xyz", &f, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setAngularInertia(physx::PxVec3(f, f, f));
+		}
+		{
+			physx::PxVec3 f3 = cloth->getCentrifugalInertia();
+			if(ImGui::DragFloat3("Centrifugal Inertia", &f3.x, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setCentrifugalInertia(f3);
+			float f = f3.maxElement();
+			if(ImGui::DragFloat("Centrifugal Inertia xyz", &f, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setCentrifugalInertia(physx::PxVec3(f, f, f));
+		}
+		{
+			physx::PxVec3 f3 = cloth->getLinearDrag();
+			if(ImGui::DragFloat3("Linear Drag", &f3.x, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setLinearDrag(f3);
+			float f = f3.maxElement();
+			if(ImGui::DragFloat("Linear Drag xyz", &f, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setLinearDrag(physx::PxVec3(f, f, f));
+		}
+		{
+			physx::PxVec3 f3 = cloth->getAngularDrag();
+			if(ImGui::DragFloat3("Angular Drag", &f3.x, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setAngularDrag(f3);
+			float f = f3.maxElement();
+			if(ImGui::DragFloat("Angular Drag xyz", &f, 0.02f, 0.0f, 1.0f, "%.2f"))
+				cloth->setAngularDrag(physx::PxVec3(f, f, f));
+		}
+		{
 			float f = cloth->getMotionConstraintScale();
 			if(ImGui::DragFloat("Motion Constraint Scale", &f, 0.08f, 0.0f, 4.0f, "%.2f"))
 				cloth->setMotionConstraintScaleBias(f, cloth->getMotionConstraintBias());
@@ -325,21 +410,23 @@ void Scene::drawUI()
 
 	if(ImGui::TreeNode("Debug Visualization"))
 	{
-		ImGui::CheckboxFlags("Tethers", &mDebugVisualizationFlags, DEBUG_VIS_TETHERS);
-		ImGui::CheckboxFlags("Constraints", &mDebugVisualizationFlags, DEBUG_VIS_CONSTRAINTS);
+		auto old = mDebugVisualizationFlags;
+		ImGui::CheckboxFlags("Tethers (T)", &mDebugVisualizationFlags, DEBUG_VIS_TETHERS);
+		ImGui::CheckboxFlags("Constraints (C)", &mDebugVisualizationFlags, DEBUG_VIS_CONSTRAINTS);
 		if(mDebugVisualizationFlags&DEBUG_VIS_CONSTRAINTS)
 		{
 			ImGui::DragInt("Start Constraint Phase Range", &sSceneDebugRenderParams.mVisiblePhaseRangeBegin, 0.05, 0, 30);
 			ImGui::DragInt("End", &sSceneDebugRenderParams.mVisiblePhaseRangeEnd, 0.05, 0, 30);
 		}
-		ImGui::CheckboxFlags("Constraint Stiffness", &mDebugVisualizationFlags, DEBUG_VIS_CONSTRAINTS_STIFFNESS);
-
-		ImGui::CheckboxFlags("Constraint Error", &mDebugVisualizationFlags, DEBUG_VIS_CONSTRAINT_ERROR);
-		ImGui::CheckboxFlags("Position Delta", &mDebugVisualizationFlags, DEBUG_VIS_POSITION_DELTA);
-		ImGui::CheckboxFlags("Bounding Box", &mDebugVisualizationFlags, DEBUG_VIS_BOUNDING_BOX);
-		ImGui::CheckboxFlags("Distance Constraints", &mDebugVisualizationFlags, DEBUG_VIS_DISTANCE_CONSTRAINTS);
-
+		ImGui::CheckboxFlags("Constraint Stiffness (F)", &mDebugVisualizationFlags, DEBUG_VIS_CONSTRAINTS_STIFFNESS);
+		ImGui::CheckboxFlags("Constraint Error (R)", &mDebugVisualizationFlags, DEBUG_VIS_CONSTRAINT_ERROR);
+		ImGui::CheckboxFlags("Position Delta (L)", &mDebugVisualizationFlags, DEBUG_VIS_POSITION_DELTA);
+		ImGui::CheckboxFlags("Bounding Box (X)", &mDebugVisualizationFlags, DEBUG_VIS_BOUNDING_BOX);
+		ImGui::CheckboxFlags("Distance Constraints (Z)", &mDebugVisualizationFlags, DEBUG_VIS_DISTANCE_CONSTRAINTS);
 		ImGui::TreePop();
+
+		if(old != mDebugVisualizationFlags)
+			mDebugVisualizationUpdateRequested = true;
 	}
 
 	static int activeSolver = 0;
@@ -395,7 +482,13 @@ void Scene::drawDebugVisualization()
 		DebugRenderBoundingBox();
 	if(mDebugVisualizationFlags & DEBUG_VIS_DISTANCE_CONSTRAINTS)
 		DebugRenderDistanceConstraints();
-	
+
+	mDebugVisualizationUpdateRequested = false;
+}
+
+bool Scene::debugVisualizationUpdateRequested() const
+{
+	return mDebugVisualizationUpdateRequested;
 }
 
 namespace
@@ -478,6 +571,11 @@ void Scene::untrackRenderable(Renderable* renderable)
 	untrackT(mRenderableList, renderable);
 }
 
+void Scene::trackCleanupCallback(std::function<void(void)> cleanupCallback)
+{
+	trackT(mCleanupCallbackList, cleanupCallback);
+}
+
 void Scene::autoDeinitialize()
 {
 	//Remove all cloths from solvers
@@ -518,6 +616,13 @@ void Scene::autoDeinitialize()
 		mSceneController->getRenderer().removeRenderable(it);
 	}
 	mRenderableList.clear();
+
+	//Run all cleanup callbacks
+	for(auto it : mCleanupCallbackList)
+	{
+		it();
+	}
+	mCleanupCallbackList.clear();
 }
 
 void Scene::doSimulationStep(float dt)

@@ -285,7 +285,7 @@ namespace
 		// point on ray R = o + t * d
 		// for this two points to intersect, we have
 		// |AB -d| | s t | = o - A
-		const float eps = 1e-4;
+		const float eps = 1e-4f;
 
 		PxVec3 OA = O - A;
 		PxVec3 AB = B - A;
@@ -765,7 +765,7 @@ int ClothGeodesicTetherCooker::computeVertexIntersection(PxU32 parent, PxU32 src
 			continue;
 
 		// t should be positive, otherwise we just hit the triangle in opposite direction, so ignore
-		const float eps = 1e-5;
+		const float eps = 1e-5f;
 		if (t > -eps)
 		{		
 			PxVec3 ip; // intersection point
@@ -884,7 +884,7 @@ int ClothGeodesicTetherCooker::computeEdgeIntersection(PxU32 parent, PxU32 edge,
 	g = (g - g.dot(n) * n).getNormalized();
 
 	float s = 0.0f, t = 0.0f;
-	const float eps = 1e-5;
+	const float eps = 1e-5f;
 	PxVec3 ip;
 
 	// intersect against edge form p2 to p0

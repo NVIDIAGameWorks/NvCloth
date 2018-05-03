@@ -162,7 +162,7 @@ uint32_t cloth::SwFabric::getNumStiffnessValues() const
 
 uint32_t cloth::SwFabric::getNumSets() const
 {
-	return uint32_t(mSets.size() - 1);
+	return uint32_t(physx::PxMax(0, static_cast<int>(mSets.size() - 1)));
 }
 
 uint32_t cloth::SwFabric::getNumIndices() const

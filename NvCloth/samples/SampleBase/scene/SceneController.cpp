@@ -76,6 +76,8 @@ void SceneController::onSampleStart()
 
 	mPhysXPrimitiveRenderMaterial = new RenderMaterial(getRenderer().getResourceManager(), "physx_primitive", "");
 	mPhysXPlaneRenderMaterial = new RenderMaterial(getRenderer().getResourceManager(), "physx_primitive_plane", "");
+	mWeightedModelSkinRenderMaterial = new RenderMaterial(getRenderer().getResourceManager(), "weighted_model_skinned", "");
+	
 
 	/*{
 		IRenderMesh* mesh = getRenderer().getPrimitiveRenderMesh(PrimitiveRenderMeshType::Plane);
@@ -184,13 +186,20 @@ void SceneController::changeScene(int index)
 		mActiveScene = Scene::CreateScene(0, this);
 	}
 	mActiveScene->onInitialize();
+	mDebugLineRenderBuffer->clear();
+	mActiveScene->drawDebugVisualization();
 }
 
 void SceneController::Animate(double dt)
 {
 	if(mPaused && (mSingleStep <= 0))
 	{
-		//Re render debug lines from last frame
+		if(mActiveScene->debugVisualizationUpdateRequested())
+		{
+			mDebugLineRenderBuffer->clear();
+			mActiveScene->drawDebugVisualization();
+		}
+			//else Re render debug lines from last frame
 		getRenderer().queueRenderBuffer(mDebugLineRenderBuffer);
 		return;
 	}
@@ -199,8 +208,6 @@ void SceneController::Animate(double dt)
 		mSingleStep--;
 		dt = 1.0 / 60.0;
 	}
-
-	mDebugLineRenderBuffer->clear();
 
 	mLeftOverTime += dt * mTimeScale;
 
@@ -211,6 +218,8 @@ void SceneController::Animate(double dt)
 		simulationStep = 1.0 / 60.0;
 
 	mActiveScene->Animate(simulationStep);
+	mDebugLineRenderBuffer->clear();
+	mActiveScene->drawDebugVisualization();
 
 	getRenderer().queueRenderBuffer(mDebugLineRenderBuffer);
 }
@@ -267,6 +276,10 @@ void SceneController::drawUI()
 	for(int i = 0; i < Scene::GetSceneCount(); i++)
 	{
 		pressed = pressed | ImGui::RadioButton(Scene::GetSceneName(i), &mActiveSceneIndex, i);
+		if(i == mActiveSceneIndex)
+		{
+			pressed = pressed | mActiveScene->drawSubScenes();
+		}
 	}
 	if(pressed)
 		changeScene(mActiveSceneIndex);

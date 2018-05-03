@@ -168,6 +168,32 @@ class Cloth : public UserAllocated
 	/** \brief Adjust the position of the cloth without affecting the dynamics (to call after a world origin shift, for example). */
 	virtual void teleport(const physx::PxVec3& delta) = 0;
 
+	/** \brief Adjust the position and rotation of the cloth without affecting the dynamics (to call after a world origin shift, for example). 
+		The velocity will be set to zero this frame, unless setTranslation/setRotation is called with a different value after this function is called.
+		The correct order to use this is:
+		\code
+		cloth->teleportToLocation(pos, rot);
+		pos += velocity * dt;
+		rot += 0.5 * angularVelocity * rot * dt;
+		cloth->setTranslation(pos);
+		cloth->setRotation(rot);
+		\endcode
+		*/
+	virtual void teleportToLocation(const physx::PxVec3& translation, const physx::PxQuat& rotation) = 0;
+
+	/** \brief Don't recalculate the velocity based on the values provided by setTranslation and setRotation for one frame (so it acts as if the velocity was the same as last frame).
+		This is useful when the cloth is moving while teleported, but the integration of the cloth position for that frame is already included in the teleport.
+		Example:
+		\code
+		pos += velocity * dt;
+		rot += 0.5 * angularVelocity * rot * dt;
+		cloth->teleportToLocation(pos, rot);
+		cloth->ignoreVelocityDiscontinuity();
+		\endcode
+		*/
+	virtual void ignoreVelocityDiscontinuity() = 0;
+
+
 	/* solver parameters */
 
 	/** \brief Returns the delta time used for previous iteration.*/

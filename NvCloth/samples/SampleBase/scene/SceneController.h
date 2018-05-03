@@ -92,6 +92,11 @@ public:
 		return mPhysXPlaneRenderMaterial;
 	}
 
+	RenderMaterial* getDefaultWeightedModelSkinMaterial()
+	{
+		return mWeightedModelSkinRenderMaterial;
+	}
+
 	DebugLineRenderBuffer* getDebugLineRenderBuffer()
 	{
 		return mDebugLineRenderBuffer;
@@ -106,6 +111,7 @@ private:
 
 	RenderMaterial*				mPhysXPrimitiveRenderMaterial;
 	RenderMaterial*				mPhysXPlaneRenderMaterial;
+	RenderMaterial*				mWeightedModelSkinRenderMaterial;
 
 	Renderable*					mPlane;
 	std::vector<Renderable*>	mBoxes;
@@ -132,8 +138,7 @@ private:
 	double						mLeftOverTime;
 
 	bool						mPaused;
-	int						mSingleStep;
-
+	int							mSingleStep;
 };
 
 #endif

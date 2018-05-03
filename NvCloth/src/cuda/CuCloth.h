@@ -131,7 +131,7 @@ class CuCloth : protected CuContextLock, public ClothImpl<CuCloth>
 	uint32_t getSharedMemorySize() const; // without particle data
 
 	// expects transformed configs, doesn't call notifyChanged()
-	void setPhaseConfigInternal(Range<const PhaseConfig>);
+	void setPhaseConfigInternal(Range<const PhaseConfig> configs);
 
 	Range<physx::PxVec4> push(CuConstraints&);
 	void clear(CuConstraints&);

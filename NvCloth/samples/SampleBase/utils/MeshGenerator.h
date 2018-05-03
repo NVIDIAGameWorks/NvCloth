@@ -14,6 +14,7 @@
 #include <vector>
 #include "renderer/CustomRenderMesh.h"
 #include <foundation/PxVec3.h>
+#include "renderer/Mesh.h"
 
 namespace MeshGenerator
 {
@@ -92,6 +93,13 @@ Mesh generateCone(physx::PxVec4 a, physx::PxVec4 b, int segments, float grow, bo
 Mesh generateCollisionConvex(physx::PxVec4* planes, uint32_t mask, float grow, bool flip);
 Mesh generateCollisionCapsules(physx::PxVec4* spheres, int sphereCount, uint32_t* indices, int indexCount, float grow);
 
+//Generates simple meshes with smooth shading
+::SimpleMesh generateFastSphere(int segmentsX, int segmentY, physx::PxMat44 transform);
+::SimpleMesh generateFastCylinder(int segmentsX, int segmentY, physx::PxMat44 transform); //no caps
+
+//Combines cashed spheres and cylinders to generate the capsules
+::SimpleMesh generateCollisionCapsulesFast(physx::PxVec4* spheres, int sphereCount, uint32_t* indices, int indexCount, float grow);
+
 uint32_t generateConvexPolyhedronPlanes(int segmentsX, int segmentsY, physx::PxVec3 center, float radius, std::vector<physx::PxVec4>* planes);
 
 class MeshGeneratorRenderMesh : public CustomRenderMesh
@@ -105,6 +113,7 @@ class MeshGeneratorRenderMeshSmooth : public CustomRenderMesh
 {
 public:
 	MeshGeneratorRenderMeshSmooth(const Mesh mesh);
+	MeshGeneratorRenderMeshSmooth(const ::SimpleMesh mesh, int flags = 0); //flags from CustomRenderMesh
 	virtual ~MeshGeneratorRenderMeshSmooth();
 };
 

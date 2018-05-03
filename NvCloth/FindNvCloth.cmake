@@ -8,9 +8,8 @@ FIND_PATH(		NVCLOTH_ROOT_DIR include/NvCloth/Fabric.h
 				HINTS 
 				${GW_DEPS_ROOT}/NvCloth
 				${GW_DEPS_ROOT}/sw/devrel/libdev/NvCloth/trunk
-				)
-				
-
+				NO_DEFAULT_PATH
+				NO_CMAKE_FIND_ROOT_PATH)
 				
 				
 INCLUDE(FindPackageHandleStandardArgs)

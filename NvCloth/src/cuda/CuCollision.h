@@ -1160,9 +1160,10 @@ __device__ void apply(ParticleDataT& particleData, const int4& indices, const fl
 	posX.y += delta.y * weights.x; posY.y += delta.y * weights.y; posZ.y += delta.y * weights.z;
 	posX.z += delta.z * weights.x; posY.z += delta.z * weights.y; posZ.z += delta.z * weights.z;
 
-	particleData(indices.x) = posX;
-	particleData(indices.y) = posY;
-	particleData(indices.z) = posZ;
+	//if(particle is not static)        store new position
+	if(particleData(indices.x,3)!= 0) particleData(indices.x) = posX;
+	if(particleData(indices.y,3)!= 0) particleData(indices.y) = posY;
+	if(particleData(indices.z,3)!= 0) particleData(indices.z) = posZ;
 }
 #else
 template <typename PointerT>

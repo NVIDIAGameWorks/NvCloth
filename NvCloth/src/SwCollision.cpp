@@ -167,7 +167,7 @@ void generateCones(cloth::ConeData* dst, const cloth::SphereData* sourceSpheres,
 
 		PxVec4 center = (second + first) * 0.5f;
 		PxVec4 axis = (second - first) * 0.5f; //half axis
-		//axiw.w = half of radii difference
+		//axis.w = half of radii difference
 
 		// |Axis|^2
 		float sqrAxisHalfLength = axis.x * axis.x + axis.y * axis.y + axis.z * axis.z;
@@ -426,8 +426,8 @@ void cloth::SwCollision<T4f>::buildSphereAcceleration(const SphereData* sIt)
 		T4f radius = splat<3>(sphere);
 
 		//calculate the first and last cell index, for each axis, that contains the sphere
-		T4i first = intFloor(max((sphere - radius) * mGridScale + mGridBias, gSimd4fZero));
-		T4i last = intFloor(min((sphere + radius) * mGridScale + mGridBias, sGridLength));
+		T4i first = intFloor(min(max((sphere - radius) * mGridScale + mGridBias, gSimd4fZero), sGridLength)); //use both min and max to deal with bad grid scales
+		T4i last = intFloor(min(max((sphere + radius) * mGridScale + mGridBias, gSimd4fZero), sGridLength));
 
 		const int* firstIdx = array(first);
 		const int* lastIdx = array(last);
@@ -555,40 +555,47 @@ operator &= (const ShapeMask& right)
 	return *this;
 }
 
+// get collision shape masks from a single cell from a single axis of the acceleration structure
 template <typename T4f>
 FORCE_INLINE typename cloth::SwCollision<T4f>::ShapeMask
 cloth::SwCollision<T4f>::getShapeMask(const T4f& position, const T4i* __restrict sphereGrid,
                                          const T4i* __restrict coneGrid)
 {
+	// position are the grid positions along a single axis (x, y, or z)
 	Gather<T4i> gather(intFloor(position));
 
+	// get the bitmask indicating which cones/spheres overlap the grid cell
 	ShapeMask result;
 	result.mCones = gather(coneGrid);
 	result.mSpheres = gather(sphereGrid);
 	return result;
 }
 
-// lookup acceleration structure and return mask of potential intersectors
+// lookup acceleration structure and return mask of potential intersection collision shapes
 template <typename T4f>
 FORCE_INLINE typename cloth::SwCollision<T4f>::ShapeMask
 cloth::SwCollision<T4f>::getShapeMask(const T4f* __restrict positions) const
 {
+	// positions are the particle positions
 	T4f posX = positions[0] * splat<0>(mGridScale) + splat<0>(mGridBias);
 	T4f posY = positions[1] * splat<1>(mGridScale) + splat<1>(mGridBias);
 	T4f posZ = positions[2] * splat<2>(mGridScale) + splat<2>(mGridBias);
 
-	ShapeMask result = getShapeMask(posX, mSphereGrid, mConeGrid);
-	result &= getShapeMask(posY, mSphereGrid + 2, mConeGrid + 2);
-	result &= getShapeMask(posZ, mSphereGrid + 4, mConeGrid + 4);
+	// AND together the bit masks so only the cones/spheres remain
+	//  that overlap with the particle posision on all axis
+	ShapeMask result = getShapeMask(posX, mSphereGrid, mConeGrid); // X
+	result &= getShapeMask(posY, mSphereGrid + 2, mConeGrid + 2); // Y 
+	result &= getShapeMask(posZ, mSphereGrid + 4, mConeGrid + 4); // Z
 
 	return result;
 }
 
-// lookup acceleration structure and return mask of potential intersectors
+// lookup acceleration structure and return mask of potential intersection collision shapes for CCD
 template <typename T4f>
 FORCE_INLINE typename cloth::SwCollision<T4f>::ShapeMask
 cloth::SwCollision<T4f>::getShapeMask(const T4f* __restrict prevPos, const T4f* __restrict curPos) const
 {
+	// same as getShapeMask(const T4f* __restrict positions) but for continuous collision detection
 	T4f scaleX = splat<0>(mGridScale);
 	T4f scaleY = splat<1>(mGridScale);
 	T4f scaleZ = splat<2>(mGridScale);
@@ -605,22 +612,24 @@ cloth::SwCollision<T4f>::getShapeMask(const T4f* __restrict prevPos, const T4f* 
 	T4f curY = curPos[1] * scaleY + biasY;
 	T4f curZ = curPos[2] * scaleZ + biasZ;
 
+	// get maximum extent corner of the AABB containing both prevPos and curPos
 	T4f maxX = min(max(prevX, curX), sGridLength);
 	T4f maxY = min(max(prevY, curY), sGridLength);
 	T4f maxZ = min(max(prevZ, curZ), sGridLength);
 
-	ShapeMask result = getShapeMask(maxX, mSphereGrid, mConeGrid);
-	result &= getShapeMask(maxY, mSphereGrid + 2, mConeGrid + 2);
-	result &= getShapeMask(maxZ, mSphereGrid + 4, mConeGrid + 4);
+	ShapeMask result = getShapeMask(maxX, mSphereGrid, mConeGrid); // X
+	result &= getShapeMask(maxY, mSphereGrid + 2, mConeGrid + 2); // Y
+	result &= getShapeMask(maxZ, mSphereGrid + 4, mConeGrid + 4); // Z
 
+	// get min extent corner of the AABB containing both prevPos and curPos
 	T4f zero = gSimd4fZero;
 	T4f minX = max(min(prevX, curX), zero);
 	T4f minY = max(min(prevY, curY), zero);
 	T4f minZ = max(min(prevZ, curZ), zero);
 
-	result &= getShapeMask(minX, mSphereGrid + 6, mConeGrid + 6);
-	result &= getShapeMask(minY, mSphereGrid + 8, mConeGrid + 8);
-	result &= getShapeMask(minZ, mSphereGrid + 10, mConeGrid + 10);
+	result &= getShapeMask(minX, mSphereGrid + 6, mConeGrid + 6); // X
+	result &= getShapeMask(minY, mSphereGrid + 8, mConeGrid + 8); // Y
+	result &= getShapeMask(minZ, mSphereGrid + 10, mConeGrid + 10); // Z
 
 	return result;
 }
@@ -770,7 +779,7 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict positions, ImpulseAc
 		T4f axisZ = splat<2>(axis);
 		T4f slope = splat<3>(axis);
 
-		// project delta onto axis
+		// distance along cone axis (from center)
 		T4f dot = deltaX * axisX + deltaY * axisY + deltaZ * axisZ;
 		// interpolate radius
 		T4f radius = dot * slope + splat<3>(center);
@@ -901,7 +910,7 @@ FORCE_INLINE void cloth::SwCollision<T4f>::collideSpheres(const T4i& sphereMask,
 		T4f dotCurCur = sqrDistance - curRadius * curRadius;
 
 		T4f discriminant = dotPrevCur * dotPrevCur - dotCurCur * dotPrevPrev;
-		T4f sqrtD = sqrt(discriminant);
+		T4f sqrtD = sqrt(discriminant); //we get -nan if there are no roots
 		T4f halfB = dotPrevCur - dotPrevPrev;
 		T4f minusA = dotPrevCur - dotCurCur + halfB;
 
@@ -914,7 +923,7 @@ FORCE_INLINE void cloth::SwCollision<T4f>::collideSpheres(const T4i& sphereMask,
 		T4f rMin = prevRadius + halfB * minusA * (curRadius - prevRadius);
 		collisionMask = collisionMask & (discriminant > minusA * rMin * rMin * sSkeletonWidth);
 
-		// a is negative when one sphere is contained in the other,
+		// a is negative when one relative sphere is contained in the other,
 		// which is already handled by discrete collision.
 		collisionMask = collisionMask & (minusA < -static_cast<T4f>(gSimd4fEpsilon));
 
@@ -931,10 +940,15 @@ FORCE_INLINE void cloth::SwCollision<T4f>::collideSpheres(const T4i& sphereMask,
 			T4f minusK = sqrtD * recip(minusA * oneMinusToi) & (oneMinusToi > gSimd4fEpsilon);
 			oneMinusToi = oneMinusToi * recip(gSimd4fOne - minusK);
 
+
+			//Move curXYZ to toi point
 			curX = curX + deltaX * oneMinusToi;
 			curY = curY + deltaY * oneMinusToi;
 			curZ = curZ + deltaZ * oneMinusToi;
+			//curXYZ is now touching the sphere at toi
+			//Note that curXYZ is also relative to the sphere center at toi
 
+			//We assume that the point sticks to the sphere until the end of the frame
 			curPos[0] = splat<0>(curSphere) + curX;
 			curPos[1] = splat<1>(curSphere) + curY;
 			curPos[2] = splat<2>(curSphere) + curZ;
@@ -1000,7 +1014,7 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict prevPos, T4f* __rest
 		T4f prevT = prevY * prevAxisZ - prevZ * prevAxisY;
 		T4f prevU = prevZ * prevAxisX - prevX * prevAxisZ;
 		T4f prevV = prevX * prevAxisY - prevY * prevAxisX;
-		T4f prevDot = prevX * prevAxisX + prevY * prevAxisY + prevZ * prevAxisZ;
+		T4f prevDot = prevX * prevAxisX + prevY * prevAxisY + prevZ * prevAxisZ; //distance along the axis
 		T4f prevRadius = prevDot * prevSlope + splat<3>(prevCenter);
 
 		T4f curCenter = loadAligned(curCenterPtr, offset);
@@ -1014,18 +1028,22 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict prevPos, T4f* __rest
 		T4f curX = curPos[0] - splat<0>(curCenter);
 		T4f curY = curPos[1] - splat<1>(curCenter);
 		T4f curZ = curPos[2] - splat<2>(curCenter);
+		//curTUV = cross(curXYZ, curAxisXYZ)
 		T4f curT = curY * curAxisZ - curZ * curAxisY;
 		T4f curU = curZ * curAxisX - curX * curAxisZ;
 		T4f curV = curX * curAxisY - curY * curAxisX;
 		T4f curDot = curX * curAxisX + curY * curAxisY + curZ * curAxisZ;
 		T4f curRadius = curDot * curSlope + splat<3>(curCenter);
 
+		//Magnitude of cross product gives area of parallelogram |curAxisXYZ|*parallelogramHeight, |curAxisXYZ|=1 
+		//parallelogramHeight is distance between the axis and the point
 		T4f curSqrDistance = gSimd4fEpsilon + curT * curT + curU * curU + curV * curV;
 
 		// set radius to zero if cone is culled
 		prevRadius = max(prevRadius, gSimd4fZero) & ~culled;
 		curRadius = max(curRadius, gSimd4fZero) & ~culled;
 
+		//Use quadratic equation to solve for time of impact (against infinite cone)
 		T4f dotPrevPrev = prevT * prevT + prevU * prevU + prevV * prevV - prevRadius * prevRadius;
 		T4f dotPrevCur = prevT * curT + prevU * curU + prevV * curV - prevRadius * curRadius;
 		T4f dotCurCur = curSqrDistance - curRadius * curRadius;
@@ -1060,6 +1078,7 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict prevPos, T4f* __rest
 			T4f posY = prevY - deltaY * toi;
 			T4f posZ = prevZ - deltaZ * toi;
 
+			//                                axisHalfLength
 			T4f curScaledAxis = curAxis * splat<1>(simd4f(curAuxiliary));
 			T4i prevAuxiliary = loadAligned(prevAuxiliaryPtr, offset);
 			T4f deltaScaledAxis = curScaledAxis - prevAxis * splat<1>(simd4f(prevAuxiliary));
@@ -1074,19 +1093,26 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict prevPos, T4f* __rest
 
 			T4f sqrHalfLength = axisX * axisX + axisY * axisY + axisZ * axisZ;
 			T4f invHalfLength = rsqrt(sqrHalfLength);
+			// distance along toi cone axis (from center)
 			T4f dot = (posX * axisX + posY * axisY + posZ * axisZ) * invHalfLength;
 
+			//point line distance
 			T4f sqrDistance = posX * posX + posY * posY + posZ * posZ - dot * dot;
 			T4f invDistance = rsqrt(sqrDistance) & (sqrDistance > gSimd4fZero);
 
+			//offset base to take slope in to account
 			T4f base = dot + slope * sqrDistance * invDistance;
 			T4f scale = base * invHalfLength & collisionMask;
+			// use invHalfLength to map base from [-HalfLength, +HalfLength]=inside to [-1, +1] =inside
 
+			// test if any impact position is in cone section
 			T4f cullMask = (abs(scale) < gSimd4fOne) & collisionMask;
 
 			// test if any impact position is in cone section
 			if (!allEqual(cullMask, gSimd4fZero))
 			{
+				//calculate unnormalized normal delta?
+				//delta = prev - cur - (prevAxis - curScaledAxis)*scale
 				deltaX = deltaX + splat<0>(deltaScaledAxis) * scale;
 				deltaY = deltaY + splat<1>(deltaScaledAxis) * scale;
 				deltaZ = deltaZ + splat<2>(deltaScaledAxis) * scale;
@@ -1099,15 +1125,19 @@ cloth::SwCollision<T4f>::collideCones(const T4f* __restrict prevPos, T4f* __rest
 				T4f minusK = sqrtD * recip(minusA * oneMinusToi) & (oneMinusToi > gSimd4fEpsilon);
 				oneMinusToi = oneMinusToi * recip(gSimd4fOne - minusK);
 
-				curX = curX + deltaX * oneMinusToi;
+				//curX = cur + (prev - cur - (prevAxis - curScaledAxis)*scale)*(1-toi)
+				//curX = cur + (prev - cur)*(1-toi) - ((prevAxis - curScaledAxis)*scale)*(1-toi)
+				curX = curX + deltaX * oneMinusToi; 
 				curY = curY + deltaY * oneMinusToi;
 				curZ = curZ + deltaZ * oneMinusToi;
 
+				//save adjusted values for discrete collision detection below
 				curDot = curX * curAxisX + curY * curAxisY + curZ * curAxisZ;
 				curRadius = curDot * curSlope + splat<3>(curCenter);
 				curRadius = max(curRadius, gSimd4fZero) & ~culled;
 				curSqrDistance = curX * curX + curY * curY + curZ * curZ - curDot * curDot;
 
+				//take offset from toi and add it to the cone center at the end
 				curPos[0] = splat<0>(curCenter) + curX;
 				curPos[1] = splat<1>(curCenter) + curY;
 				curPos[2] = splat<2>(curCenter) + curZ;
@@ -1210,7 +1240,7 @@ PX_INLINE void calculateFrictionImpulse(const T4f& deltaX, const T4f& deltaY, co
 	T4f nz = deltaZ * rcpDelta;
 
 	// calculate relative velocity
-	// velXYZ is scaled by one over the number of collisions since all collisions accumulate into 
+	// velXYZ is scaled by one over the number of collisions (scale) since all collisions accumulate into 
 	//  that variable during collision detection
 	T4f rvx = curPos[0] - prevPos[0] - velX * scale;
 	T4f rvy = curPos[1] - prevPos[1] - velY * scale;
@@ -1227,7 +1257,7 @@ PX_INLINE void calculateFrictionImpulse(const T4f& deltaX, const T4f& deltaY, co
 	// calculate magnitude of relative tangential velocity
 	T4f rcpVt = rsqrt(rvtx * rvtx + rvty * rvty + rvtz * rvtz + gSimd4fEpsilon);
 
-	// magnitude of friction impulse (cannot be greater than -vt)
+	// magnitude of friction impulse (cannot be greater than -rvt)
 	T4f j = max(-coefficient * deltaSq * rcpDelta * rcpVt, gSimd4fMinusOne) & mask;
 
 	impulse[0] = rvtx * j;
@@ -1244,7 +1274,7 @@ void cloth::SwCollision<T4f>::collideParticles()
 	const T4f massScale = simd4f(mClothData.mCollisionMassScale);
 
 	const bool frictionEnabled = mClothData.mFrictionScale > 0.0f;
-	const T4f frictionScale = simd4f(mClothData.mFrictionScale); //[arameter set by user
+	const T4f frictionScale = simd4f(mClothData.mFrictionScale); //Parameter set by user
 
 	T4f curPos[4];
 	T4f prevPos[4];
@@ -1439,21 +1469,22 @@ void cloth::SwCollision<T4f>::collideVirtualParticles()
 
 			transpose(frictionImpulse[0], frictionImpulse[1], frictionImpulse[2], frictionImpulse[3]);
 
-			q0v0 = q0v0 - (splat<0>(rw0) * frictionImpulse[0]);
-			q0v1 = q0v1 - (splat<1>(rw0) * frictionImpulse[0]);
-			q0v2 = q0v2 - (splat<2>(rw0) * frictionImpulse[0]);
-
-			q1v0 = q1v0 - (splat<0>(rw1) * frictionImpulse[1]);
-			q1v1 = q1v1 - (splat<1>(rw1) * frictionImpulse[1]);
-			q1v2 = q1v2 - (splat<2>(rw1) * frictionImpulse[1]);
-
-			q2v0 = q2v0 - (splat<0>(rw2) * frictionImpulse[2]);
-			q2v1 = q2v1 - (splat<1>(rw2) * frictionImpulse[2]);
-			q2v2 = q2v2 - (splat<2>(rw2) * frictionImpulse[2]);
-
-			q3v0 = q3v0 - (splat<0>(rw3) * frictionImpulse[3]);
-			q3v1 = q3v1 - (splat<1>(rw3) * frictionImpulse[3]);
-			q3v2 = q3v2 - (splat<2>(rw3) * frictionImpulse[3]);
+			//            (weight         * frictionImpulse   ) &  mask away if particle is static
+			q0v0 = q0v0 - ((splat<0>(rw0) * frictionImpulse[0]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q0v1 = q0v1 - ((splat<1>(rw0) * frictionImpulse[0]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q0v2 = q0v2 - ((splat<2>(rw0) * frictionImpulse[0]) & ~(splat<3>(p0v0) == gSimd4fZero));
+						  
+			q1v0 = q1v0 - ((splat<0>(rw1) * frictionImpulse[1]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q1v1 = q1v1 - ((splat<1>(rw1) * frictionImpulse[1]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q1v2 = q1v2 - ((splat<2>(rw1) * frictionImpulse[1]) & ~(splat<3>(p0v0) == gSimd4fZero));
+						  
+			q2v0 = q2v0 - ((splat<0>(rw2) * frictionImpulse[2]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q2v1 = q2v1 - ((splat<1>(rw2) * frictionImpulse[2]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q2v2 = q2v2 - ((splat<2>(rw2) * frictionImpulse[2]) & ~(splat<3>(p0v0) == gSimd4fZero));
+						  
+			q3v0 = q3v0 - ((splat<0>(rw3) * frictionImpulse[3]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q3v1 = q3v1 - ((splat<1>(rw3) * frictionImpulse[3]) & ~(splat<3>(p0v0) == gSimd4fZero));
+			q3v2 = q3v2 - ((splat<2>(rw3) * frictionImpulse[3]) & ~(splat<3>(p0v0) == gSimd4fZero));
 
 			// write back prev particles
 			storeAligned(prevParticles, vpIt[0] * sizeof(PxVec4), q0v0);
@@ -1487,6 +1518,7 @@ void cloth::SwCollision<T4f>::collideVirtualParticles()
 			T4f s2 = gSimd4fOne + splat<2>(weightScale) * (w2 & splat<2>(mask));
 			T4f s3 = gSimd4fOne + splat<3>(weightScale) * (w3 & splat<3>(mask));
 
+			//we don't care if particles are static here since we are only scaling (zero for static) mass
 			p0v0 = p0v0 * (gSimd4fOneXYZ | (splat<0>(s0) & sMaskW));
 			p0v1 = p0v1 * (gSimd4fOneXYZ | (splat<1>(s0) & sMaskW));
 			p0v2 = p0v2 * (gSimd4fOneXYZ | (splat<2>(s0) & sMaskW));
@@ -1504,21 +1536,22 @@ void cloth::SwCollision<T4f>::collideVirtualParticles()
 			p3v2 = p3v2 * (gSimd4fOneXYZ | (splat<2>(s3) & sMaskW));
 		}
 
-		p0v0 = p0v0 + (splat<0>(rw0) * d0);
-		p0v1 = p0v1 + (splat<1>(rw0) * d0);
-		p0v2 = p0v2 + (splat<2>(rw0) * d0);
-
-		p1v0 = p1v0 + (splat<0>(rw1) * d1);
-		p1v1 = p1v1 + (splat<1>(rw1) * d1);
-		p1v2 = p1v2 + (splat<2>(rw1) * d1);
-
-		p2v0 = p2v0 + (splat<0>(rw2) * d2);
-		p2v1 = p2v1 + (splat<1>(rw2) * d2);
-		p2v2 = p2v2 + (splat<2>(rw2) * d2);
-
-		p3v0 = p3v0 + (splat<0>(rw3) * d3);
-		p3v1 = p3v1 + (splat<1>(rw3) * d3);
-		p3v2 = p3v2 + (splat<2>(rw3) * d3);
+		//            (weight      * delta) & mask away if particle is static
+		p0v0 = p0v0 + ((splat<0>(rw0) * d0) & ~(splat<3>(p0v0) == gSimd4fZero));
+		p0v1 = p0v1 + ((splat<1>(rw0) * d0) & ~(splat<3>(p0v1) == gSimd4fZero));
+		p0v2 = p0v2 + ((splat<2>(rw0) * d0) & ~(splat<3>(p0v2) == gSimd4fZero));
+																
+		p1v0 = p1v0 + ((splat<0>(rw1) * d1) & ~(splat<3>(p1v0) == gSimd4fZero));
+		p1v1 = p1v1 + ((splat<1>(rw1) * d1) & ~(splat<3>(p1v1) == gSimd4fZero));
+		p1v2 = p1v2 + ((splat<2>(rw1) * d1) & ~(splat<3>(p1v2) == gSimd4fZero));
+																
+		p2v0 = p2v0 + ((splat<0>(rw2) * d2) & ~(splat<3>(p2v0) == gSimd4fZero));
+		p2v1 = p2v1 + ((splat<1>(rw2) * d2) & ~(splat<3>(p2v1) == gSimd4fZero));
+		p2v2 = p2v2 + ((splat<2>(rw2) * d2) & ~(splat<3>(p2v2) == gSimd4fZero));
+																
+		p3v0 = p3v0 + ((splat<0>(rw3) * d3) & ~(splat<3>(p3v0) == gSimd4fZero));
+		p3v1 = p3v1 + ((splat<1>(rw3) * d3) & ~(splat<3>(p3v1) == gSimd4fZero));
+		p3v2 = p3v2 + ((splat<2>(rw3) * d3) & ~(splat<3>(p3v2) == gSimd4fZero));
 
 		// write back particles
 		storeAligned(particles, vpIt[0] * sizeof(PxVec4), p0v0);

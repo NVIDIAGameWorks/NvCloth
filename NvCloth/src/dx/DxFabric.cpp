@@ -62,30 +62,33 @@ cloth::DxFabric::DxFabric(DxFactory& factory, uint32_t numParticles, Range<const
 	NV_CLOTH_ASSERT(restvalues.size() == stiffnessValues.size() || stiffnessValues.size() == 0);
 	NV_CLOTH_ASSERT(mNumParticles > *shdfnd::maxElement(indices.begin(), indices.end()));
 
-	// manually convert uint32_t indices to uint16_t in temp memory
-	Vector<DxConstraint>::Type hostConstraints;
-	hostConstraints.resizeUninitialized(restvalues.size());
-	Vector<DxConstraint>::Type::Iterator cIt = hostConstraints.begin();
-	Vector<DxConstraint>::Type::Iterator cEnd = hostConstraints.end();
-
-	const uint32_t* iIt = indices.begin();
-	const float* rIt = restvalues.begin();
-	for (; cIt != cEnd; ++cIt)
+	//constraints
 	{
-		cIt->mRestvalue = *rIt++;
-		cIt->mFirstIndex = uint16_t(*iIt++);
-		cIt->mSecondIndex = uint16_t(*iIt++);
-	}
+		// manually convert uint32_t indices to uint16_t in temp memory
+		Vector<DxConstraint>::Type hostConstraints;
+		hostConstraints.resizeUninitialized(restvalues.size());
+		Vector<DxConstraint>::Type::Iterator cIt = hostConstraints.begin();
+		Vector<DxConstraint>::Type::Iterator cEnd = hostConstraints.end();
 
-	// copy to device vector in one go
+		const uint32_t* iIt = indices.begin();
+		const float* rIt = restvalues.begin();
+		for(; cIt != cEnd; ++cIt)
+		{
+			cIt->mRestvalue = *rIt++;
+			cIt->mFirstIndex = uint16_t(*iIt++);
+			cIt->mSecondIndex = uint16_t(*iIt++);
+		}
+
+		// copy to device vector in one go
 #if 0
 	// Workaround for NvAPI SCG device updateSubresource size limit
-	mConstraintsHostCopy.assign(hostConstraints.begin(), hostConstraints.end());
-	mConstraints.resize(mConstraintsHostCopy.size());
-	mConstraints = mConstraintsHostCopy;
+		mConstraintsHostCopy.assign(hostConstraints.begin(), hostConstraints.end());
+		mConstraints.resize(mConstraintsHostCopy.size());
+		mConstraints = mConstraintsHostCopy;
 #else
-	mConstraints.assign(hostConstraints.begin(), hostConstraints.end());
+		mConstraints.assign(hostConstraints.begin(), hostConstraints.end());
 #endif
+	}
 
 	mStiffnessValues.assign(stiffnessValues.begin(), stiffnessValues.end());
 

@@ -23,6 +23,8 @@ cbuffer Object : register(b2)
 {
 	row_major matrix model;
 	float4 defaultColor;
+	uint boneoffsetoffset;
+	uint submesh;
 };
 
 #endif

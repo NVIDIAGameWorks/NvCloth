@@ -443,10 +443,55 @@ void Renderer::Render(ID3D11Device* /*device*/, ID3D11DeviceContext* ctx, ID3D11
 	ctx->RSSetViewports(1, &m_viewport);
 
 	// render debug render buffers
-	while (m_queuedRenderBuffers.size() > 0)
 	{
-		render(m_queuedRenderBuffers.back());
-		m_queuedRenderBuffers.pop_back();
+		float fAspectRatio = m_screenWidth / m_screenHeight;
+
+		// Hack projection matrix to add a depth bias to all render buffers
+		// This might not be the behavior we want if we use the render buffers for other purposes than
+		//  debug lines, but it works for now.
+		// Fill Camera constant buffer
+		{
+			float depthOffset = 0.005f;
+			// Temporarily change camera state so we can use the same projection matrix calculation.
+			// We don't want to mess with the DXUT library right now, but it would be cleaner to have support for this from m_camera
+			m_camera.SetProjParams(DirectX::XM_PIDIV4, fAspectRatio, CAMERA_CLIP_NEAR + depthOffset, CAMERA_CLIP_FAR + depthOffset);
+
+			// copied from the beginning of Renderer::Render()
+			// needed matrices
+			DirectX::XMMATRIX viewMatrix = m_camera.GetViewMatrix();
+			DirectX::XMMATRIX projMatrix = m_camera.GetProjMatrix();
+			DirectX::XMMATRIX projMatrixInv = DirectX::XMMatrixInverse(NULL, projMatrix);
+			DirectX::XMMATRIX viewProjMatrix = viewMatrix * projMatrix;
+
+			//same as // Opaque render
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			ctx->Map(m_cameraCB, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			CBCamera* cameraBuffer = (CBCamera*)mappedResource.pData;
+			cameraBuffer->viewProjection = viewProjMatrix;
+			cameraBuffer->projectionInv = projMatrixInv;
+			DirectX::XMStoreFloat3(&(cameraBuffer->viewPos), m_camera.GetEyePt());
+			ctx->Unmap(m_cameraCB, 0);
+		}
+
+		while(m_queuedRenderBuffers.size() > 0)
+		{
+			render(m_queuedRenderBuffers.back());
+			m_queuedRenderBuffers.pop_back();
+		}
+
+		//reset camera state
+		m_camera.SetProjParams(DirectX::XM_PIDIV4, fAspectRatio, CAMERA_CLIP_NEAR, CAMERA_CLIP_FAR);
+
+		// Fill Camera constant buffer (make sure that the depth bias is reset)
+		{
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			ctx->Map(m_cameraCB, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			CBCamera* cameraBuffer = (CBCamera*)mappedResource.pData;
+			cameraBuffer->viewProjection = viewProjMatrix;
+			cameraBuffer->projectionInv = projMatrixInv;
+			DirectX::XMStoreFloat3(&(cameraBuffer->viewPos), m_camera.GetEyePt());
+			ctx->Unmap(m_cameraCB, 0);
+		}
 	}
 
 	// Transparency render
@@ -680,7 +725,8 @@ void Renderer::reloadShaders()
 	std::set<RenderMaterial*> materials;
 	for (auto it = m_renderables.begin(); it != m_renderables.end(); it++)
 	{
-		materials.emplace(&((*it)->getMaterial()));
+		for(int i = 0; i<(*it)->getMaterialCount(); i++)
+			materials.emplace(&((*it)->getMaterial(i)));
 	}
 	for (std::set<RenderMaterial*>::iterator it = materials.begin(); it != materials.end(); it++)
 	{

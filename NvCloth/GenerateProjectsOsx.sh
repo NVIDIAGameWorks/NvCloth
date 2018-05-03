@@ -2,7 +2,7 @@
 
 # Make sure the various variables that we need are set
 
-export GW_DEPS_ROOT="$PWD""/../../../../"
+export GW_DEPS_ROOT="$PWD""/../../../../../"
 
 if [ -e $PWD"/../Externals/CMakeModules" ]; then
 	export GW_DEPS_ROOT="$PWD""/../../"
@@ -18,7 +18,7 @@ export PX_OUTPUT_ROOT="$PWD"
 # Install cmake using packman
 export PACKMAN="./scripts/packman/packman.sh"
 source $PACKMAN pull -p mac "./scripts/packman/packages/cmake.packman.xml" || exit 1
-export CMAKE="$PM_PACKAGES_ROOT/cmake-mac-x86_64/3.7.2/bin/cmake"
+export CMAKE="$PM_cmake_PATH/bin/cmake"
 
 
 # Cuda isn't supported on mac yet

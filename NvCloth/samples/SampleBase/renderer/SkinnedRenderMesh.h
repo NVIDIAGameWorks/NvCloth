@@ -47,7 +47,7 @@ public:
 	//////// IRenderMesh implementation ////////
 
 	virtual const std::vector<D3D11_INPUT_ELEMENT_DESC>& getInputElementDesc() const { return m_inputDesc; }
-	virtual void render(ID3D11DeviceContext& context) const;
+	virtual void render(ID3D11DeviceContext& context, int submesh) const;
 
 private:
 	//////// internal data ////////

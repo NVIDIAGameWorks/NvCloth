@@ -2,20 +2,14 @@
 set EXIT_CODE=0
 
 REM Make sure the various variables that we need are set
-
 CD /D %~dp0
 REM echo "Note: You need to run this with admin rights for the first time to set GW_DEPS_ROOT globally."
 call "./scripts/locate_gw_root.bat" GW_DEPS_ROOT_F
 @echo on
 set GW_DEPS_ROOT=%GW_DEPS_ROOT_F%
 echo GW_DEPS_ROOT = %GW_DEPS_ROOT%
-call "./scripts/locate_cmake.bat" CMAKE_PATH_F
-echo CMAKE_PATH_F = %CMAKE_PATH_F%
-
-SET PATH=%PATH%;%CMAKE_PATH_F%
 
 @echo off
-
 IF EXIST %~dp0..\Externals\CMakeModules (
 	set GW_DEPS_ROOT=%~dp0..\
 )
@@ -23,6 +17,15 @@ IF EXIST %~dp0..\Externals\CMakeModules (
 IF NOT DEFINED GW_DEPS_ROOT GOTO GW_DEPS_ROOT_UNDEFINED
 
 set PX_OUTPUT_ROOT=%~dp0
+
+REM Install cmake using packman
+set PACKMAN=call scripts/packman/packman.cmd
+%PACKMAN% pull -p windows "scripts/packman/packages/cmake.packman.xml"
+IF %ERRORLEVEL% NEQ 0 (
+    set EXIT_CODE=%ERRORLEVEL%
+    GOTO :End
+)
+set CMAKE=%PM_cmake_PATH%/bin/cmake.exe
 
 REM Generate projects here
 
