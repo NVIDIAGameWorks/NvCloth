@@ -1,17 +1,11 @@
 #
-# Build SampleBase Windows
+# Build AuthoringLibrary Windows
 #
-MESSAGE("Windows/SampleBase.cmake [begin]")
 
-FIND_PACKAGE(CUDA 8 REQUIRED)
-
-SET(SAMPLEBASE_PLATFORM_COMMON_FILES
+SET(AUTHORINGLIBRARY_PLATFORM_COMMON_FILES
 )
 
-SET(SAMPLEBASE_PLATFORM_INCLUDES ${CUDA_INCLUDE_DIRS}
-)
-
-SET(SAMPLEBASE_COMPILE_DEFS
+SET(AUTHORINGLIBRARY_COMPILE_DEFS
 	# Common to all configurations
 	${SAMPLES_SLN_COMPILE_DEFS}
 	
@@ -21,9 +15,9 @@ SET(SAMPLEBASE_COMPILE_DEFS
 	$<$<CONFIG:release>:${SAMPLES_SLN_RELEASE_COMPILE_DEFS}>
 )
 
-SET(SAMPLEBASE_LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+SET(AUTHORINGLIBRARY_LINK_FLAGS "/SUBSYSTEM:WINDOWS")
 
-SET(SAMPLEBASE_ADDITIONAL_DLLS "")
+SET(AUTHORINGLIBRARY_ADDITIONAL_DLLS "")
 
 #TODO: Move this to an external dep
 if (CMAKE_CL_64)
@@ -35,6 +29,7 @@ if (CMAKE_CL_64)
 
 	SET(D3DCOMPILER_DLL "\"$(VC_ExecutablePath_x64_x64)/d3dcompiler_47.dll\"")
 	
+	SET(ASSIMP_DLLS ${ASSIMP_DLL_PATH}/Release/assimp-vc140-mt.dll)
 else()
 	SET(SHADOW_LIB ${NVCLOTH_ROOT_DIR}/samples/external/shadow_lib/GFSDK_ShadowLib_DX11.win32.lib)
 	SET(SHADOW_DLLS ${NVCLOTH_ROOT_DIR}/samples/external/shadow_lib/GFSDK_ShadowLib_DX11.win32.dll)
@@ -44,7 +39,6 @@ else()
 
 	SET(D3DCOMPILER_DLL "\"$(VC_ExecutablePath_x86_x86)/d3dcompiler_47.dll\"")
 	
+	SET(ASSIMP_DLLS ${ASSIMP_DLL_PATH}/Release/assimp-vc140-mt.dll)
 endif()
 
-
-MESSAGE("Windows/SampleBase.cmake [end]")

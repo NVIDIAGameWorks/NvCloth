@@ -1,5 +1,10 @@
-NvCloth 1.0
+NvCloth 1.1.5
 ===========
+
+Development notice
+------------------
+
+This project is currently not under active development/maintenance any more.
 
 Introduction
 ------------

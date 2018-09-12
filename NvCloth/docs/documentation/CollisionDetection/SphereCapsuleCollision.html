@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+    
+    <title>Sphere Capsule collision detection &mdash; NvCloth 1.1.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/breathe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/application.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styleguide.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/jquery.storageapi.js"></script>
+    <link rel="top" title="NvCloth 1.1.3 documentation" href="../index.html" /> 
+  </head>
+  <body>
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="row">
+      <div class="navbar-brand">
+             <img class="logo" src="../_static/developerzone_gameworks_logo.png" alt="Logo"/>
+      </div>
+<div id="searchbox" style="display: none; float:right; padding-top:4px; padding-right:4px">
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</nav>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-3 bs-sidenav" style="white-space: nowrap; overflow: auto;">
+<div class="bs-sidebar">
+  <div id="sidebar_toc">
+  <h4>Table Of Contents</h4>
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes/index.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id1">1.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id2">1.1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id3">1.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id4">1.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id5">1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id6">1.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id7">1.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Compiling/index.html">Compiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#mac">Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#android">Android</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Modules/Index.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth">NvCloth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth-extensions">NvCloth extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide/Index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#initializing-the-library">Initializing the Library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#factory">Factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#fabric-cloth">Fabric &amp; Cloth</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../UserGuide/Index.html#fabric">Fabric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../UserGuide/Index.html#cloth">Cloth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#solver">Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#retrieving-simulation-data">Retrieving simulation data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#common-cloth-properties">Common cloth properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#tethers">Tethers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#collision-detection">Collision detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#local-space-simulation">Local space simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#drag-lift-and-wind">Drag lift and wind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#distance-motion-constraints">Distance/Motion constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#attaching-cloth-to-animated-characters">Attaching cloth to animated characters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#unit-scaling">Unit scaling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#parts-of-cloth-disappearing-for-single-frame">Parts of cloth disappearing (for single frame)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+</ul>
+
+  </div>
+<div id="searchbox" style="display: none">
+  <h4>Quick search</h4>
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+  </div>
+    <div class="document col-md-8">
+          <div class="body">
+            
+  <div class="section" id="sphere-capsule-collision-detection">
+<h1>Sphere Capsule collision detection<a class="headerlink" href="#sphere-capsule-collision-detection" title="Permalink to this headline">¶</a></h1>
+<p>Sphere and capsule collision is divided in 3 steps:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Sphere/capsule generation</li>
+<li>Acceleration structure generation</li>
+<li>Collision detection</li>
+</ul>
+</div></blockquote>
+<div class="section" id="sphere-capsule-generation">
+<h2>Sphere/ Capsule generation<a class="headerlink" href="#sphere-capsule-generation" title="Permalink to this headline">¶</a></h2>
+<p>The sphere data set by the user doesn&#8217;t need to be converted before it can be used for collision detection.
+However, the data will be interpolated between frames when continuous collision detection is enabled.</p>
+<p>The capsules need more setup work as the representation set by the user is not directly usable for collision detection.
+Some values are precomputed (in generateCones()) so they won&#8217;t have to be computed unnecessarily in the collision detection routine.
+All the computations are explained in the cone collision detection documentation. Refer to the code to see which values are precomputed.</p>
+</div>
+<div class="section" id="sphere-acceleration-structure">
+<h2>Sphere acceleration structure<a class="headerlink" href="#sphere-acceleration-structure" title="Permalink to this headline">¶</a></h2>
+<p>We use a small sweep and prune (SAP) acceleration structure to avoid testing each particle against every sphere.
+We begin by calculating the axis aligned bounding volume containing all particles and collision spheres (SwCollision&lt;T4f&gt;::buildAcceleration()).
+That space is then divided into an 8x8x8 grid.
+The span of each sphere along the 3 primary axes are stored in bitmasks where each bit is for a different sphere.
+So we have 8 bitmasks for each axis.
+We store the info twice to ensure that particles don&#8217;t skip over marked grid cells (when using continuous collision detection).
+The first set contains spans that are extended to the maximum, while the spans in the second set are extended to the minimum (see image below).
+So if the sphere was contained in cells 2, 3, and 4 along the x axis, the cells 5, 6, and 7 would also be marked for the first set.</p>
+<img src="../_images/SphereAcceleration.svg" /><p>Thick bordered bitmask cells indicate that the sphere is inside.
+The cells that contain the spheres can be obtained by combining both sets using binary AND.
+This is done when continuous collision detection is disabled (SwCollision&lt;T4f&gt;::mergeAcceleration()).</p>
+<p>We use both bit mask sets when continuous collision detection is enabled to test if the span from the particle movement overlaps the sphere span stored in the bitmasks.
+For each axis, we test the highest of the two position values against the bitmask from the first set and the lowest against the second set.
+We don&#8217;t have to test the cells in between because the bitmasks are extended (e.g. if the particle moves from cell 5 to cell 1 along the x axis both bitmasks will test positive, even though the particle skipped past the sphere. However, if the particle moved from cell 5 to 6 only one of the cells tests positive, culling the collision).</p>
+</div>
+<div class="section" id="collideparticles">
+<h2>collideParticles()<a class="headerlink" href="#collideparticles" title="Permalink to this headline">¶</a></h2>
+<p>TODO mass scaling
+CollideParticles iterates through the cloth particles to handle non-continuous collisions with spheres and capsules.
+The capsule cones are handled first so that the corresponding spheres can be ignored, ensuring that no double collisions are registered (in the case where a particle intersects both the cone and sphere of the capsule).
+The sphere and cone collision detection is discussed in the sections below.
+The results of the collision detection routines are stored in the ImpulseAccumulator which keeps track of the depenetration delta sum, friction velocity sum (multiplied by the frame time) and collision count (to calculate the averages).</p>
+<p>The average depenetration delta is directly added to the current particle position.</p>
+<p>The friction impulse (calculated by calculateFrictionImpulse()) is directly applied to the previous particle position so that only the velocity is changed.</p>
+</div>
+<div class="section" id="capsule-collision-detection">
+<h2>Capsule collision detection<a class="headerlink" href="#capsule-collision-detection" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cone-collision-detection">
+<h3>Cone collision detection<a class="headerlink" href="#cone-collision-detection" title="Permalink to this headline">¶</a></h3>
+<p>Capsule collision detection is split in two parts: Sphere and cone collision detection.
+Here we describe the cone collision detection. Spheres are described in the next subsection.</p>
+<p>The cone needs to be constructed in a way that it correctly fills the space between two spheres with centers \(c_i\) and radii \(r_i\), where \(i \in \left\{ 1,2 \right\} \).
+The capsule is a continuous surface, so the cone needs to intersect both spheres at a tangent.
+The problem can be solved in 2d by projecting it onto a plane that contains both sphere centers.
+We use an approach similar as described <a class="reference external" href="http://jwilson.coe.uga.edu/emt669/Student.Folders/Kertscher.Jeff/Essay.3/Tangents.html">here</a>.</p>
+<img src="../_images/CapsuleCircleIntersectionDiagram.svg" /><p>Two circles are constructed: circle m (green) with center on midpoint \(m = \frac{1}{2}\left(c_1+c_2\right)\) and radius \(r_m=\frac{1}{2}|c_2-c_1|\)
+and circle 3 (black) with center \(c_1\) and radius \(r_3=r_1-r_2\).
+The intersection between circle 3 and m gives us the tangent point \(t_1\) (see <a class="reference external" href="http://paulbourke.net/geometry/circlesphere/">here</a> for more details on circle intersections).
+The tangent line intersects points \(c_2\) and \(t_1\).</p>
+<p>\(t_2\) is obtained by offsetting \(t_1\) by \(\frac{t_1-c_1}{r_3}r_2\), and similar with \(c_2\) to obtain \(t_3\).</p>
+<p>The cone length can be derived from the diagram:
+$$
+V_l = \left|t_3-t_2\right| = \left|t_1-c_2\right| = \sqrt{\left|c_1-c_2\right|^2-\left(r_1-r_2\right)^2}
+$$
+The axis length of the cone is
+$$
+A_l = \left|c_2 - c_1\right|
+$$
+The axis of the cone is
+$$
+A = \frac{\left(c_2 - c_1\right)}{A_l}
+$$</p>
+<img src="../_images/CapsuleRadiusDiagram.svg" /><p>The radius of the cone above point \(m\) (in blue) is
+$$
+V_r = \left(\frac{1}{2}\left(r_2 - r_1\right) + r_1\right) \frac{A_l}{V_l} = \frac{1}{2}\left(r_2 + r_1\right) \frac{A_l}{V_l}
+$$
+as the triangles made from the red-blue line pairs are similar.
+The slope of the cone (the rate of change of the radius) is
+$$
+V_s = \frac{r_2 - r_1}{V_l}
+$$</p>
+<p>Detecting if point p lies inside the cone is done in two steps: detecting if it lies within the infinite cone and checking if it is contained within the span of \(t_2\) and \(t_3\).</p>
+<img src="../_images/CapsulePointCollisionDetection.svg" /><p>Point P is first projected onto the cone axis \(A\) giving the distance (dotted red in diagram) to \(m\) along \(A\):
+$$
+d = \left(p-m\right)\cdot A
+$$
+The radius below p (thick blue) is
+$$
+r_p = d V_s + V_r
+$$
+The distance of \(p\) to \(A\) is given by:
+$$
+d_{\bot} = \sqrt{\left|p-m\right|^2 -  d^2}
+$$
+The point is contained within the infinite cone when \(r_p&gt; d_{\bot}\).</p>
+<img src="../_images/CapsulePointCollisionDetection2.svg" /><p>The distance \(d_o\) (blue dashed line) between \(p\) and \(m&#8217;\) is given by:
+$$
+d_o = d + V_s d_{\bot}
+$$
+\(d_o\) is less than \(\frac{1}{2}A_l\) if point \(p\) lies inside the finite capped cone:
+$$
+\frac{1}{2}A_l &lt; d_o$$</p>
+<p>Todo: collision response</p>
+<p>The (un-normalized) collision normal \(n\) is given by:
+$$
+n = (p-m) - d_o A
+$$</p>
+<img src="../_images/CapsulePointCollisionResponse.svg" /><p>The collision response scale is calculated using:
+$$
+s = \frac{r_p}{d_{\bot}}cos (\alpha)^2 - cos (\alpha)^2
+$$
+where \(cos(\alpha)^2\) is calculated using:
+$$
+cos(\alpha)^2 = 1 - \left(\frac{r_2-r_1}{A_l}\right)^2 = 1 - sin(\alpha)^2 = \left(\frac{\left|t_1-c_2\right|}{\left|c_1-c_2\right|}\right)^2
+$$</p>
+<p>\(\frac{r_p}{d_{\bot}} \) is 1 when the particle is exactly on the surface of the cone, bigger than 1 when the particle has penetrated the capsule.
+\(cos (\alpha)^2\) ???</p>
+<p>$$
+s = \cos\left(\alpha\right)^2 \left(\frac{r_p}{d_{\bot}}-1\right)
+$$</p>
+<p>Variables in <tt class="code docutils literal"><span class="pre">generateCones()</span></tt>:</p>
+<div class="highlight-python"><pre>center = \(m\)
+axis.xyz = \(\frac{1}{2}(c_2-c_1) = \frac{1}{2}A_l A\)
+cIt-&gt;axis = \(A\)
+axis.w = \(-\frac{1}{2}r_3\)
+sqrAxisHalfLength = \((\frac{1}{2}A_l)^2\)
+sqrConeHalfLength = \((\frac{1}{2}V_l)^2\)
+slope = \(\frac{\frac{1}{2}(r_2-r_1)}{\frac{1}{2}V_l} = \frac{(r_2-r_1)}{V_l} = V_s\)
+cIt-&gt;radius = \((\frac{1}{2}(r_2-r_1)+r_1)\frac{A_l}{V_l} = V_r \)</pre>
+</div>
+<p>Variables in <tt class="code docutils literal"><span class="pre">cloth::SwCollision&lt;T4f&gt;::collideCones()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">todo</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sphere-collision-detection">
+<h3>Sphere collision detection<a class="headerlink" href="#sphere-collision-detection" title="Permalink to this headline">¶</a></h3>
+<p>We calculate the following values for the regular particle against sphere collision:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">delta</span> <span class="o">=</span> <span class="n">particle</span> <span class="o">-</span> <span class="n">sphereCenter</span>
+<span class="n">sqDeltaLegnth</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+<span class="n">negativeScale</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sphereRadius</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sqDeltaLegnth</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>NegativeScale will be negative when the particle does not collide with the sphere, at which point we can skip the rest of the work.
+We apply a depenetration impulse to the particle when it does collide:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">particleDelta</span> <span class="o">-=</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">negativeScale</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sphere-ccd">
+<h3>Sphere CCD<a class="headerlink" href="#sphere-ccd" title="Permalink to this headline">¶</a></h3>
+<p>Continuous collision detection between cloth and spheres calculate the time of impact between cloth particles and moving spheres.
+Both particles and spheres move linearly during a solver iteration, so this problem is the same as a line sphere intersection (making the particle movement relative to the sphere).</p>
+<img src="../_images/SphereCCD.svg" /><p>We start with the following equations:
+\begin{align}
+x =&amp; p_0 + (p_1-p_0)t\\
+y =&amp; c_0 + (c_1-c_0)t\\
+\left|x-y\right|^2 =&amp; (r_0+(r_1-r_0)t)^2
+\end{align}</p>
+<p>where \(p_0\) and \(p_1\) are the beginning and end positions of the particle, \(c_0\) and \(c_1\) are the beginning and end positions of the sphere, and \(r_0\) and \(r_1\) are the beginning and end radii of the sphere.</p>
+<p>We simplify the equations by working relative to the sphere:
+\begin{align}
+q_0 =&amp; p_0 - c_0\\
+q_1 =&amp; p_1 - c_1\\
+x-y =&amp; q_0 + (q_1-q_0)t\\
+\end{align}</p>
+<p>Expanding this gives us:
+\begin{align}
+q_0^2 + 2q_0(q_1-q_0)t + (q_1-q_0)^2t^2 =&amp; r_0^2 + 2r_0(r_1-r_0)t + (r_1-r_0)^2t^2\\
+q_0^2 + (2q_0q_1-2q_0^2)t + (q_1^2-2q_1q_0+q_0^2)t^2 =&amp; r_0^2 + (2r_0r_1-2r_0^2)t + (r_1^2-2r_1r_0+r_0^2)t^2\\
+\end{align}
+We rewrite this as a quadratic polynomial:
+\begin{align}
+q_0^2-r_0^2 + (2q_0q_1-2q_0^2)t-(2r_0r_1-2r_0^2)t + (q_1^2-2q_1q_0+q_0^2)t^2-(r_1^2-2r_1r_0+r_0^2)t^2 =0\\
+q_0^2-r_0^2 + (2q_0q_1-2r_0r_1-2q_0^2+2r_0^2)t + (q_1^2-r_1^2-2q_1q_0+2r_1r_0+q_0^2-r_0^2)t^2 =0\\
+m_{00} + (2m_{01}-2m_{00})t + (m_{11}-2m_{01}+m_{00})t^2 =0\\
+\end{align}</p>
+<p>Using the following definitions for readability:
+\begin{align}
+m_{00} =&amp; q_0^2 - r_0^2\\
+m_{11} =&amp; q_1^2 - r_1^2\\
+m_{01} =&amp; q_0q_1 - r_0r_1\\
+\end{align}</p>
+<p>We can now use the quadratic formula to solve for \(t\):
+\begin{align}
+a =&amp; m_{11}-2m_{01}+m_{00}\\
+b =&amp; 2m_{01}-2m_{00}\\
+c =&amp; m_{00}\\
+d =&amp; b^2-4ac = 4m_{01}^2-4m_{01}m_{00}+4m_{00}^2 -4m_{00}m_{11}+4m_{00}m_{01}-4m_{00}^2\\
+d =&amp; 4m_{01}^2-4m_{00}m_{11}\\
+t =&amp; \frac{-b+\sqrt{d}}{2a} = \frac{-m_{01}+m_{00} + \sqrt{\left(m^2_{01}-m_{00}m_{11}\right)}}{m_{11}-2m_{01}+m_{00}}\\
+\end{align}</p>
+<p>The variables used in <tt class="code docutils literal"><span class="pre">SwCollision&lt;T4f&gt;::collideSpheres</span></tt> are very similar:</p>
+<div class="highlight-python"><pre>dotPrevPrev = \(m_{00}\)
+dotPrevCur = \(m_{01}\)
+dotCurCur = \(m_{11}\) //(epsilon is omitted here)
+discriminant = \(\frac{1}{4}d\)
+sqrtD = \(\frac{1}{2}\sqrt{\left(d\right)}\)
+halfB = -\(\frac{1}{2}b\)
+minusA = \(-a\)</pre>
+</div>
+<p>Continuous collision detection can be skipped if one (relative) sphere is contained in the other (relative) sphere, or \(\left|q_0-q_1\right|^2 &lt; (r_0-r_1)^2\).
+We can reuse \(a\) for this check. If \(a &gt; 0\) Continuous collision detection is executed (TODO: check if this makes sense. it looks like discrete collision detection never runs when CCD is enabled. Are all cases really handled when a&lt;0?):
+\begin{align}
+a &gt;&amp; 0\\
+a =&amp; m_{11} - 2m_{01} + m_{00}\\
+=&amp; q_1^2-r_1^2 - 2q_0q_1 +2r_0r_1 + q_0^2-r_0^2\\
+=&amp; q_0^2+q_1^2- 2q_0q_1 -r_1^2 + 2r_0r_1 -r_0^2\\
+=&amp; (q_1-q_0)^2 - (r_1-r_0)^2 &lt; 0\\
+=&amp; (p_1 - c_1 - p_0 + c_0)^2 - (r_1-r_0)^2\\
+=&amp; ((p_1 - p_0) - (c_1 - c_0))^2 - (r_1-r_0)^2 &lt; 0\\
+\end{align}
+TODO: check code if we can skip both if sphere 0 is \(\in\) sphere 1 or sphere 1 is \(\in\) sphere 0 as we only do collision detection with sphere 1 in the end.</p>
+<p>Collision will happen within the current frame when \( 0 &lt; t &lt; 1\).
+The following position correction is applied to stop the particle from penetrating the sphere:
+\begin{align}
+p&#8217;_1 =&amp; c_1 + q_1 + \left(q_0-q_1\right)\left(1 - t\right)\\
+=&amp; p_1 + \left(q_0-q_1\right)\left(1 - t\right)
+\end{align}
+Note that \(q_1 + \left(q_0-q_1\right)\left(1 - t\right)\) is the toi position relative to the toi sphere center.
+This offset is added to the current sphere center \(c_1\), this is correct if the particle sticks to the sphere for the rest of the iteration step duration.</p>
+<p>The rest of the steps are the same as the non-continuous collision detection (but using the distance from the toi calculation).</p>
+<p>TODO: check the other collisionMask calculations and comments:</p>
+<div class="highlight-python"><pre>// skip continuous collision if the (un-clamped) particle
+// trajectory only touches the outer skin of the cone.
+T4f rMin = prevRadius + halfB * minusA * (curRadius - prevRadius);
+collisionMask = collisionMask &amp; (discriminant &gt; minusA * rMin * rMin * sSkeletonWidth);</pre>
+</div>
+<p>\begin{align}
+r_{min} =&amp; r_0 - \frac{1}{2}ba(r_1-r_0)\\
+\frac{1}{4}d &gt;&amp; -a r_{min}^2 s\\
+\frac{1}{4}d &gt;&amp; -a (r_0 - \frac{1}{2}ba(r_1-r_0))^2 s\\
+\frac{1}{4}d &gt;&amp; -asr_0^2 - as\frac{1}{4}b^2a^2(r_1-r_0)^2\\
+\frac{1}{4}d &gt;&amp; -asr_0^2 - as\frac{1}{4}b^2a^2(r_1-r_0)^2\\
+d &gt;&amp; -4asr_0^2 - 4as\frac{1}{4}b^2a^2(r_1-r_0)^2\\
+d &gt;&amp; 4a(-sr_0^2 - s\frac{1}{4}b^2a^2(r_1-r_0)^2)\\
+\frac{d}{4a} &gt;&amp; -sr_0^2 - s\frac{1}{4}b^2a^2(r_1-r_0)^2\\
+\frac{d}{4a} &gt;&amp; -s(r_0^2 + \frac{1}{4}b^2a^2(r_1-r_0)^2)\\
+\end{align}</p>
+<p>\begin{align}
+y =&amp; at^2 + bt + c\\
+t =&amp; -b/(2a)\\
+y_{min} =&amp; c - \frac{b^2}{4a} = -\frac{d}{4a} = \text{vertex}_y\\
+\end{align}</p>
+<p>\begin{align}
+b =&amp; 2m_{01}-2m_{00}\\
+b =&amp; 2q_0q_1 - 2r_0r_1 - 2q_0^2 + 2r_0^2\\
+b =&amp; 2q_0q_1 - 2q_0^2 + 2r_0^2 - 2r_0r_1\\
+b =&amp; 2(p_0-c_0)(p_1-c_1) - 2(p_0-c_0)^2 + 2r_0^2 - 2r_0r_1\\
+b =&amp; 2(p_0p_1-p_0c_1-c_0p_1+c_0c_1) - 2(p_0^2+c_0^2 - 2 p_0c_0) + 2r_0^2 - 2r_0r_1\\
+\end{align}</p>
+<p>TODO: what is going on:</p>
+<div class="highlight-python"><pre>// reduce ccd impulse if (clamped) particle trajectory stays in sphere skin,
+// i.e. scale by exp2(-k) or 1/(1+k) with k = (tmin - toi) / (1 - toi)
+T4f minusK = sqrtD * recip(minusA * oneMinusToi) &amp; (oneMinusToi &gt; gSimd4fEpsilon);
+oneMinusToi = oneMinusToi * recip(gSimd4fOne - minusK);</pre>
+</div>
+</div>
+<div class="section" id="cone-ccd">
+<h3>Cone CCD<a class="headerlink" href="#cone-ccd" title="Permalink to this headline">¶</a></h3>
+<p>Cone continuous collision detection works in a similar way as the sphere CCD.</p>
+<blockquote>
+<div>At roughly double the cost of discrete collision, the linearized trajectory of the particle relative to the capsule is tested for intersection. The 6th order polynomial is approximated by a quadratic equation, assuming the capsule length and slope stay constant.</div></blockquote>
+<p>&#8211; From <a class="reference external" href="https://wiki.nvidia.com/engwiki/index.php/PhysX/sdk/project/clothing3x/Pipeline">Engwiki, csigg</a></p>
+<p>We use the cross product <a class="reference external" href="http://www.qc.edu.hk/math/Advanced%20Level/Point_to_line.htm">method</a> instead of dot products to calculate the point line distance:
+$$
+\text{distance}_\bot = \left|(p-c) \times a\right|
+$$
+where \(c\) is a point on the line, \(a\) is the unit direction of the line (axis) and \(p\) is the point.</p>
+<p>We start with the following equations:
+\begin{align}
+x =&amp; \left(p_0-c_0\right) \times A_0 + \left(\left(p_1-c_1\right)\times A_1-\left(p_0-c_0\right)\times A_0\right)t\\
+\left|x\right|^2 =&amp; (r_0+(r_1-r_0)t)^2
+\end{align}
+where \(p_0\) and \(p_1\) are the beginning and end positions of the particle,
+\(c_0\) and \(c_1\) are the beginning and end positions of the cone center,
+\(A_0\) and \(A_1\) are the beginning and end cone axes,
+and \(r_0\) and \(r_1\) are the beginning and end radii of the cone
+below the particle (like \(r_p\) from the discrete cone section above):
+\begin{align}
+r = ((p-c) \cdot A) V_s + V_r
+\end{align}
+where \(V_s\) is the cone slope and \(V_r\) is the radius above the cone mid point.</p>
+<p>Note that \(x\) is very similar to the \(x-y\) from the sphere ccd section above, only adding the cross products.</p>
+<p>We simplify the equations using the following definitions:
+\begin{align}
+q_0 =&amp; \left(p_0 - c_0\right) \times A_0\\
+q_1 =&amp; \left(p_1 - c_1\right) \times A_1\\
+x =&amp; q_0 + (q_1-q_0)t\\
+\end{align}</p>
+<p>We can now solve for \(t\) in the same way as described in the sphere ccd section above.
+The checks determining if collision occurred, and the skipping conditions are also the same as with sphere ccd.</p>
+<p>So far, all checks were against the infinite cone. Next, we check if the collision falls on the cone section between the spheres.
+We interpolate the following values to the time of impact:</p>
+<p>\begin{align}
+p_{toi} =&amp; p_0-c_0 - (p_0-c_0 - p_1-c_1)t\\
+A_{ltoi} =&amp; \left|A_1A_{l1} - (A_1A_{l1} - A_0A_{l0})(1-t)\right|\\
+A_{toi} =&amp; \left(A_1A_{l1} - (A_1A_{l1} - A_0A_{l0})(1-t)\right)A_{ltoi}^{-1}\\
+\end{align}
+Where \(A_{l0}\) is the axis length at the start and \(A_{l1}\) at the end.</p>
+<p>We calculate the point line distance, and the distance along the axis:
+\begin{align}
+d_{\bot} =&amp; \sqrt{p_{toi}^2 - \left(p_{toi} \cdot A_{toi}\right)^2}\\
+d_| = &amp; p_{toi} \cdot A_{toi}
+\end{align}</p>
+<p>Now we can calculate \(d_o\) again:
+$$
+d_o = d_| + V_s d_{\bot}
+$$
+which leaves us at with the same conditions used in the non-continuous capsule section.</p>
+</div>
+</div>
+<div class="section" id="calculatefrictionimpulse">
+<h2>calculateFrictionImpulse()<a class="headerlink" href="#calculatefrictionimpulse" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="code docutils literal"><span class="pre">calculateFrictionImpulse</span></tt> function is used to do the friction calculations after the collisions have been calculated.
+The friction calculation is simplified by assuming the particle only touches one flat surface which approximates the average collision surface.
+The normal of this surface is in the same direction as the collision delta calculated from the collision detection functions (<tt class="code docutils literal"><span class="pre">mDeltaXYZ</span></tt> in the accumulator).</p>
+<p>The velocity of the surface is calculated each time a collision is detected.
+The sum of these velocities also stored in the accumulator (<tt class="code docutils literal"><span class="pre">mVelXYZ</span></tt>).
+The velocity of the friction surface is the average of all those velocities.</p>
+<p>The friction impulse will be along the tangential part of the relative velocity between the particle and the surface.
+The friction impulse magnitude is proportional to the friction coefficient and the collision delta magnitude. (TODO: Is the collision delta a good approximation for the normal force?)</p>
+</div>
+</div>
+
+
+          </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-boilerplate">
+        <div class="row">
+            <div class="boilerplate">
+                Copyright &copy; 2014, NVIDIA Corporation &nbsp; | &nbsp; <a href="http://www.nvidia.com/object/about-nvidia.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/about-nvidia.html_1&quot;;return this.s_oc?this.s_oc(e):true">About NVIDIA </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/legal_info.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/legal_info.html_1&quot;;return this.s_oc?this.s_oc(e):true">Legal Information </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/privacy_policy.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/privacy_policy.html_1&quot;;return this.s_oc?this.s_oc(e):true">Privacy Policy </a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      processEscapes: true,
+      skipTags: ["script","noscript","style","textarea"]
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] },
+    TeX: {
+        Macros: {
+          Lrg: ['\\displaystyle{#1}', 1, ""]
+        }
+      }
+  });
+</script>
+
+
+<script type="text/javascript" async
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script>
+var treestatename = 'GWDocsTreeState';
+var protocol = location.href.split('/')[0].toLowerCase();
+var storage;
+if (protocol.substring(0,4) == 'http') {
+  storage = $.cookieStorage;
+  storage.setPath('/');
+} else {
+  storage = $.localStorage;
+}
+
+if (storage.isEmpty(treestatename)) {
+  storage.set(treestatename, {});
+}
+
+var treestate = storage.get(treestatename);
+
+$.each($("#sidebar_toc ul li"), toc_walker);
+
+function toc_walker(key, value) {
+    var handleSpan = $("<span></span>")
+        .addClass("toc_handle").prependTo(value);
+    handleSpan.attr("id", $(value).closest("div").attr("id") + "." + key);
+
+    if($(value).has("ul li").size() > 0) {
+        var id = handleSpan.attr("id");
+        if (!(id in treestate)) {
+          treestate[id] = false;
+        }
+        handleSpan.addClass("toc_expanded").click(function() {
+            $(this).toggleClass("toc_expanded toc_collapsed").siblings("ul").toggle();
+            treestate[$(this).attr('id')] = $(this).hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        });
+        if(!($(this).hasClass('current') || treestate[id])) {
+            handleSpan.click();
+        }
+        if($(this).hasClass('current')) {
+            treestate[handleSpan.attr('id')] = handleSpan.hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        }
+    }
+}
+</script>
+  </body>
+</html>

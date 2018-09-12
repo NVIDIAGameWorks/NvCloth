@@ -67,11 +67,13 @@
   <h4>Table Of Contents</h4>
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="ReleaseNotes/index.html">Release Notes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id1">1.1.3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id2">1.1.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id3">1.1.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id4">1.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id5">1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id1">1.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id2">1.1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id3">1.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id4">1.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id5">1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id6">1.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ReleaseNotes/index.html#id7">1.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Compiling/index.html">Compiling</a><ul>
@@ -117,6 +119,75 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solver/Index.html">Internal solver function/algorithm documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#particle-invmass-w-component">Particle invMass w component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#log-stiffness">Log Stiffness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#integration">Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#wind-simulation">Wind simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#distance-constraints">Distance constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#tether-constraints">Tether constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#edge-constraints">Edge constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#separation-constraints">Separation constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver/Index.html#fabric-data-structure">Fabric data structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CollisionDetection/Index.html">Internal collision detection documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CollisionDetection/Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html">Sphere Capsule collision detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#sphere-capsule-generation">Sphere/ Capsule generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#sphere-acceleration-structure">Sphere acceleration structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#collideparticles">collideParticles()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#capsule-collision-detection">Capsule collision detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#cone-collision-detection">Cone collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#sphere-collision-detection">Sphere collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#sphere-ccd">Sphere CCD</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#cone-ccd">Cone CCD</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SphereCapsuleCollision.html#calculatefrictionimpulse">calculateFrictionImpulse()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CollisionDetection/SelfCollision.html">Self Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SelfCollision.html#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/SelfCollision.html#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SelfCollision.html#grid-setup">Grid setup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SelfCollision.html#particle-sorting">Particle sorting</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SelfCollision.html#key-range-sweep">Key range sweep</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/SelfCollision.html#collision-detection-and-response">Collision detection and response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CollisionDetection/InterCollision.html">Inter Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/InterCollision.html#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/InterCollision.html#broad-phase-collision-detection">Broad phase collision detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CollisionDetection/InterCollision.html#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/InterCollision.html#id1">Broad phase collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="CollisionDetection/InterCollision.html#differences-with-self-collision">Differences with self collision</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CollisionDetection/Index.html#todo">Todo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cooking/Index.html">Internal cooking documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Cooking/Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Cooking/TripletScheduler.html">TripletScheduler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Cooking/TripletScheduler.html#adjacencyquerier">AdjacencyQuerier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Cooking/TripletScheduler.html#id1">TripletScheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Cooking/TripletScheduler.html#tripletscheduler-simd">TripletScheduler::simd()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Cooking/TripletScheduler.html#tripletscheduler-warp">TripletScheduler::warp()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
   </div>
@@ -166,6 +237,9 @@
 <li class="toctree-l1"><a class="reference internal" href="Modules/Index.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="UserGuide/Index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Solver/Index.html">Internal solver function/algorithm documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CollisionDetection/Index.html">Internal collision detection documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cooking/Index.html">Internal cooking documentation</a></li>
 </ul>
 </div>
 </div>

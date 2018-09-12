@@ -66,10 +66,8 @@ SET(RENDERER_FILES
 	${SB_RENDERER_SOURCE_DIR}/ShaderUtils.h
 	${SB_RENDERER_SOURCE_DIR}/SkinnedRenderMesh.cpp
 	${SB_RENDERER_SOURCE_DIR}/SkinnedRenderMesh.h
-	${SB_RENDERER_SOURCE_DIR}/WeightedSkinRenderMesh.cpp
-	${SB_RENDERER_SOURCE_DIR}/WeightedSkinRenderMesh.h
-	${SB_RENDERER_SOURCE_DIR}/Model.cpp
-	${SB_RENDERER_SOURCE_DIR}/Model.h
+
+	
 )
 
 SET(SCENE_FILES
@@ -154,8 +152,7 @@ SET(UTIL_FILES
 	${SB_UTILS_SOURCE_DIR}/MeshGenerator.h
 	${SB_UTILS_SOURCE_DIR}/DataStream.cpp
 	${SB_UTILS_SOURCE_DIR}/DataStream.h
-	${SB_UTILS_SOURCE_DIR}/AnimatedModelUtilities.cpp
-	${SB_UTILS_SOURCE_DIR}/AnimatedModelUtilities.h
+
 	
 )
 SET(TASK_FILES

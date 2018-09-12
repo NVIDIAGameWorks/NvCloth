@@ -458,9 +458,9 @@ void applyWind(T4f* __restrict curIt, const T4f* __restrict prevIt, const uint16
 
 		T4f impulse = (drag + lift) * fluidDensity * doubleArea & ~isZero; //fluidDensity compensates for double area
 
-		curIt[i0] = c0 - impulse * splat<3>(c0);
-		curIt[i1] = c1 - impulse * splat<3>(c1);
-		curIt[i2] = c2 - impulse * splat<3>(c2);
+		curIt[i0] = c0 - ((impulse * splat<3>(c0)) & sMaskXYZ);
+		curIt[i1] = c1 - ((impulse * splat<3>(c1)) & sMaskXYZ);
+		curIt[i2] = c2 - ((impulse * splat<3>(c2)) & sMaskXYZ);
 	}
 }
 

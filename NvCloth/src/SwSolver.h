@@ -61,7 +61,7 @@ class SwSolver : public Solver
 
   public:
 	SwSolver();
-	virtual ~SwSolver();
+	virtual ~SwSolver() override;
 
 	virtual void addCloth(Cloth*) override;
 	virtual void addCloths(Range<Cloth*> cloths) override;

@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+    
+    <title>Internal solver function/algorithm documentation &mdash; NvCloth 1.1.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/breathe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/application.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styleguide.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../_static/jquery.storageapi.js"></script>
+    <link rel="top" title="NvCloth 1.1.3 documentation" href="../index.html" />
+    <link rel="next" title="Internal collision detection documentation" href="../CollisionDetection/Index.html" />
+    <link rel="prev" title="NVIDIA Copyright Notice" href="../CopyRight/Index.html" /> 
+  </head>
+  <body>
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="row">
+      <div class="navbar-brand">
+             <img class="logo" src="../_static/developerzone_gameworks_logo.png" alt="Logo"/>
+      </div>
+<div id="searchbox" style="display: none; float:right; padding-top:4px; padding-right:4px">
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</nav>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-3 bs-sidenav" style="white-space: nowrap; overflow: auto;">
+<div class="bs-sidebar">
+  <div id="sidebar_toc">
+  <h4>Table Of Contents</h4>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes/index.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id1">1.1.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id2">1.1.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id3">1.1.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id4">1.1.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id5">1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id6">1.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id7">1.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Compiling/index.html">Compiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#mac">Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#android">Android</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Modules/Index.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth">NvCloth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Modules/Index.html#nvcloth-extensions">NvCloth extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide/Index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#initializing-the-library">Initializing the Library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#factory">Factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#fabric-cloth">Fabric &amp; Cloth</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../UserGuide/Index.html#fabric">Fabric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../UserGuide/Index.html#cloth">Cloth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#solver">Solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#retrieving-simulation-data">Retrieving simulation data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#common-cloth-properties">Common cloth properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#tethers">Tethers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#collision-detection">Collision detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#local-space-simulation">Local space simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#drag-lift-and-wind">Drag lift and wind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#distance-motion-constraints">Distance/Motion constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#attaching-cloth-to-animated-characters">Attaching cloth to animated characters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#unit-scaling">Unit scaling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../UserGuide/Index.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../UserGuide/Index.html#parts-of-cloth-disappearing-for-single-frame">Parts of cloth disappearing (for single frame)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Internal solver function/algorithm documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#particle-invmass-w-component">Particle invMass w component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#log-stiffness">Log Stiffness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration">Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wind-simulation">Wind simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distance-constraints">Distance constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tether-constraints">Tether constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edge-constraints">Edge constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#separation-constraints">Separation constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fabric-data-structure">Fabric data structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CollisionDetection/Index.html">Internal collision detection documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CollisionDetection/Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html">Sphere Capsule collision detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-capsule-generation">Sphere/ Capsule generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-acceleration-structure">Sphere acceleration structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#collideparticles">collideParticles()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#capsule-collision-detection">Capsule collision detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#cone-collision-detection">Cone collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-collision-detection">Sphere collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#sphere-ccd">Sphere CCD</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#cone-ccd">Cone CCD</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SphereCapsuleCollision.html#calculatefrictionimpulse">calculateFrictionImpulse()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../CollisionDetection/SelfCollision.html">Self Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#grid-setup">Grid setup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#particle-sorting">Particle sorting</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#key-range-sweep">Key range sweep</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/SelfCollision.html#collision-detection-and-response">Collision detection and response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../CollisionDetection/InterCollision.html">Inter Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/InterCollision.html#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/InterCollision.html#broad-phase-collision-detection">Broad phase collision detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../CollisionDetection/InterCollision.html#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/InterCollision.html#id1">Broad phase collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../CollisionDetection/InterCollision.html#differences-with-self-collision">Differences with self collision</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../CollisionDetection/Index.html#todo">Todo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Cooking/Index.html">Internal cooking documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Cooking/Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Cooking/TripletScheduler.html">TripletScheduler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#adjacencyquerier">AdjacencyQuerier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#id1">TripletScheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#tripletscheduler-simd">TripletScheduler::simd()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#tripletscheduler-warp">TripletScheduler::warp()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../CopyRight/Index.html"
+                        title="previous chapter">NVIDIA Copyright Notice</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../CollisionDetection/Index.html"
+                        title="next chapter">Internal collision detection documentation</a></p>
+<div id="searchbox" style="display: none">
+  <h4>Quick search</h4>
+    <form class="search form-inline" action="../search.html" method="get">
+      <div class="form-group">
+      <input type="text" name="q" class="form-control" />
+      <input type="submit" value="Search" class="btn btn-primary" />
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+  </div>
+    <div class="document col-md-8">
+          <div class="body">
+            
+  <div class="section" id="internal-solver-function-algorithm-documentation">
+<h1>Internal solver function/algorithm documentation<a class="headerlink" href="#internal-solver-function-algorithm-documentation" title="Permalink to this headline">¶</a></h1>
+<p>NOTE: This documentation is work in progress and may contain errors and unfinished sections.</p>
+<p>This document describes the internal workings of the solver.
+We describe how the different parts work independent from platform specific features. Although we might occasionally comment on particular implementation details.</p>
+<p>Todo: give this solver a name, so that we can differentiate when a new/different solver is added.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Overview of the general algorithm goes here.</p>
+<ul class="simple">
+<li>Integrate particles (integrateParticles())</li>
+<li>Simulate wind/drag/lift (applyWind())</li>
+<li>Distance constraints (constrainMotion())</li>
+<li>Tether constraints (constrainTether())</li>
+<li>Solve edge constraints (solveFabric())</li>
+<li>Solve separation constraints (constrainSeparation())</li>
+<li>Collision (collideParticles())</li>
+<li>Self collision (selfCollideParticles())</li>
+<li>Update sleep state (updateSleepState())</li>
+</ul>
+</div>
+<div class="section" id="particle-invmass-w-component">
+<h2>Particle invMass w component<a class="headerlink" href="#particle-invmass-w-component" title="Permalink to this headline">¶</a></h2>
+<p>Todo: check and rewrite:</p>
+<div class="highlight-python"><pre>// note on invMass (stored in current/previous positions.w):
+// integrateParticles()
+//   - if(current.w == 0) current.w = previous.w
+// constraintMotion()
+//   - if(constraint.radius &lt;= 0) current.w = 0
+// computeBounds()
+//   - if(current.w &gt; 0) current.w = previous.w
+// collideParticles()
+//   - if(collides) current.w *= 1/massScale
+// after simulate()
+//   - previous.w: original invMass as set by user
+//   - current.w: zeroed by motion constraints and mass-scaled by collision</pre>
+</div>
+</div>
+<div class="section" id="slack">
+<h2>Slack<a class="headerlink" href="#slack" title="Permalink to this headline">¶</a></h2>
+<p>The position constraint for keeping distance between points a and b is usually written as:</p>
+<div class="highlight-python"><pre>error  = |b-a| - restLength
+offset = error * (b-a)/|b-a|
+       = (b-a) - restLength*(b-a)/|b-a|</pre>
+</div>
+<p>The equation calculating <em>slack</em> pops up often in the solver code.
+This does exactly the same as the above:</p>
+<div class="highlight-python"><pre>slack  = 1 - restLength / |b-a|
+offset = (b-a) * slack
+       = (b-a) - restLength*(b-a)/|b-a|</pre>
+</div>
+</div>
+<div class="section" id="log-stiffness">
+<h2>Log Stiffness<a class="headerlink" href="#log-stiffness" title="Permalink to this headline">¶</a></h2>
+<p>Many constraints have a stiffness parameter that can be used to influence the rate at which the constraint recovers from errors.
+Stiffness can be applied, in the most basic forms, as follows:
+$$
+p_1 = p_0 + \Delta p k
+$$
+where \(p_0\) and \(p_1\) are the current and next particle positions, \(\Delta p\) is the constraint correction offset (as seen in the Slack section), and \(k\) is the stiffness constant.</p>
+<p>The constraint error will be reduced by a factor of \(k\) per iteration, making it solver frequency dependent.
+The remaining constraint error is \(\Delta p(1-k)^n\) after \(n\) iterations.</p>
+<p>We adjust the stiffness constant based on the delta time to get framerate independence.
+We want to pick \(k_{\Delta t} \) so that the error after one second at reference frequency \(f\), \(\Delta p(1-k)^f\), and the error after one second with time steps of \(\Delta t\), \(\Delta p(1-k_{\Delta t})^{\frac{1}{\Delta t}}\), are equal:
+\begin{align}
+(1-k)^{f} &amp;= (1-k_{\Delta t})^{\frac{1}{\Delta t}}\\
+(1-k)^{f\Delta t} &amp;= 1-k_{\Delta t}\\
+k_{\Delta t} &amp;= 1 - (1-k)^{f\Delta t}\\
+\end{align}</p>
+<p>This solution is most likely based on page 8 of <a class="reference external" href="http://matthias-mueller-fischer.ch/publications/EG2015PBD.pdf">this</a> paper.</p>
+<p>The user specifies the stiffness \(k\) (using the constraint phase configs and functions like <tt class="code docutils literal"><span class="pre">Cloth::setTetherConstraintStiffness()</span></tt>) for the reference frequency \(f\) (set using <tt class="code docutils literal"><span class="pre">Cloth::setStiffnessFrequency()</span></tt>).
+Instead of storing \(k\) as is we store it in logarithmic space:
+$$
+k_{\log} =
+\begin{cases}
+\log_2(1-k),&amp; 1-k&gt;0\\
+\text{-FLT_MAX_EXP},&amp;\text{otherwise}
+\end{cases}
+$$</p>
+<p>This way \(k_{\Delta t}\) can be calculated without using the <tt class="code docutils literal"><span class="pre">powf()</span></tt> function:
+$$
+k_{\Delta t} = 1 - \mathrm{e}^{\left(f \Delta t \log(2) k_{\log}\right)}
+$$</p>
+<p>Note: this still uses the <tt class="code docutils literal"><span class="pre">expf()</span></tt> function. We also need the extra \(\log(2)\) constant as for some reason \(k_{\log}\) is in the base 2 logarithm. This is probably to make the condition work with <tt class="code docutils literal"><span class="pre">FLT_MAX_EXP</span></tt>.</p>
+<p>Also note that even though \(k_{\Delta t}\) should be timestep independent the time step still affects the stiffness of the simulation, both because of error propagation and because the integrator is not timestep independent.</p>
+</div>
+<div class="section" id="integration">
+<h2>Integration<a class="headerlink" href="#integration" title="Permalink to this headline">¶</a></h2>
+<p>The first step of the cloth simulation is the integration.
+Explicit Euler integration is used to calculate the new position of the particles.
+The velocity of the particles is not stored, instead we use the position from the previous frame to calculate the velocity.
+We need to compensate for differences in delta time. Large fluctuations can cause problems, so the delta time is damped.</p>
+<p>The following pseudo code describes how this is implemented:</p>
+<div class="highlight-python"><pre>//calculate damping constants from user setting 'damping'
+logDamping = log_2(1-damping) //from ClothImpl&lt;T&gt;::setDamping
+dampExponent = stiffnessFrequency * dt1 //from IterationState::create
+
+//calculate delta time ajustment
+scale = e^{logDamping * dampExponent} * {dt1/dt0} //from IterationState::create
+//Do the integration
+delta = (particle_position1-particle_position0) * scale + acceleration
+particle_position1 = particle_position1 + delta</pre>
+</div>
+<p>The integration code also replaces the current inverse mass with the previous inverse mass if the current is zero.</p>
+<p>Todo: rotating reference frame.</p>
+<p>Todo: how does damping work?</p>
+</div>
+<div class="section" id="wind-simulation">
+<h2>Wind simulation<a class="headerlink" href="#wind-simulation" title="Permalink to this headline">¶</a></h2>
+<p>Drag and lift simulation is done in the applyWind() function.
+We use the following equations to model air drag and air lift:</p>
+<p>$$
+F_d = \frac{1}{2} \rho v^2 c_{drag} A
+$$</p>
+<p>$$
+F_l = c_{lift}\frac{1}{2} \rho v^2 A
+$$</p>
+<p>where \(F_d\) and \(F_l\) are the drag and lift forces, \(\rho\) is the fluid density, \(v\) is the flow speed, \(A\) is the surface area and \(c_{drag}\) and \(c_{lift}\) are the drag and lift coefficients.
+We use different symbols and notation in the explanation below to match closer to the source implementation.
+Note that the equations above work with velocity in \(\mathrm{m.s^{-1}}\), while we work mostly with the offset per frame in \(\mathrm{m}\) (meanning velocity multiplied by the iteration delta time).</p>
+<p>The following algorithm is used:</p>
+<div class="highlight-python"><pre>for each triangle
+       \(p_j\), \(c_j\) and \(m^{-1}_j\) are the previous position, current position and is the inverse mass of the \(j\)th particle in the triangle.
+
+       //Calculate current and previous center of the triangle
+       \(c_t = \frac{1}{3} \cdot \left( c_0 + c_1 + c_2 \right)\)
+       \(p_t = \frac{1}{3} \cdot \left( p_0 + p_1 + p_2 \right)\)
+
+       //Position difference including wind (same as flow speed times dt; in \(\mathrm{m}\))
+       \(d = c_t - p_t + wind\)
+
+       if rotating reference frame
+               \(d = c_t + R\left(d-c_t\right)\) //where \(R\) is the inverse local space rotation for one solver iteration
+               //Todo check/explain this
+
+       //Unnormalized normal of the triangle
+       \(n = \left(c_2 - c_0\right) \times \left(c_1 - c_0\right) \)
+
+       //Double the area of the triangle in \(\mathrm{m^2}\)
+       \(a = \left|n\right| \)
+
+       //Normalized triangle normal
+       \(\hat{n} = \frac{n}{a}\)
+
+       //Calculate the cos and sin of the angle \(\theta\) between the \(d\) and \(n\)
+       \(\Lrg{ \cos\left(\theta\right) = \frac{\hat{n} \cdot d}{\left|d \right|} }\)
+       \(\Lrg{ \sin\left(\theta\right) =  \sqrt{\max(0, 1 - \cos\left(\theta\right)^2)}}\)
+
+       //Lift direction is orthogonal to \(d\) and in the \(d\) \(n\) plane. Its length is \(\left|d\right|\)
+       \(\Lrg{ l_{dir} = \frac{\left( d \times \hat{n}\right) \times d}{\left|d \right|} }\)
+
+       //Calculate the lift and drag impulse
+       //The lift is at its maximum when \(d\) is at an \(45^\circ\) angle to the triangle
+       //We use \(\sin\left(\theta\right)\cdot\cos\left(\theta\right) = \frac{1}{2}\sin\left(2\cdot \theta\right)\) to calculate this
+       \(i_{lift} = c_{lift} \cdot \cos\left(\theta\right) \cdot \sin\left(\theta\right) \cdot l_{dir} \cdot \left|d\right| \cdot \Delta t^{-1}\)
+       \(i_{drag} = c_{drag} \cdot \left|\cos\left(\theta\right)\right| \cdot d \cdot \left|d\right| \cdot \Delta t^{-1} \)
+       //\(c_{lift} \) and \(c_{drag}\) are the lift and drag coefficients
+
+       //combined impulse
+       \(\Lrg{ i =
+               \begin{cases}
+               \epsilon &lt; \left|d\right|^2,&amp; 0\\
+               \text{else},&amp; \left(i_{lift} + i_{drag}\right) \cdot \rho \cdot a
+               \end{cases}
+       }\)
+       //where \(\rho\) is the fluid density
+       //\(\rho\) should be set to compensate for the double area in \(a\)
+
+       //apply impulses to the particle positions
+       for each particle \(j = \left\{ 0, 1, 2 \right\} \)
+               \(c_j = c_j - i \cdot m^{-1}_j \)</pre>
+</div>
+<p>Note that when we combine the impulses we check if \(\left|d\right|\) is too small as this causes instabilities due to float division inaccuracies.
+This can cause different drag and lift behavior depending on the time step size (or solver frequency).
+Smaller time steps result in smaller position deltas which reach the \(\epsilon\) threshold sooner.
+This results in less drag/lift at small time steps (high solver frequencies) for slow moving particles.</p>
+</div>
+<div class="section" id="distance-constraints">
+<h2>Distance constraints<a class="headerlink" href="#distance-constraints" title="Permalink to this headline">¶</a></h2>
+<p>A distance constraint can limit the movement of a particle to the volume of a sphere.
+The constraints are specified with an array of 4 dimensional vectors (physx::PxVec4) where the x, y, z elements define the center and w the radius of the sphere.</p>
+<p>The constraints are interpolated between the start and target spheres if both are given.</p>
+<p>The constrainMotion() function in the solver is responsible for enforcing these constraints.
+The following pseudo code describes how this is implemented:</p>
+<div class="highlight-python"><pre>delta = sphere_center - particle_position
+sqrLength = epsilon + |delta|^2
+radius = max(0, sphere_radius * scale + bias)
+slack = 1 - radius / sqrt{sqrLength}
+
+if(slack&gt;0)
+{
+   if(radius &lt;= 0)
+      particle_invMass.w = 0 //Set the inverse mass to 0 if we are constrained to a zero radius sphere
+   slack = slack * stiffness
+   particle.xyz += delta * slack
+}</pre>
+</div>
+</div>
+<div class="section" id="tether-constraints">
+<h2>Tether constraints<a class="headerlink" href="#tether-constraints" title="Permalink to this headline">¶</a></h2>
+<p>Tether constraints help with reducing the stretchiness of the cloth without increasing the solver iteration count.
+This is done by adding additional max distance constraints connecting simulated particles with their nearest fixed particle(s).
+The tether constraints are stored as an index &amp; length pair.
+The array of constraints has a multiple of particle count elements.
+The constraints in the array are stored in order so that the first particle of the constraint is element%numParticles.
+The index stored in the constraint defines the other (anchor) particle of the constraint.</p>
+<p>The constraint for one particle is solved as follows:</p>
+<div class="highlight-python"><pre>offset = 0
+for each tether connecting pb
+    //pa is the anchor particle
+    delta = pa - pb
+    radius = tetherLength * scale
+    slack = 1 - radius / (|delta| + epsilon)
+    offset += delta * max(slack, 0)
+pb += offset * stiffness</pre>
+</div>
+<p>The stiffness is calculated as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stiffness</span> <span class="o">=</span> <span class="n">tetherConstraintStiffness</span> <span class="o">*</span> <span class="n">numParticles</span> <span class="o">/</span> <span class="n">numTethers</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="edge-constraints">
+<h2>Edge constraints<a class="headerlink" href="#edge-constraints" title="Permalink to this headline">¶</a></h2>
+<p>Algorithm:</p>
+<div class="highlight-python"><pre>r = restlength
+pi = particle i
+piw = inv weight of particle i
+h = pb-pa
+e2 = epsilon + |h|^2
+er = r&gt;0 ? (1 - r / sqrt{e2}) : 0
+
+if(useMultiplier)
+{
+    //from PhaseConfig.h cloth::transform
+    multiplierC = log2(stiffnessMultiplier)
+    compressionLimitC = 1 - 1 / compressionLimit
+    strechLimitC = 1 - 1 / stretchLimit
+    er -= multiplierC * max(compressionLimitC, min(er, stretchLimitC))
+}
+
+stiffnessExponent = stiffnessFrequency * dt/iterations
+stiffness = log2(1-stiffness) //check when this happens //from PhaseConfig.h cloth::transform
+stiffnessC = 1-2^{stiffness * stiffnessExponent}
+ex = er * stiffnessC / (pbw+paw)
+
+pa = pa + h*ex * paw
+pb = pb - h*ex * pbw</pre>
+</div>
+</div>
+<div class="section" id="separation-constraints">
+<h2>Separation constraints<a class="headerlink" href="#separation-constraints" title="Permalink to this headline">¶</a></h2>
+<p>Separation constraints do exactly the opposite of distance constraints.
+These constraints ensure that the particles remain outside the defined spheres.</p>
+<p>The constraints are interpolated between the start and target spheres if both are given.</p>
+<p>The constrainSeparation() function in the solver is responsible for enforcing these constraints.
+Solving a single constraint is done as follows:</p>
+<div class="highlight-python"><pre>//p is the particle position
+//c is the sphere center
+//r is the sphere radius
+d = c-p
+l = |d|
+slack = 1 - r/l
+if(slack &lt; 0)
+    p += d * slack</pre>
+</div>
+</div>
+<div class="section" id="fabric-data-structure">
+<h2>Fabric data structure<a class="headerlink" href="#fabric-data-structure" title="Permalink to this headline">¶</a></h2>
+<p>The fabric data structure contains the constraint information that can be reused by multiple cloth instances.
+The constraints are divided in different phases.
+Each phase usually contains a different type of constraints such as (horizontal/vertical) stretching, searing, bending constraints.</p>
+<p>mPhases contains indices indicating which set from mSets belongs to a phase.</p>
+<p>mSets contains a list of start (and end) indices for mRestvalues and mIndices (if multiplied by 2).
+The first rest value of set s is mRestvalues[mSets[s]] and the last is mRestvalues[mSets[s+1]-1].</p>
+<p>mRestvalues contains the rest lengths / edge lengths of the constraints.</p>
+<p>mIndices contains pairs of indices connected by a constraint. (mIndices.size()*2 == mRestvalues.size())</p>
+</div>
+</div>
+
+
+          </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="masthead">
+    <div class="row">
+      <ul class="breadcrumb">
+        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li> 
+      </ul>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-boilerplate">
+        <div class="row">
+            <div class="boilerplate">
+                Copyright &copy; 2014, NVIDIA Corporation &nbsp; | &nbsp; <a href="http://www.nvidia.com/object/about-nvidia.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/about-nvidia.html_1&quot;;return this.s_oc?this.s_oc(e):true">About NVIDIA </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/legal_info.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/legal_info.html_1&quot;;return this.s_oc?this.s_oc(e):true">Legal Information </a>&nbsp; | &nbsp; <a href="http://www.nvidia.com/object/privacy_policy.html" onclick="s_objectID=&quot;http://www.nvidia.com/object/privacy_policy.html_1&quot;;return this.s_oc?this.s_oc(e):true">Privacy Policy </a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      processEscapes: true,
+      skipTags: ["script","noscript","style","textarea"]
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] },
+    TeX: {
+        Macros: {
+          Lrg: ['\\displaystyle{#1}', 1, ""]
+        }
+      }
+  });
+</script>
+
+
+<script type="text/javascript" async
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script>
+var treestatename = 'GWDocsTreeState';
+var protocol = location.href.split('/')[0].toLowerCase();
+var storage;
+if (protocol.substring(0,4) == 'http') {
+  storage = $.cookieStorage;
+  storage.setPath('/');
+} else {
+  storage = $.localStorage;
+}
+
+if (storage.isEmpty(treestatename)) {
+  storage.set(treestatename, {});
+}
+
+var treestate = storage.get(treestatename);
+
+$.each($("#sidebar_toc ul li"), toc_walker);
+
+function toc_walker(key, value) {
+    var handleSpan = $("<span></span>")
+        .addClass("toc_handle").prependTo(value);
+    handleSpan.attr("id", $(value).closest("div").attr("id") + "." + key);
+
+    if($(value).has("ul li").size() > 0) {
+        var id = handleSpan.attr("id");
+        if (!(id in treestate)) {
+          treestate[id] = false;
+        }
+        handleSpan.addClass("toc_expanded").click(function() {
+            $(this).toggleClass("toc_expanded toc_collapsed").siblings("ul").toggle();
+            treestate[$(this).attr('id')] = $(this).hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        });
+        if(!($(this).hasClass('current') || treestate[id])) {
+            handleSpan.click();
+        }
+        if($(this).hasClass('current')) {
+            treestate[handleSpan.attr('id')] = handleSpan.hasClass('toc_expanded');
+            storage.set(treestatename, treestate);
+        }
+    }
+}
+</script>
+  </body>
+</html>

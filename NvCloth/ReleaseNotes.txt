@@ -4,7 +4,7 @@ NvCloth Release notes.
 Release Notes 
 ***************************
 
-1.1.4
+1.1.5
 ===========================================================================================
 Supported platforms:
 
@@ -29,6 +29,20 @@ Supported compilers (via cmake 3.7)
 * Switch: Visual studio 14 (2015)
 
 
+Fixed:
+
+- Wind simulation code could affect particle masses (especially when high drag/lift coefficients were used)
+- Fixed PS4 mising override error.
+- Fix setCapsules bug.
+
+New:
+- Authoring library (helper functions useful for authoring tools)
+
+Known issues:
+- None
+
+1.1.4
+===========================================================================================
 Fixed:
 
 - DirectX 11 solver had issues with ccd sphere/capsule collision.

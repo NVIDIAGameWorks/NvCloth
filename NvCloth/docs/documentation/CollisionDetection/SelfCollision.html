@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
     
-    <title>Compiling &mdash; NvCloth 1.1.3 documentation</title>
+    <title>Self Collision &mdash; NvCloth 1.1.3 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -31,9 +31,7 @@
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/jquery.storageapi.js"></script>
-    <link rel="top" title="NvCloth 1.1.3 documentation" href="../index.html" />
-    <link rel="next" title="Modules" href="../Modules/Index.html" />
-    <link rel="prev" title="Release Notes" href="../ReleaseNotes/index.html" /> 
+    <link rel="top" title="NvCloth 1.1.3 documentation" href="../index.html" /> 
   </head>
   <body>
 <nav class="navbar navbar-inverse navbar-default">
@@ -66,7 +64,7 @@
 <div class="bs-sidebar">
   <div id="sidebar_toc">
   <h4>Table Of Contents</h4>
-  <ul class="current">
+  <ul>
 <li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes/index.html">Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id1">1.1.5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id2">1.1.4</a></li>
@@ -77,11 +75,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id7">1.0.0</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Compiling</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mac">Mac</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#android">Android</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Compiling/index.html">Compiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#mac">Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#android">Android</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Modules/Index.html">Modules</a><ul>
@@ -123,12 +121,6 @@
 </ul>
 
   </div>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../ReleaseNotes/index.html"
-                        title="previous chapter">Release Notes</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../Modules/Index.html"
-                        title="next chapter">Modules</a></p>
 <div id="searchbox" style="display: none">
   <h4>Quick search</h4>
     <form class="search form-inline" action="../search.html" method="get">
@@ -149,87 +141,82 @@
     <div class="document col-md-8">
           <div class="body">
             
-  <div class="section" id="compiling">
-<h1>Compiling<a class="headerlink" href="#compiling" title="Permalink to this headline">¶</a></h1>
-<p>Cmake is automatically obtained using nvidia&#8217;s packman scripts for all platforms (except for Android).
-Internet connection is required for this.</p>
-<div class="section" id="windows">
-<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
-<p>For windows: Download and install the following dependencies:</p>
-<ul class="simple">
-<li>Visual studio 12 or later (2013 or later)</li>
-<li>Windows 8.1 sdk <a class="reference external" href="https://developer.microsoft.com/en-us/windows/downloads/windows-8-1-sdk">https://developer.microsoft.com/en-us/windows/downloads/windows-8-1-sdk</a></li>
-<li>CUDA sdk <a class="reference external" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a> (version 8 or later)</li>
-</ul>
-<p>Edit <tt class="code docutils literal"><span class="pre">scripts/locate_cuda.bat</span></tt> to point to the CUDA installation folder (that contains the bin, include and lib folder), edit <tt class="code docutils literal"><span class="pre">scripts/locate_win8sdk.bat</span></tt> to point to the windows SDK (<tt class="code docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files</span> <span class="pre">(x86)\Windows</span> <span class="pre">Kits\8.1</span></tt> by default)</p>
-<p>Run <tt class="code docutils literal"><span class="pre">CmakeGenerateAll.bat</span></tt> to generate the visual studio solution files in <tt class="code docutils literal"><span class="pre">compiler/vcXXwinXX-cmake/</span></tt>.
-For example Visual Studio 2015 solution with 64-bit target processor will be placed to <tt class="code docutils literal"><span class="pre">compiler/vc14win64-cmake/</span></tt> folder.
-Then open <tt class="code docutils literal"><span class="pre">NvCloth.sln</span></tt>, choose the release/debug configuration and build the solution. The library binaries will be put to the <tt class="code docutils literal"><span class="pre">bin</span></tt> folder next to the <tt class="code docutils literal"><span class="pre">compiler</span></tt> folder.</p>
-<p>The above project generation script has optional command line arguments to control whether CUDA/DX11 solvers should be enabled:</p>
-<div class="highlight-python"><pre>CmakeGenerateProjects.bat &lt;0|1:use_cuda (default is 1)&gt; &lt;0|1:use_dx11 (default is 1)&gt;</pre>
+  <div class="section" id="self-collision">
+<h1>Self Collision<a class="headerlink" href="#self-collision" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Self collision tries to keep the cloth from self intersecting.
+It does this by keeping the particles a minimum distance away from each other.
+This distance can be set using Cloth::setSelfCollisionDistance().</p>
 </div>
-<p>E.g.:</p>
-<div class="highlight-python"><pre>CmakeGenerateProjects.bat 1 0</pre>
-</div>
-<p>will include CUDA solver into the compilation but exclude the DX11 solver.</p>
-<p>Run <tt class="code docutils literal"><span class="pre">samples/CmakeGenerateProjects.bat</span></tt> to generate the visual studio solution files for the samples in <tt class="code docutils literal"><span class="pre">samples/compiler/vc14winXX-cmake/CmakeGenerateProjects.bat</span></tt>.
-You need to build assimp first before building the samples. Run <tt class="code docutils literal"><span class="pre">E:\nx0\sw\devrel\libdev\NvCloth\trunk\samples\external\assimp-4.1.0</span></tt> and build <tt class="code docutils literal"><span class="pre">samples\external\assimp-4.1.0\compiler\vc14winXX-cmake\Assimp.sln</span></tt></p>
-</div>
-<div class="section" id="linux">
-<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
-<p>Run <tt class="code docutils literal"><span class="pre">GenerateProjectsLinux.sh</span></tt> to generate make files in <tt class="code docutils literal"><span class="pre">compiler/linux64-XXXXX-cmake/</span></tt></p>
-<p>Enable or disable CUDA support by simply changing the following line in the <tt class="code docutils literal"><span class="pre">BuildProjectsLinux.sh</span></tt> script included to the distribution:</p>
-<div class="highlight-python"><pre>export USE_CUDA=0 # 0 for disable 1 for enable</pre>
-</div>
-<p>Run <tt class="code docutils literal"><span class="pre">BuildProjectsLinux.sh</span></tt> script. It will generate various makefile-based projects in the <tt class="code docutils literal"><span class="pre">compiler</span></tt> folder.
-Choose the one you need, e.g.:</p>
-<div class="highlight-python"><pre>cd compiler/linux64-release-cmake</pre>
-</div>
-<p>then run the build process (using 5 compilation processes in parallel):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">make</span> <span class="o">--</span><span class="n">jobs</span><span class="o">=</span><span class="mi">5</span>
+<div class="section" id="acceleration-structure">
+<h2>Acceleration structure<a class="headerlink" href="#acceleration-structure" title="Permalink to this headline">¶</a></h2>
+<p>Testing every particle against all other particle is too slow.
+Instead an acceleration structure is used to only test nearby particles.</p>
+<p>The acceleration structure is a combination of a regular grid and a sweep.
+The longest axes of the AABB around all particles is used for the sweep.
+The other two axes are divided in a regular grid of 253x253.
+For each particle we test against the current and neighboring cells of the grid in which we sweep along the remaining axis.
+The whole process will be described in more detail below.</p>
+<div class="section" id="grid-setup">
+<h3>Grid setup<a class="headerlink" href="#grid-setup" title="Permalink to this headline">¶</a></h3>
+<p>The AABB is obtained from ClothData (calculated by SwCollision&lt;T4f&gt;::computeBounds()).
+The edge lengths are calculated by subtracting the lower bounds from the upper bounds.
+The sweep axis index (0 to 2 for x to z so we can use the array operators) is picked by the largest edge length.
+The two hash axes are the remaining axes in arbitrary order.</p>
+<img src="../_images/SelfCollisionGrid.svg" /><p>The cell size for the hash axes is picked so that it is not smaller than the collision distance set by the user, and large enough that 253 cells cover the whole edge length.
+The sweep axis is divided in 65533 cells.
+The first and last cells of each axis are reserved as a sentinel.
+The amount of sweep cells that need to be checked to cover the collision distance is given by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">numSweepCells</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">gridScale</span> <span class="o">*</span> <span class="n">collisionDistance</span>
 </pre></div>
 </div>
-<p>The library binaries will be put to the <tt class="code docutils literal"><span class="pre">bin</span></tt> folder next to the <tt class="code docutils literal"><span class="pre">compiler</span></tt> folder.</p>
-<p><strong>Note:</strong> In case you run the Linux project generation scripts <tt class="code docutils literal"><span class="pre">GenerateProjectsLinux.sh</span></tt> and see an error like this:</p>
-<div class="highlight-python"><pre>env: bash\r: No such file or directory</pre>
+<p>We calculate the grid scale and grid bias to quickly convert particle coordinates to cell coordinates using \(coordinate \cdot gridScale + gridBias\).
+The gridScale is \((cellCount + 1)^{-1}\) and the gridBias is \(-lowerBound \cdot gridScale + 1 \), where \(lowerBound\) is taken from the AABB.</p>
 </div>
-<p>this command will help to fix the line endings:</p>
-<div class="highlight-python"><pre>sed $'s/\r$//' GenerateProjectsLinux.sh &gt; GenerateProjectsLinux.sh.fixed &amp;&amp; mv GenerateProjectsLinux.sh.fixed GenerateProjectsLinux.sh &amp;&amp; chmod +x GenerateProjectsLinux.sh</pre>
+<div class="section" id="particle-sorting">
+<h3>Particle sorting<a class="headerlink" href="#particle-sorting" title="Permalink to this headline">¶</a></h3>
+<p>Particles are sorted based on a key which is constructed from the cell coordinates.
+The 16 least significant bits are used to store the sweep axis cell coordinate.
+The two other bytes are used to store the hash axis cell coordinates (this is the reason for the specific cell count per axis in the grid).</p>
+<p>A radix sort with a radix (bin) size of 256 is used, requiring 4 bins to sort the 32-bit keys.</p>
 </div>
-<p>or use your favorite text editor.</p>
+<div class="section" id="key-range-sweep">
+<h3>Key range sweep<a class="headerlink" href="#key-range-sweep" title="Permalink to this headline">¶</a></h3>
+<p>Individual particles can be processed now that the acceleration structure is setup.
+Only 5 cells are processed for each particle, as we don&#8217;t want to detect duplicate pairs.</p>
+<img src="../_images/SelfCollisionHashAxisKernel.svg" /><p>Particles can be quickly identified in the acceleration structure by looping though the sorted keys.
+Cells cannot be directly accessed as they are variable in size (depending on how many particles a cell contains) and stored in a continuous buffer.</p>
+<p>The range of keys that need to be tested against the current particles can be calculated using key offsets.
+Key offsets are relative key coordinates for the cells marked in yellow in the above diagram.</p>
+<p>The first and last keys in the starting cell is calculated using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">firstKey</span> <span class="o">=</span> <span class="n">currentParticleKey</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">numSweepCells</span><span class="p">,</span> <span class="n">currentParticleKey</span> <span class="o">&amp;</span> <span class="n">bucketMask</span><span class="p">)</span>
+<span class="n">lastKey</span> <span class="o">=</span>  <span class="nb">min</span><span class="p">(</span><span class="n">currentParticleKey</span> <span class="o">+</span> <span class="n">numSweepCells</span><span class="p">,</span> <span class="n">currentParticleKey</span> <span class="o">|</span> <span class="n">bucketMask</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="mac">
-<h2>Mac<a class="headerlink" href="#mac" title="Permalink to this headline">¶</a></h2>
-<p>Running <tt class="code docutils literal"><span class="pre">BuildProjectsOsx.sh</span></tt> will generate various xcode-based projects in the <tt class="code docutils literal"><span class="pre">compiler</span></tt> folder.
-Choose the one you need, e.g. <tt class="code docutils literal"><span class="pre">cd</span> <span class="pre">compiler/osx64-cmake</span></tt>, open the project in XCode and build inside the IDE.</p>
-<p>The library binaries will be put to the <tt class="code docutils literal"><span class="pre">bin</span></tt> folder next to the <tt class="code docutils literal"><span class="pre">compiler</span></tt> folder.</p>
-<p><strong>Note:</strong> In case if you run the Mac project generation scripts GenerateProjectsOsx.sh and see an error like this:</p>
-<div class="highlight-python"><pre>env: bash\r: No such file or directory</pre>
+<p>The key offsets can be added to these values to obtain the range for the other cells.
+Note that numSweepCells is not subtracted for firstKey to ensure no duplicate collisions are detected.
+Note that bit operations can be used as the different axes are contained in their own bytes within the key.</p>
+<p>Collision detection/response can begin once the first/last keys are known.</p>
+<p>Note that the first/last keys from the previous processed particle are reused for optimizations that can be done because the keys are sorted.</p>
 </div>
-<p>this command will help to fix the line endings:</p>
-<div class="highlight-python"><pre>sed $'s/\r$//' GenerateProjectsOsx.sh &gt; GenerateProjectsOsx.sh.fixed &amp;&amp; mv GenerateProjectsOsx.sh.fixed GenerateProjectsOsx.sh &amp;&amp; chmod +x GenerateProjectsOsx.sh</pre>
+<div class="section" id="collision-detection-and-response">
+<h3>Collision detection and response<a class="headerlink" href="#collision-detection-and-response" title="Permalink to this headline">¶</a></h3>
+<p>Near phase collision detection can start once two possibly colliding keys are identified.
+The pointers to the keys are converted to the particles and the rest particles.</p>
+<p>A basic distance check between the particles and the user specified collision distance is done, culling non-colliding particles.</p>
+<p>When available the distance is also checked against the rest distance to cull particles that are supposed to be close in the mesh.
+This makes it possible to set the collision distance larger than the shortest constraint in the fabric without providing manual collision indices.</p>
+<p>Next a position delta is calculated if the particle collision is not culled:</p>
+<div class="highlight-python"><pre>diff = p1-p0
+ratio = collisionDistance / |diff|
+scale = stiffness / (epsilon + w0 + w1)
+delta = scale * (diff - diff * ratio
+p0 += delta * w0
+p1 -= delta * w1</pre>
 </div>
+<p>TODO: format nicer</p>
 </div>
-<div class="section" id="android">
-<h2>Android<a class="headerlink" href="#android" title="Permalink to this headline">¶</a></h2>
-<p>Download and install CMake 3.7 from <a class="reference external" href="https://cmake.org/download/">https://cmake.org/download/</a>. Edit <tt class="code docutils literal"><span class="pre">scripts/locate_cmake.bat</span></tt> to point to the cmake executable.</p>
-<p>Download NDK from <a class="reference external" href="https://developer.android.com/ndk/downloads/index.html">https://developer.android.com/ndk/downloads/index.html</a> (tested versions are r15c, r13b, r12b). Set <tt class="code docutils literal"><span class="pre">ANDROID_NDK_ROOT</span></tt> environment variable to point to the root NDK folder.
-Run project generation script:</p>
-<div class="highlight-python"><pre>CmakeGenerateAndroid.bat release</pre>
-</div>
-<p>You need <tt class="code docutils literal"><span class="pre">cmake</span></tt> to be in your PATH.</p>
-<p>Go to <tt class="code docutils literal"><span class="pre">compiler\android-arm64-v8a-release-cmake</span></tt> folder and run:</p>
-<div class="highlight-python"><pre>cmake --build .  -- -j5</pre>
-</div>
-<p>The library binaries will be put to the <tt class="code docutils literal"><span class="pre">bin</span></tt> folder next to the <tt class="code docutils literal"><span class="pre">compiler</span></tt> folder.</p>
-<p><strong>Note:</strong> To be able to build the Android binaries using CMake you need to make sure a certain folders in your NDK point to needed binaries.
-Specifically, you need to create a symlink/copy/rename:</p>
-<div class="highlight-python"><pre>&lt;path_to_android_ndk&gt;/toolchains/aarch64-linux-android-4.9/prebuilt/windows</pre>
-</div>
-<p>to:</p>
-<div class="highlight-python"><pre>&lt;path_to_android_ndk&gt;/toolchains/aarch64-linux-android-4.9/prebuilt/windows-x86_64</pre>
-</div>
-<p>Newer NDK versions might not require doing that at all, but some versions do.</p>
 </div>
 </div>
 
