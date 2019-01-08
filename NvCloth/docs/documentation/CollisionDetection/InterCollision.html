@@ -31,7 +31,10 @@
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
     <script type="text/javascript" src="../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../_static/jquery.storageapi.js"></script>
-    <link rel="top" title="NvCloth 1.1.3 documentation" href="../index.html" /> 
+    <link rel="top" title="NvCloth 1.1.3 documentation" href="../index.html" />
+    <link rel="up" title="Internal collision detection documentation" href="Index.html" />
+    <link rel="next" title="Internal cooking documentation" href="../Cooking/Index.html" />
+    <link rel="prev" title="Self Collision" href="SelfCollision.html" /> 
   </head>
   <body>
 <nav class="navbar navbar-inverse navbar-default">
@@ -55,7 +58,8 @@
 <div class="masthead">
     <div class="row">
       <ul class="breadcrumb">
-        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li> 
+        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li>
+          <li><a href="Index.html" accesskey="U">Internal collision detection documentation</a></li> 
       </ul>
     </div>
 </div>
@@ -64,7 +68,7 @@
 <div class="bs-sidebar">
   <div id="sidebar_toc">
   <h4>Table Of Contents</h4>
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes/index.html">Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id1">1.1.5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ReleaseNotes/index.html#id2">1.1.4</a></li>
@@ -79,6 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#windows">Windows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#linux">Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#mac">Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#ios">iOS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Compiling/index.html#android">Android</a></li>
 </ul>
 </li>
@@ -118,9 +123,84 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../CopyRight/Index.html">NVIDIA Copyright Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Solver/Index.html">Internal solver function/algorithm documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#particle-invmass-w-component">Particle invMass w component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#log-stiffness">Log Stiffness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#integration">Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#wind-simulation">Wind simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#distance-constraints">Distance constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#tether-constraints">Tether constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#edge-constraints">Edge constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#separation-constraints">Separation constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Solver/Index.html#fabric-data-structure">Fabric data structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="Index.html">Internal collision detection documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="SphereCapsuleCollision.html">Sphere Capsule collision detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SphereCapsuleCollision.html#sphere-capsule-generation">Sphere/ Capsule generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="SphereCapsuleCollision.html#sphere-acceleration-structure">Sphere acceleration structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="SphereCapsuleCollision.html#collideparticles">collideParticles()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="SphereCapsuleCollision.html#capsule-collision-detection">Capsule collision detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="SphereCapsuleCollision.html#cone-collision-detection">Cone collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="SphereCapsuleCollision.html#sphere-collision-detection">Sphere collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="SphereCapsuleCollision.html#sphere-ccd">Sphere CCD</a></li>
+<li class="toctree-l5"><a class="reference internal" href="SphereCapsuleCollision.html#cone-ccd">Cone CCD</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="SphereCapsuleCollision.html#calculatefrictionimpulse">calculateFrictionImpulse()</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SelfCollision.html">Self Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SelfCollision.html#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="SelfCollision.html#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="SelfCollision.html#grid-setup">Grid setup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="SelfCollision.html#particle-sorting">Particle sorting</a></li>
+<li class="toctree-l5"><a class="reference internal" href="SelfCollision.html#key-range-sweep">Key range sweep</a></li>
+<li class="toctree-l5"><a class="reference internal" href="SelfCollision.html#collision-detection-and-response">Collision detection and response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Inter Collision</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#broad-phase-collision-detection">Broad phase collision detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acceleration-structure">Acceleration structure</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">Broad phase collision detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#differences-with-self-collision">Differences with self collision</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Index.html#todo">Todo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Cooking/Index.html">Internal cooking documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Cooking/Index.html#overview-of-the-different-modules">Overview of the different modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Cooking/TripletScheduler.html">TripletScheduler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#adjacencyquerier">AdjacencyQuerier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#id1">TripletScheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#tripletscheduler-simd">TripletScheduler::simd()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Cooking/TripletScheduler.html#tripletscheduler-warp">TripletScheduler::warp()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
   </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SelfCollision.html"
+                        title="previous chapter">Self Collision</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../Cooking/Index.html"
+                        title="next chapter">Internal cooking documentation</a></p>
 <div id="searchbox" style="display: none">
   <h4>Quick search</h4>
     <form class="search form-inline" action="../search.html" method="get">
@@ -201,7 +281,8 @@ Now the narrow phase only has to deal with the particles in those lists.</p>
 <div class="masthead">
     <div class="row">
       <ul class="breadcrumb">
-        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li> 
+        <li><a href="../index.html">NvCloth 1.1.3 documentation</a></li>
+          <li><a href="Index.html" >Internal collision detection documentation</a></li> 
       </ul>
     </div>
 </div>
