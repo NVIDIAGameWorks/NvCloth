@@ -47,7 +47,7 @@ FIND_PACKAGE(PxShared REQUIRED)
 #  such as - we don't want to be installing any built artifacts on this server, etc. So for now we hack it.
 
 # Add PxShared as a dependency so that we can use project references
-ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/linux "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
+ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/Linux "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
 
 # Include all of the projects
 INCLUDE(NvCloth.cmake)
