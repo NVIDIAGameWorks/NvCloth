@@ -1,5 +1,0 @@
-C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/vc14win32-cmake/CMakeFiles/NvCloth.dir
-C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/vc14win32-cmake/CMakeFiles/ALL_BUILD.dir
-C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/vc14win32-cmake/CMakeFiles/ZERO_CHECK.dir
-C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/vc14win32-cmake/pxshared_bin/CMakeFiles/PxFoundation.dir
-C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/vc14win32-cmake/pxshared_bin/CMakeFiles/ALL_BUILD.dir

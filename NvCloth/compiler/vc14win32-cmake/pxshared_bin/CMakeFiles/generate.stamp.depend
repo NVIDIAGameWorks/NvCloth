@@ -1,6 +1,0 @@
-# CMake generation dependency list for this directory.
-C:/Users/Julie/Documents/GitHub/NvCloth/PxShared/src/compiler/cmake/windows/CMakeLists.txt
-C:/Users/Julie/Documents/GitHub/NvCloth/PxShared/src/compiler/cmake/common/CMakeLists.txt
-C:/Users/Julie/Documents/GitHub/NvCloth/Externals/CMakeModules/SetOutputPaths.cmake
-C:/Users/Julie/Documents/GitHub/NvCloth/PxShared/src/compiler/cmake/windows/PxFoundation.cmake
-C:/Users/Julie/Documents/GitHub/NvCloth/PxShared/src/compiler/cmake/common/PxFoundation.cmake
