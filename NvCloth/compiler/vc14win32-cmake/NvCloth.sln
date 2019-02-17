@@ -1,0 +1,66 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{DFEDA2AE-3D68-34B3-8E51-521BBD922B53}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E} = {ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A} = {C8C50AC9-80A5-3AE1-A817-E399A286298A}
+		{BF288524-9806-392D-AB34-2CDD2B195231} = {BF288524-9806-392D-AB34-2CDD2B195231}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NvCloth", "NvCloth.vcxproj", "{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A} = {C8C50AC9-80A5-3AE1-A817-E399A286298A}
+		{BF288524-9806-392D-AB34-2CDD2B195231} = {BF288524-9806-392D-AB34-2CDD2B195231}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PxFoundation", "pxshared_bin\PxFoundation.vcxproj", "{C8C50AC9-80A5-3AE1-A817-E399A286298A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BF288524-9806-392D-AB34-2CDD2B195231} = {BF288524-9806-392D-AB34-2CDD2B195231}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{BF288524-9806-392D-AB34-2CDD2B195231}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug|Win32 = debug|Win32
+		checked|Win32 = checked|Win32
+		profile|Win32 = profile|Win32
+		release|Win32 = release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFEDA2AE-3D68-34B3-8E51-521BBD922B53}.debug|Win32.ActiveCfg = debug|Win32
+		{DFEDA2AE-3D68-34B3-8E51-521BBD922B53}.checked|Win32.ActiveCfg = checked|Win32
+		{DFEDA2AE-3D68-34B3-8E51-521BBD922B53}.profile|Win32.ActiveCfg = profile|Win32
+		{DFEDA2AE-3D68-34B3-8E51-521BBD922B53}.release|Win32.ActiveCfg = release|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.debug|Win32.ActiveCfg = debug|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.debug|Win32.Build.0 = debug|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.checked|Win32.ActiveCfg = checked|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.checked|Win32.Build.0 = checked|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.profile|Win32.ActiveCfg = profile|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.profile|Win32.Build.0 = profile|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.release|Win32.ActiveCfg = release|Win32
+		{ABE8FBB9-F557-3B45-8CE6-6843D9A4F72E}.release|Win32.Build.0 = release|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.debug|Win32.ActiveCfg = debug|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.debug|Win32.Build.0 = debug|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.checked|Win32.ActiveCfg = checked|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.checked|Win32.Build.0 = checked|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.profile|Win32.ActiveCfg = profile|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.profile|Win32.Build.0 = profile|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.release|Win32.ActiveCfg = release|Win32
+		{C8C50AC9-80A5-3AE1-A817-E399A286298A}.release|Win32.Build.0 = release|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.debug|Win32.ActiveCfg = debug|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.debug|Win32.Build.0 = debug|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.checked|Win32.ActiveCfg = checked|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.checked|Win32.Build.0 = checked|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.profile|Win32.ActiveCfg = profile|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.profile|Win32.Build.0 = profile|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.release|Win32.ActiveCfg = release|Win32
+		{BF288524-9806-392D-AB34-2CDD2B195231}.release|Win32.Build.0 = release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

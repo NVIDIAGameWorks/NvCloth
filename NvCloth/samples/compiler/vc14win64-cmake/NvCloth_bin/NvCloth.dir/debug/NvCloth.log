@@ -1,0 +1,4 @@
+﻿  CuSolver.cpp
+C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolver.cpp(492): error C2220: warning treated as error - no 'object' file generated
+C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolver.cpp(492): warning C4996: 'cuFuncSetBlockShape': was declared deprecated
+  C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\include\cuda.h(10932): note: see declaration of 'cuFuncSetBlockShape'

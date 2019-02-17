@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
+debug|x64|C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\vc14win64-cmake\|

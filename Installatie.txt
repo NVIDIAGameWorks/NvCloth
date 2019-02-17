@@ -1,0 +1,4 @@
+1. Clone de repo van https://github.com/jiddmeye/NvCloth/tree/master/NvCloth op Windows
+2. Open docs/documentation/index.html en volg de compiling instructies voor windows
+3. Indien NVIDIA CUDA installatie crasht: zorg dat  Visual Studio Integration niet aangevinkt is 
+4. Indien je in VS 'warning treated as error' tegenkomt, kun je dit uitzetten in de instellingen (zoek gwn de error even op op google)

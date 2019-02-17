@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="debug|Win32">
+      <Configuration>debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="checked|Win32">
+      <Configuration>checked</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="profile|Win32">
+      <Configuration>profile</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release|Win32">
+      <Configuration>release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{A1403FF2-5C3A-383D-A735-DB8DC0FB3890}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='checked|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='profile|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">Building Custom Rule C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">setlocal
+C:\packman-repo\chk\cmake-x64\3.7.0\bin\cmake.exe -HC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples -BC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake --check-stamp-file C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\SetOutputPaths.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\FindPxShared.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\NvCloth.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\cuda_compile_fatbin_1.dir\__\__\__\src\cuda\cuda_compile_fatbin_1_generated_CuSolverKernel.cu.fatbin.depend;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\run_nvcc.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\NvCloth.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">Building Custom Rule C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">setlocal
+C:\packman-repo\chk\cmake-x64\3.7.0\bin\cmake.exe -HC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples -BC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake --check-stamp-file C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\SetOutputPaths.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\FindPxShared.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\NvCloth.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\cuda_compile_fatbin_1.dir\__\__\__\src\cuda\cuda_compile_fatbin_1_generated_CuSolverKernel.cu.fatbin.depend;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\run_nvcc.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\NvCloth.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='checked|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">Building Custom Rule C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">setlocal
+C:\packman-repo\chk\cmake-x64\3.7.0\bin\cmake.exe -HC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples -BC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake --check-stamp-file C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\SetOutputPaths.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\FindPxShared.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\NvCloth.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\cuda_compile_fatbin_1.dir\__\__\__\src\cuda\cuda_compile_fatbin_1_generated_CuSolverKernel.cu.fatbin.depend;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\run_nvcc.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\NvCloth.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='profile|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='release|Win32'">Building Custom Rule C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release|Win32'">setlocal
+C:\packman-repo\chk\cmake-x64\3.7.0\bin\cmake.exe -HC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples -BC:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake --check-stamp-file C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/compiler/cmake/windows/CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\CMakeLists.txt;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\SetOutputPaths.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\Externals\CMakeModules\FindPxShared.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\NvCloth.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageHandleStandardArgs.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindPackageMessage.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\CMakeParseArguments.cmake;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\select_compute_arch.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\cuda_compile_fatbin_1.dir\__\__\__\src\cuda\cuda_compile_fatbin_1_generated_CuSolverKernel.cu.fatbin.depend;C:\packman-repo\chk\cmake-x64\3.7.0\share\cmake-3.7\Modules\FindCUDA\run_nvcc.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\common\NvCloth.cmake;C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release|Win32'">C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\samples\compiler\vc14win32-cmake\NvCloth_bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='release|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake/ZERO_CHECK.vcxproj">
+      <Project>E0E4B1F6-E3B5-3CC8-9DD0-9F404FDF9DAF</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake/NvCloth_bin/NvCloth.vcxproj">
+      <Project>730861A0-7D1F-349F-AE64-D33FC3E146FD</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win32-cmake/NvCloth_bin/pxshared_bin/PxFoundation.vcxproj">
+      <Project>54D18D47-5BDA-33A1-A863-813BDAF11EC5</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

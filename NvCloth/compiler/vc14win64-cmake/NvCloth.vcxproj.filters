@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuCloth.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuClothClone.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuClothData.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuContextLock.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuFabric.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuFactory.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolver.cpp">
+      <Filter>src\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxCloth.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxClothClone.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxClothData.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxContextLock.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxFabric.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxFactory.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxSolver.cpp">
+      <Filter>src\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\avx\SwSolveConstraints.cpp">
+      <Filter>src\avx</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\Allocator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\Callbacks.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\Factory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\PhaseConfig.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwCloth.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwClothData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwCollision.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwFabric.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwInterCollision.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwSelfCollision.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwSolver.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwSolverKernel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\TripletScheduler.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\src\ClothFabricCooker.cpp">
+      <Filter>extensions\src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\src\ClothGeodesicTetherCooker.cpp">
+      <Filter>extensions\src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\src\ClothMeshQuadifier.cpp">
+      <Filter>extensions\src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\src\ClothSimpleTetherCooker.cpp">
+      <Filter>extensions\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuCheckSuccess.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuCloth.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuClothData.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuCollision.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuContextLock.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuDevicePointer.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuDeviceVector.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuFabric.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuFactory.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuPhaseConfig.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuPinnedAllocator.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSelfCollision.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolver.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolverKernel.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolverKernelBlob.h">
+      <Filter>src\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxBatchedVector.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxCheckSuccess.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxCloth.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxClothData.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxContextLock.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxDeviceVector.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxFabric.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxFactory.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxSolver.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxSolverKernelBlob.h">
+      <Filter>src\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Allocator.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Callbacks.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Cloth.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\DxContextManagerCallback.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Fabric.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Factory.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\PhaseConfig.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Range.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\include\NvCloth\Solver.h">
+      <Filter>include\NvCloth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\BoundingBox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\ClothBase.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\ClothClone.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\ClothImpl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\IndexPair.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\IterationState.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\MovingAverage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\PointInterpolator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\Simd.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\StackAllocator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwCloth.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwClothData.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwCollision.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwCollisionHelpers.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwFabric.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwFactory.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwInterCollision.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwSelfCollision.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwSolver.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\SwSolverKernel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\TripletScheduler.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\Vec4T.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\NvSimd4f.h">
+      <Filter>src\NvSimd</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\NvSimd4i.h">
+      <Filter>src\NvSimd</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\NvSimdTypes.h">
+      <Filter>src\NvSimd</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\neon\NvNeonSimd4f.h">
+      <Filter>src\NvSimd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\neon\NvNeonSimd4i.h">
+      <Filter>src\NvSimd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\neon\NvNeonSimdTypes.h">
+      <Filter>src\NvSimd\neon</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\scalar\NvScalarSimd4f.h">
+      <Filter>src\NvSimd\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\scalar\NvScalarSimd4i.h">
+      <Filter>src\NvSimd\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\scalar\NvScalarSimdTypes.h">
+      <Filter>src\NvSimd\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\sse2\NvSse2Simd4f.h">
+      <Filter>src\NvSimd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\sse2\NvSse2Simd4i.h">
+      <Filter>src\NvSimd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\NvSimd\sse2\NvSse2SimdTypes.h">
+      <Filter>src\NvSimd\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\scalar\SwCollisionHelpers.h">
+      <Filter>src\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\sse2\SwCollisionHelpers.h">
+      <Filter>src\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\sse2\SwSolveConstraints.h">
+      <Filter>src\sse2</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\include\NvClothExt\ClothFabricCooker.h">
+      <Filter>extensions\include\NvClothExt</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\include\NvClothExt\ClothMeshDesc.h">
+      <Filter>extensions\include\NvClothExt</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\include\NvClothExt\ClothMeshQuadifier.h">
+      <Filter>extensions\include\NvClothExt</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\extensions\include\NvClothExt\ClothTetherCooker.h">
+      <Filter>extensions\include\NvClothExt</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\cuda\CuSolverKernel.cu">
+      <Filter>src\cuda</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\cmake\windows\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\compiler\vc14win64-cmake\CMakeFiles\6ee5e5f2e77399833fd7df404fa2b339\CuSolverKernelBlob.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <FXCompile Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxSolverKernel.hlsl">
+      <Filter>src\dx</Filter>
+    </FXCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Julie\Documents\GitHub\NvCloth\NvCloth\src\dx\DxSortKernel.inc">
+      <Filter>src\dx</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src\cuda">
+      <UniqueIdentifier>{0E9EBF50-B917-379C-B04B-F22AAE5965E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dx">
+      <UniqueIdentifier>{56965EDB-2E96-32C7-A857-BCA492F0B258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\avx">
+      <UniqueIdentifier>{44827829-A721-3610-8C8F-9707B49A6E32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\NvSimd">
+      <UniqueIdentifier>{BF60FB13-81F3-38CC-95C8-60477732C329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scalar">
+      <UniqueIdentifier>{5415B549-F90F-3158-B1D0-01E2225BF07C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sse2">
+      <UniqueIdentifier>{AFABB75C-706C-3638-BB9D-7CE64D7F33DC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\NvCloth">
+      <UniqueIdentifier>{5EAF5059-DFE3-3BB1-A209-3E5BA14BE179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extensions\include\NvClothExt">
+      <UniqueIdentifier>{B4354CA3-B6A7-3F9B-A588-9515F7697253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extensions\include">
+      <UniqueIdentifier>{0981DBF9-7CA6-3498-A2ED-2D11C10AE993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extensions\src">
+      <UniqueIdentifier>{1F9A9480-6BE1-375E-A0C3-D787AA2B7D61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\NvSimd\neon">
+      <UniqueIdentifier>{EC7E3524-5467-311B-9E67-05C540F3E570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\NvSimd\scalar">
+      <UniqueIdentifier>{41AD3B0F-44D7-34B5-93E4-81BBE288CD33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\NvSimd\sse2">
+      <UniqueIdentifier>{5A7A8D68-559C-3F42-A0DA-2EB3CD040222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{40DE6F1E-320A-3E29-B88B-9E3B109EBB1D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{B5CF9ED5-D9DE-3F71-AD55-FD1F6BFBFA02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{C9255BBE-8198-3294-9672-FE3E0D09CF7B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extensions">
+      <UniqueIdentifier>{47D23A9B-AAD3-3852-AAEF-19E8523584AD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

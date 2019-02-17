@@ -1,0 +1,7 @@
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/CMakeFiles/SampleBase.dir
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/CMakeFiles/ALL_BUILD.dir
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/NvCloth_bin/CMakeFiles/NvCloth.dir
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/NvCloth_bin/CMakeFiles/ALL_BUILD.dir
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/NvCloth_bin/pxshared_bin/CMakeFiles/PxFoundation.dir
+C:/Users/Julie/Documents/GitHub/NvCloth/NvCloth/samples/compiler/vc14win64-cmake/NvCloth_bin/pxshared_bin/CMakeFiles/ALL_BUILD.dir
