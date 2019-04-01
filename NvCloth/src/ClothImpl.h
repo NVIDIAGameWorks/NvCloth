@@ -109,12 +109,14 @@ class ClothImpl : public Cloth
 	virtual uint32_t getAccelerationFilterWidth() const;
 
 	virtual void setSpheres(Range<const physx::PxVec4>, uint32_t first, uint32_t last);
+	virtual void setSpheres(Range<const physx::PxVec4> startSpheres, Range<const physx::PxVec4> targetSpheres);
 	virtual uint32_t getNumSpheres() const;
 
 	virtual void setCapsules(Range<const uint32_t>, uint32_t first, uint32_t last);
 	virtual uint32_t getNumCapsules() const;
 
 	virtual void setPlanes(Range<const physx::PxVec4>, uint32_t first, uint32_t last);
+	virtual void setPlanes(Range<const physx::PxVec4> startPlanes, Range<const physx::PxVec4> targetPlanes);
 	virtual uint32_t getNumPlanes() const;
 
 	virtual void setConvexes(Range<const uint32_t>, uint32_t first, uint32_t last);
@@ -617,6 +619,38 @@ inline void ClothImpl<T>::setSpheres(Range<const physx::PxVec4> spheres, uint32_
 }
 
 template <typename T>
+inline void ClothImpl<T>::setSpheres(Range<const physx::PxVec4> startSpheres, Range<const physx::PxVec4> targetSpheres)
+{
+	NV_CLOTH_ASSERT(startSpheres.size() == targetSpheres.size());
+
+	//Clamp ranges to the first 32 spheres
+	startSpheres = Range<const physx::PxVec4>(startSpheres.begin(), std::min(startSpheres.end(), startSpheres.begin() + 32));
+	targetSpheres = Range<const physx::PxVec4>(targetSpheres.begin(), std::min(targetSpheres.end(), targetSpheres.begin() + 32));
+
+	uint32_t oldSize = uint32_t(getChildCloth()->mStartCollisionSpheres.size());
+	uint32_t newSize = uint32_t(startSpheres.size());
+
+	if(newSize > std::min(getChildCloth()->mStartCollisionSpheres.capacity(), getChildCloth()->mTargetCollisionSpheres.capacity()))
+	{
+		//context lock only if we are growing the array
+		ContextLockType contextLock(getChildCloth()->mFactory);
+		getChildCloth()->mStartCollisionSpheres.assign(startSpheres.begin(), startSpheres.end());
+		getChildCloth()->mTargetCollisionSpheres.assign(targetSpheres.begin(), targetSpheres.end());
+		getChildCloth()->notifyChanged();
+	}
+	else
+	{
+		getChildCloth()->mStartCollisionSpheres.assign(startSpheres.begin(), startSpheres.end());
+		getChildCloth()->mTargetCollisionSpheres.assign(targetSpheres.begin(), targetSpheres.end());
+
+		if(newSize - oldSize) //notify only if the size changed
+			getChildCloth()->notifyChanged();
+	}
+
+	wakeUp();
+}
+
+template <typename T>
 inline uint32_t ClothImpl<T>::getNumSpheres() const
 {
 	return uint32_t(getChildCloth()->mStartCollisionSpheres.size());
@@ -769,6 +803,38 @@ inline void ClothImpl<T>::setPlanes(Range<const physx::PxVec4> planes, uint32_t 
 		// fill target elements with planes
 		for (uint32_t i = 0; i < planes.size(); ++i)
 			target[first + i] = planes[i];
+	}
+
+	wakeUp();
+}
+
+template <typename T>
+inline void ClothImpl<T>::setPlanes(Range<const physx::PxVec4> startPlanes, Range<const physx::PxVec4> targetPlanes)
+{
+	NV_CLOTH_ASSERT(startPlanes.size() == targetPlanes.size());
+
+	//Clamp ranges to the first 32 planes
+	startPlanes = Range<const physx::PxVec4>(startPlanes.begin(), std::min(startPlanes.end(), startPlanes.begin() + 32));
+	targetPlanes = Range<const physx::PxVec4>(targetPlanes.begin(), std::min(targetPlanes.end(), targetPlanes.begin() + 32));
+
+	uint32_t oldSize = uint32_t(getChildCloth()->mStartCollisionPlanes.size());
+	uint32_t newSize = uint32_t(startPlanes.size());
+
+	if(newSize > std::min(getChildCloth()->mStartCollisionPlanes.capacity(), getChildCloth()->mTargetCollisionPlanes.capacity()))
+	{
+		//context lock only if we are growing the array
+		ContextLockType contextLock(getChildCloth()->mFactory);
+		getChildCloth()->mStartCollisionPlanes.assign(startPlanes.begin(), startPlanes.end());
+		getChildCloth()->mTargetCollisionPlanes.assign(targetPlanes.begin(), targetPlanes.end());
+		getChildCloth()->notifyChanged();
+	}
+	else
+	{
+		getChildCloth()->mStartCollisionPlanes.assign(startPlanes.begin(), startPlanes.end());
+		getChildCloth()->mTargetCollisionPlanes.assign(targetPlanes.begin(), targetPlanes.end());
+
+		if(newSize - oldSize) //notify only if the size changed
+			getChildCloth()->notifyChanged();
 	}
 
 	wakeUp();

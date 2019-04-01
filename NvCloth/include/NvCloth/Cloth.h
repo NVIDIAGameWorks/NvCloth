@@ -263,6 +263,7 @@ class Cloth : public UserAllocated
 		\endcode
 	  */
 	virtual void setSpheres(Range<const physx::PxVec4> spheres, uint32_t first, uint32_t last) = 0;
+	virtual void setSpheres(Range<const physx::PxVec4> startSpheres, Range<const physx::PxVec4> targetSpheres) = 0;
 	/// Returns the number of spheres currently set.
 	virtual uint32_t getNumSpheres() const = 0;
 
@@ -291,6 +292,7 @@ class Cloth : public UserAllocated
 		Use setConvexes to enable planes for collision detection.
 	  */
 	virtual void setPlanes(Range<const physx::PxVec4> planes, uint32_t first, uint32_t last) = 0;
+	virtual void setPlanes(Range<const physx::PxVec4> startPlanes, Range<const physx::PxVec4> targetPlanes) = 0;
 	/// Returns the number of planes currently set.
 	virtual uint32_t getNumPlanes() const = 0;
 
@@ -308,7 +310,7 @@ class Cloth : public UserAllocated
 		The values currently in range [first, last[ will be replaced with the content of triangles.
 		*/
 	virtual void setTriangles(Range<const physx::PxVec3> triangles, uint32_t first, uint32_t last) = 0;
-	virtual void setTriangles(Range<const physx::PxVec3> triangles, Range<const physx::PxVec3>, uint32_t first) = 0;
+	virtual void setTriangles(Range<const physx::PxVec3> startTriangles, Range<const physx::PxVec3> targetTriangles, uint32_t first) = 0;
 	/// Returns the number of triangles currently set.
 	virtual uint32_t getNumTriangles() const = 0;
 
