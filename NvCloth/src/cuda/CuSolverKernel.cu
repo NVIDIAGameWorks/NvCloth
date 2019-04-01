@@ -851,7 +851,7 @@ __device__ void applyImpulse(SharedParticleData::ParticleReferenceType pos, cons
 	float scale = -pos.mReferences[3];
 
 #if CONVERT_ADDRESSES
-	//Use this instead of atomicAdd function to work around compiler issue treating the pointer as global memory instead of shared memory
+	// Use this instead of atomicAdd function to work around compiler issue treating the pointer as global memory instead of shared memory
 	asm("red.shared.add.f32 [%0], %1;" ::POINTER_CONSTRAINT(pos.mReferences[0].mPtr), "f"(impulse.x * scale));
 	asm("red.shared.add.f32 [%0], %1;" ::POINTER_CONSTRAINT(pos.mReferences[1].mPtr), "f"(impulse.y * scale));
 	asm("red.shared.add.f32 [%0], %1;" ::POINTER_CONSTRAINT(pos.mReferences[2].mPtr), "f"(impulse.z * scale));
@@ -1393,6 +1393,7 @@ __launch_bounds__(512, 1)
 	int32_t configDataSize = gClothData.mNumPhases * gCuPhaseConfigSize;
 	for (int32_t i = threadIdx.x; i < configDataSize; i += blockDim.x)
 		gSharedUnsigned[i] = reinterpret_cast<const uint32_t*>(gClothData.mPhaseConfigs)[i];
+
 
 	Pointer<Shared, uint32_t> scratchPtr = Pointer<Shared, uint32_t>(
 	    gSharedUnsigned + configDataSize + 4 * gFrameData.mNumSharedPositions * gClothData.mNumParticles);

@@ -42,11 +42,6 @@ SET(NVCLOTH_LIBTYPE STATIC)
 INCLUDE(../common/NvCloth.cmake)
 
 
-# Add linked libraries
-# TARGET_LINK_LIBRARIES(NvCloth PUBLIC ${NVTOOLSEXT_LIBRARIES} LowLevel LowLevelAABB LowLevelCloth LowLevelDynamics LowLevelParticles PhysXCommon PhysXGpu PxFoundation PxPvdSDK PxTask SceneQuery SimulationController)
-
-TARGET_LINK_LIBRARIES(NvCloth PUBLIC PxFoundation)
-
 SET_TARGET_PROPERTIES(NvCloth PROPERTIES 
 	LINK_FLAGS_DEBUG ""
 	LINK_FLAGS_CHECKED ""

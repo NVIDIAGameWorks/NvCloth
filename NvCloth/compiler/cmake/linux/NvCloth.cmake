@@ -30,6 +30,8 @@ SET(NVCLOTH_PLATFORM_INCLUDES
 )
 
 SET(NVCLOTH_PLATFORM_SOURCE_FILES
+	${PROJECT_ROOT_DIR}/src/ps/unix/PsUnixAtomic.cpp
+	${PROJECT_ROOT_DIR}/src/ps/unix/PsUnixFPU.h
 	#${PROJECT_ROOT_DIR}/src/neon/NeonCollision.cpp
 	#${PROJECT_ROOT_DIR}/src/neon/NeonSelfCollision.cpp
 	#${PROJECT_ROOT_DIR}/src/neon/NeonSolverKernel.cpp
@@ -128,11 +130,6 @@ ENDIF()
 # include common NvCloth settings
 INCLUDE(../common/NvCloth.cmake)
 
-
-# Add linked libraries
-# TARGET_LINK_LIBRARIES(NvCloth PUBLIC ${NVTOOLSEXT_LIBRARIES} LowLevel LowLevelAABB LowLevelCloth LowLevelDynamics LowLevelParticles PhysXCommon PhysXGpu PxFoundation PxPvdSDK PxTask SceneQuery SimulationController)
-
-TARGET_LINK_LIBRARIES(NvCloth PUBLIC PxFoundation)
 TARGET_LINK_LIBRARIES(NvCloth PUBLIC ${CUDA_CUDA_LIBRARY})
 
 SET_TARGET_PROPERTIES(NvCloth PROPERTIES 

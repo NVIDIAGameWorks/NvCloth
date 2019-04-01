@@ -1,29 +1,29 @@
-// This code contains NVIDIA Confidential Information and is disclosed to you
-// under a form of NVIDIA software license agreement provided separately to you.
 //
-// Notice
-// NVIDIA Corporation and its licensors retain all intellectual property and
-// proprietary rights in and to this software and related documentation and
-// any modifications thereto. Any use, reproduction, disclosure, or
-// distribution of this software and related documentation without an express
-// license agreement from NVIDIA Corporation is strictly prohibited.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//  * Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//  * Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//  * Neither the name of NVIDIA CORPORATION nor the names of its
+//    contributors may be used to endorse or promote products derived
+//    from this software without specific prior written permission.
 //
-// ALL NVIDIA DESIGN SPECIFICATIONS, CODE ARE PROVIDED "AS IS.". NVIDIA MAKES
-// NO WARRANTIES, EXPRESSED, IMPLIED, STATUTORY, OR OTHERWISE WITH RESPECT TO
-// THE MATERIALS, AND EXPRESSLY DISCLAIMS ALL IMPLIED WARRANTIES OF NONINFRINGEMENT,
-// MERCHANTABILITY, AND FITNESS FOR A PARTICULAR PURPOSE.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// Information and code furnished is believed to be accurate and reliable.
-// However, NVIDIA Corporation assumes no responsibility for the consequences of use of such
-// information or for any infringement of patents or other rights of third parties that may
-// result from its use. No license is granted by implication or otherwise under any patent
-// or patent rights of NVIDIA Corporation. Details are subject to change without notice.
-// This code supersedes and replaces all information previously supplied.
-// NVIDIA Corporation products are not authorized for use as critical
-// components in life support devices or systems without express written approval of
-// NVIDIA Corporation.
-//
-// Copyright (c) 2008-2017 NVIDIA Corporation. All rights reserved.
+// Copyright (c) 2008-2019 NVIDIA Corporation. All rights reserved.
 // Copyright (c) 2004-2008 AGEIA Technologies, Inc. All rights reserved.
 // Copyright (c) 2001-2004 NovodeX AG. All rights reserved.
 
@@ -321,40 +321,40 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::setMaximal()
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::include(const PxVec3& v)
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	minimum = minimum.minimum(v);
 	maximum = maximum.maximum(v);
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::include(const PxBounds3& b)
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	minimum = minimum.minimum(b.minimum);
 	maximum = maximum.maximum(b.maximum);
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::isEmpty() const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	return minimum.x > maximum.x;
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::intersects(const PxBounds3& b) const
 {
-	PX_ASSERT(isValid() && b.isValid());
+	PX_SHARED_ASSERT(isValid() && b.isValid());
 	return !(b.minimum.x > maximum.x || minimum.x > b.maximum.x || b.minimum.y > maximum.y || minimum.y > b.maximum.y ||
 	         b.minimum.z > maximum.z || minimum.z > b.maximum.z);
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::intersects1D(const PxBounds3& a, uint32_t axis) const
 {
-	PX_ASSERT(isValid() && a.isValid());
+	PX_SHARED_ASSERT(isValid() && a.isValid());
 	return maximum[axis] >= a.minimum[axis] && a.maximum[axis] >= minimum[axis];
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::contains(const PxVec3& v) const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 
 	return !(v.x < minimum.x || v.x > maximum.x || v.y < minimum.y || v.y > maximum.y || v.z < minimum.z ||
 	         v.z > maximum.z);
@@ -362,7 +362,7 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::contains(const PxVec3& v) const
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::isInside(const PxBounds3& box) const
 {
-	PX_ASSERT(isValid() && box.isValid());
+	PX_SHARED_ASSERT(isValid() && box.isValid());
 	if(box.minimum.x > minimum.x)
 		return false;
 	if(box.minimum.y > minimum.y)
@@ -380,57 +380,57 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE bool PxBounds3::isInside(const PxBounds3& box) 
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 PxBounds3::getCenter() const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	return (minimum + maximum) * 0.5f;
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE float PxBounds3::getCenter(uint32_t axis) const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	return (minimum[axis] + maximum[axis]) * 0.5f;
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE float PxBounds3::getExtents(uint32_t axis) const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	return (maximum[axis] - minimum[axis]) * 0.5f;
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 PxBounds3::getDimensions() const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	return maximum - minimum;
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 PxBounds3::getExtents() const
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	return getDimensions() * 0.5f;
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::scaleSafe(float scale)
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	if(!isEmpty())
 		scaleFast(scale);
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::scaleFast(float scale)
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	*this = centerExtents(getCenter(), getExtents() * scale);
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::fattenSafe(float distance)
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	if(!isEmpty())
 		fattenFast(distance);
 }
 
 PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::fattenFast(float distance)
 {
-	PX_ASSERT(isValid());
+	PX_SHARED_ASSERT(isValid());
 	minimum.x -= distance;
 	minimum.y -= distance;
 	minimum.z -= distance;
@@ -442,25 +442,25 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE void PxBounds3::fattenFast(float distance)
 
 PX_CUDA_CALLABLE PX_INLINE PxBounds3 PxBounds3::transformSafe(const PxMat33& matrix, const PxBounds3& bounds)
 {
-	PX_ASSERT(bounds.isValid());
+	PX_SHARED_ASSERT(bounds.isValid());
 	return !bounds.isEmpty() ? transformFast(matrix, bounds) : bounds;
 }
 
 PX_CUDA_CALLABLE PX_INLINE PxBounds3 PxBounds3::transformFast(const PxMat33& matrix, const PxBounds3& bounds)
 {
-	PX_ASSERT(bounds.isValid());
+	PX_SHARED_ASSERT(bounds.isValid());
 	return PxBounds3::basisExtent(matrix * bounds.getCenter(), matrix, bounds.getExtents());
 }
 
 PX_CUDA_CALLABLE PX_INLINE PxBounds3 PxBounds3::transformSafe(const PxTransform& transform, const PxBounds3& bounds)
 {
-	PX_ASSERT(bounds.isValid());
+	PX_SHARED_ASSERT(bounds.isValid());
 	return !bounds.isEmpty() ? transformFast(transform, bounds) : bounds;
 }
 
 PX_CUDA_CALLABLE PX_INLINE PxBounds3 PxBounds3::transformFast(const PxTransform& transform, const PxBounds3& bounds)
 {
-	PX_ASSERT(bounds.isValid());
+	PX_SHARED_ASSERT(bounds.isValid());
 	return PxBounds3::basisExtent(transform.transform(bounds.getCenter()), PxMat33(transform.q), bounds.getExtents());
 }
 

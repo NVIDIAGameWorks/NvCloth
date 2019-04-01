@@ -28,7 +28,7 @@
 // Copyright (c) 2001-2004 NovodeX AG. All rights reserved.
 
 #include "NvCloth/PhaseConfig.h"
-#include "PsMathUtils.h"
+#include "NvCloth/ps/PsMathUtils.h"
 #include <algorithm>
 #include "ClothImpl.h"
 

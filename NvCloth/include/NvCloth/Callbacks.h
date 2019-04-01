@@ -36,7 +36,7 @@
 #pragma once
 #include <foundation/PxPreprocessor.h>
 #include <foundation/PxProfiler.h>
-#include <foundation/PxAssert.h>
+#include <foundation/PxAllocatorCallback.h>
 #ifndef NV_CLOTH_IMPORT
 #define NV_CLOTH_IMPORT PX_DLL_IMPORT
 #endif
@@ -79,6 +79,25 @@ NV_CLOTH_API(void)
 //Allocator
 NV_CLOTH_API(physx::PxAllocatorCallback*) GetNvClothAllocator(); //Only use internally
 
+#if !PX_DOXYGEN
+namespace physx
+{
+#endif
+
+/* Base class to handle assert failures */
+class PxAssertHandler
+{
+public:
+	virtual ~PxAssertHandler()
+	{
+	}
+	virtual void operator()(const char* exp, const char* file, int line, bool& ignore) = 0;
+};
+
+#if !PX_DOXYGEN
+} // namespace physx
+#endif
+
 namespace nv
 {
 namespace cloth
@@ -107,7 +126,7 @@ NV_CLOTH_API(physx::PxAssertHandler*) GetNvClothAssertHandler(); //This function
 #else
 #if PX_VC
 #define PX_CODE_ANALYSIS_ASSUME(exp)                                                                                   \
-	__analysis_assume(!!(exp)) // This macro will be used to get rid of analysis warning messages if a PX_ASSERT is used
+	__analysis_assume(!!(exp)) // This macro will be used to get rid of analysis warning messages if a NV_CLOTH_ASSERT is used
 																 // to "guard" illegal mem access, for example.
 #else
 #define PX_CODE_ANALYSIS_ASSUME(exp)
@@ -121,7 +140,7 @@ NV_CLOTH_API(physx::PxAssertHandler*) GetNvClothAssertHandler(); //This function
 #define NV_CLOTH_ASSERT_WITH_MESSAGE(message, exp)                                                                             \
 	{                                                                                                                    \
 		static bool _ignore = false;                                                                                     \
-		((void)((!!(exp)) || (!_ignore && (physx::PxGetAssertHandler()(message, __FILE__, __LINE__, _ignore), false)))); \
+		((void)((!!(exp)) || (!_ignore && ((*nv::cloth::GetNvClothAssertHandler())(message, __FILE__, __LINE__, _ignore), false)))); \
 		PX_CODE_ANALYSIS_ASSUME(exp);                                                                                    \
 	}
 #endif

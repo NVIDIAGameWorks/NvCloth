@@ -29,7 +29,7 @@
 
 #include "TripletScheduler.h"
 #include <algorithm>
-#include <PsUtilities.h>
+#include "../../src/ps/PsUtilities.h"
 
 using namespace physx;
 using namespace nv;

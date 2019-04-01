@@ -11,6 +11,7 @@
 #include "Renderable.h"
 #include "Renderer.h"
 #include "RenderUtils.h"
+#include <NvCloth/Callbacks.h>
 
 const DirectX::XMFLOAT4 DEFAULT_COLOR(0.5f, 0.5f, 0.5f, 1.0f);
 
@@ -42,7 +43,7 @@ void Renderable::render(Renderer& renderer, bool depthStencilOnly) const
 		auto& material = m_materialInstances[submeshId%getMaterialCount()];
 		if(!material->isValid())
 		{
-			PX_ALWAYS_ASSERT();
+			NV_CLOTH_ASSERT(false);
 			return;
 		}
 

@@ -36,7 +36,7 @@
 #include "SwCollisionHelpers.h"
 #include <foundation/PxProfiler.h>
 #include <cstring> // for memset
-#include <PsSort.h>
+#include "ps/PsSort.h"
 
 using namespace nv;
 using namespace physx;

@@ -31,7 +31,7 @@
 
 #include "NvCloth/Allocator.h"
 #include "NvCloth/Range.h"
-#include "PsArray.h"
+#include "NvCloth/ps/PsArray.h"
 
 namespace nv
 {

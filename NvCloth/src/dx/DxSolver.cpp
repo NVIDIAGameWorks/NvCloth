@@ -34,7 +34,7 @@
 #include "DxFactory.h"
 #include "DxContextLock.h"
 #include "../IterationState.h"
-#include <PsSort.h>
+#include "../ps/PsSort.h"
 #include <foundation/PxProfiler.h>
 
 #if NV_CLOTH_ENABLE_DX11

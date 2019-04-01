@@ -4,22 +4,19 @@ set EXIT_CODE=0
 
 REM Make sure the various variables that we need are set
 CD /D %~dp0
-echo "Note: You need to run this with admin rights for the first time to set GW_DEPS_ROOT globally."
-call "./scripts/locate_gw_root.bat" GW_DEPS_ROOT_F
-REM single " is not a mistake
-setx GW_DEPS_ROOT "%GW_DEPS_ROOT_F%
-REM this one is for local use
-set GW_DEPS_ROOT=%GW_DEPS_ROOT_F%
-echo GW_DEPS_ROOT = %GW_DEPS_ROOT%
 
 REM Make sure the various variables that we need are set
 
 call "./scripts/locate_cuda.bat" CUDA_PATH_
 echo CUDA_PATH_ = %CUDA_PATH_%
 
-IF EXIST %~dp0..\Externals\CMakeModules (
-	set GW_DEPS_ROOT=%~dp0..\
-)
+set GW_DEPS_ROOT=%~dp0..\
+echo "Note: You need to run this with admin rights for the first time to set GW_DEPS_ROOT globally."
+REM single " is not a mistake
+setx GW_DEPS_ROOT "%GW_DEPS_ROOT%
+REM this one is for local use
+set GW_DEPS_ROOT=%GW_DEPS_ROOT%
+echo GW_DEPS_ROOT = %GW_DEPS_ROOT%
 
 IF NOT DEFINED GW_DEPS_ROOT goto GW_DEPS_ROOT_UNDEFINED
 
@@ -68,12 +65,6 @@ rmdir /s /q compiler\vc12win64-cmake\
 mkdir compiler\vc12win64-cmake\
 pushd compiler\vc12win64-cmake\
 %CMAKE% ..\cmake\windows -G "Visual Studio 12 2013" -Ax64 %CMAKE_COMMON_PARAMS% -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\bin\vc12win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\lib\vc12win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\bin\vc12win64-cmake
-popd
-
-rmdir /s /q compiler\vc14win32-cmake\
-mkdir compiler\vc14win32-cmake\
-pushd compiler\vc14win32-cmake\
-%CMAKE% ..\cmake\windows -G "Visual Studio 14 2015" -AWin32 %CMAKE_COMMON_PARAMS% -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\bin\vc14win32-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\lib\vc14win32-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\bin\vc14win32-cmake
 popd
 
 rmdir /s /q compiler\vc14win64-cmake\

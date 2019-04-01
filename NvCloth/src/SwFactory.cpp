@@ -55,12 +55,12 @@ cloth::SwFactory::~SwFactory()
 }
 
 cloth::Fabric* cloth::SwFactory::createFabric(uint32_t numParticles, Range<const uint32_t> phaseIndices,
-                                              Range<const uint32_t> sets, Range<const float> restvalues, Range<const float> stiffnessValues,
-                                              Range<const uint32_t> indices, Range<const uint32_t> anchors,
+											  Range<const uint32_t> sets, Range<const float> restvalues, Range<const float> stiffnessValues,
+											  Range<const uint32_t> indices, Range<const uint32_t> anchors,
                                               Range<const float> tetherLengths, Range<const uint32_t> triangles)
 {
 	return NV_CLOTH_NEW(SwFabric)(*this, numParticles, phaseIndices, sets, restvalues, stiffnessValues, indices, anchors, tetherLengths, triangles,
-	                    getNextFabricId());
+								  getNextFabricId());
 }
 
 cloth::Cloth* cloth::SwFactory::createCloth(Range<const PxVec4> particles, Fabric& fabric)

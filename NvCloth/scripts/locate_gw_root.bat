@@ -11,7 +11,7 @@ rem set FOLDER_NEEDLE=NvCloth\src
 
 call "%~dp0/locate.bat" FOLDER %FOLDER_NEEDLE%
 :manualfolder
-set returnVal=%FOLDER%\..\..\
+set returnVal=%FOLDER%\..\..\..\..\..\..\..\
 
 ( endlocal
     set "%~1=%returnVal%"

@@ -36,8 +36,8 @@
 #include "SwClothData.h"
 #include "SwSolverKernel.h"
 #include "SwInterCollision.h"
-#include <PsFPU.h>
-#include <PsSort.h>
+#include "ps/PsFPU.h"
+#include "ps/PsSort.h"
 
 using namespace physx;
 

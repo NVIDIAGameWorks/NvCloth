@@ -83,7 +83,7 @@ void PlaneCollisionScene::initializeCloth(int index, physx::PxVec3 offset)
 
 	//assign as collision data
 	nv::cloth::Range<const physx::PxVec4> planesR(&planes[0], &planes[0] + planes.size());
-	mClothActor[index]->mCloth->setPlanes(planesR, 0, mClothActor[index]->mCloth->getNumPlanes());
+	mClothActor[index]->mCloth->setPlanes(planesR, planesR);
 
 	//assign convex indices
 	std::vector<uint32_t> indices;

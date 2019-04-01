@@ -10,7 +10,7 @@
 
 #include "ClothMeshGenerator.h"
 
-#include "PsMathUtils.h"
+#include <NvCloth/ps/PsMathUtils.h>
 
 #include <fstream>
 #include <iterator>

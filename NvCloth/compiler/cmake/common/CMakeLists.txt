@@ -8,17 +8,9 @@ CMAKE_POLICY(SET CMP0057 NEW) # Enable IN_LIST
 
 SET(GW_DEPS_ROOT $ENV{GW_DEPS_ROOT})
 
-SET(CMAKE_MODULE_PATH $ENV{GW_DEPS_ROOT}/sw/physx/tools/CMakeModules)
-
-IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-	SET(CMAKE_MODULE_PATH $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-ENDIF()
+SET(CMAKE_MODULE_PATH $ENV{GW_DEPS_ROOT}/NvCloth/Externals/CMakeModules)
 
 MESSAGE( "[NvCloth]cmake/common CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
-
-IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-	SET(CMAKE_MODULE_PATH $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-ENDIF()
 
 # Add find modules to the path
 IF(NOT EXISTS ${CMAKE_MODULE_PATH})

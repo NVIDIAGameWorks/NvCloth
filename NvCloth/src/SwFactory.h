@@ -56,7 +56,7 @@ class SwFactory : public Factory
 	virtual Platform getPlatform() const { return Platform::CPU; }
 
 	virtual Fabric* createFabric(uint32_t numParticles, Range<const uint32_t> phaseIndices, Range<const uint32_t> sets,
-	                             Range<const float> restvalues, Range<const float> stiffnessValues, Range<const uint32_t> indices,
+								 Range<const float> restvalues, Range<const float> stiffnessValues, Range<const uint32_t> indices,
 	                             Range<const uint32_t> anchors, Range<const float> tetherLengths,
 	                             Range<const uint32_t> triangles);
 

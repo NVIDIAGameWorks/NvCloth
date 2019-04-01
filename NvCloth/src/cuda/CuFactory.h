@@ -30,7 +30,7 @@
 #pragma once
 
 #include "NvCloth/Factory.h"
-#include <PsArray.h>
+#include "NvCloth/ps/PsArray.h"
 #include <foundation/PxVec4.h>
 #include <foundation/PxVec3.h>
 #include <cuda.h>

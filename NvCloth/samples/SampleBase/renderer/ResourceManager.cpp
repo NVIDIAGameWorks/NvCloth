@@ -9,7 +9,7 @@
 */
 
 #include "ResourceManager.h"
-#include "PxAssert.h"
+#include <NvCloth/Callbacks.h>
 #include "Utils.h"
 
 #include <windows.h>
@@ -58,7 +58,7 @@ const Resource* ResourceManager::requestResource(ResourceType type, const char* 
 		}
 		else
 		{
-			PX_ALWAYS_ASSERT_MESSAGE(name);
+			NV_CLOTH_ASSERT_WITH_MESSAGE(false,name);
 		}
 	}
 	else if (type == eTEXTURE)
@@ -85,7 +85,7 @@ const Resource* ResourceManager::requestResource(ResourceType type, const char* 
 			}
 			else
 			{
-				PX_ALWAYS_ASSERT_MESSAGE("Unsupported texture extension");
+				NV_CLOTH_ASSERT_WITH_MESSAGE(false,"Unsupported texture extension");
 			}
 			resource = textureResource;
 		}
@@ -98,7 +98,7 @@ const Resource* ResourceManager::requestResource(ResourceType type, const char* 
 	}
 	else
 	{
-		PX_ALWAYS_ASSERT_MESSAGE(name);
+		NV_CLOTH_ASSERT_WITH_MESSAGE(false,name);
 		return nullptr;
 	}
 }

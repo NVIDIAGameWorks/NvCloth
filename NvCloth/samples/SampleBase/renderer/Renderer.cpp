@@ -14,6 +14,8 @@
 #include "SampleProfiler.h"
 
 #include "PxRenderBuffer.h"
+
+#include <NvCloth/Callbacks.h>
 using namespace physx;
 
 #include <set>
@@ -692,7 +694,7 @@ IRenderMesh* Renderer::getPrimitiveRenderMesh(PrimitiveRenderMeshType::Enum type
 			m_primitiveRenderMeshes[type] = new SphereRenderMesh();
 			break;
 		default:
-			PX_ALWAYS_ASSERT_MESSAGE("Unsupported PxGeometryType");
+			NV_CLOTH_ASSERT_WITH_MESSAGE(false,"Unsupported PxGeometryType");
 			return NULL;
 		}
 	}

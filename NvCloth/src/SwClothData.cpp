@@ -31,7 +31,7 @@
 #include "SwCloth.h"
 #include "SwFabric.h"
 #include <foundation/Px.h>
-#include <PsUtilities.h>
+#include "ps/PsUtilities.h"
 
 using namespace physx;
 using namespace nv;

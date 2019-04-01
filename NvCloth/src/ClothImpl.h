@@ -35,7 +35,7 @@
 #include <foundation/PxVec3.h>
 #include "IndexPair.h"
 #include "MovingAverage.h"
-#include <PsMathUtils.h>
+#include "NvCloth/ps/PsMathUtils.h"
 #include <cmath>
 
 namespace nv

@@ -16,8 +16,6 @@
 #include <d3d11.h>
 //#endif
 
-#include <PsThread.h>
-
 NvClothEnvironment* NvClothEnvironment::sEnv = nullptr;
 
 
@@ -52,9 +50,6 @@ DxContextManagerCallbackImpl::DxContextManagerCallbackImpl(ID3D11Device* device,
 {
 	mDevice->AddRef();
 	mDevice->GetImmediateContext(&mContext);
-#ifdef _DEBUG
-	mLockCountTls = physx::shdfnd::TlsAlloc();
-#endif
 }
 DxContextManagerCallbackImpl::~DxContextManagerCallbackImpl()
 {
@@ -72,24 +67,15 @@ DxContextManagerCallbackImpl::~DxContextManagerCallbackImpl()
 
 	mDevice->Release();
 
-#if _DEBUG
-	physx::shdfnd::TlsFree(mLockCountTls);
-#endif
 }
 
 void DxContextManagerCallbackImpl::acquireContext()
 {
 
 	mMutex.lock();
-#if _DEBUG
-	physx::shdfnd::TlsSet(mLockCountTls, reinterpret_cast<void*>(reinterpret_cast<intptr_t>(physx::shdfnd::TlsGet(mLockCountTls)) + 1));
-#endif
 }
 void DxContextManagerCallbackImpl::releaseContext()
 {
-#if _DEBUG
-	physx::shdfnd::TlsSet(mLockCountTls, reinterpret_cast<void*>(reinterpret_cast<intptr_t>(physx::shdfnd::TlsGet(mLockCountTls)) - 1));
-#endif
 	mMutex.unlock();
 }
 ID3D11Device* DxContextManagerCallbackImpl::getDevice() const
@@ -98,9 +84,6 @@ ID3D11Device* DxContextManagerCallbackImpl::getDevice() const
 }
 ID3D11DeviceContext* DxContextManagerCallbackImpl::getContext() const
 {
-#if _DEBUG
-	assert(reinterpret_cast<intptr_t>(physx::shdfnd::TlsGet(mLockCountTls)) > 0);
-#endif
 	return mContext;
 }
 bool DxContextManagerCallbackImpl::synchronizeResources() const

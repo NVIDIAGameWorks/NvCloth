@@ -12,6 +12,7 @@
 #include <DirectXMath.h>
 #include "ShaderUtils.h"
 #include "Renderer.h"
+#include <NvCloth/Callbacks.h>
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +117,7 @@ void RenderMaterial::setBlending(BlendMode blendMode)
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 		break;
 	default:
-		PX_ALWAYS_ASSERT_MESSAGE("Unknown blend mode");
+		NV_CLOTH_ASSERT_WITH_MESSAGE(false,"Unknown blend mode");
 	}
 
 	ID3D11Device* device = GetDeviceManager()->GetDevice();
@@ -187,7 +188,7 @@ RenderMaterial::InstancePtr RenderMaterial::getMaterialInstance(const D3D11_INPU
 			return materialInstance;
 		}
 	}
-	PX_ALWAYS_ASSERT();
+	NV_CLOTH_ASSERT(false);
 	return NULL;
 }
 

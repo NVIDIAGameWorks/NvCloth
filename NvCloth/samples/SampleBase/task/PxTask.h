@@ -32,7 +32,6 @@
 #include "task/PxTaskManager.h"
 #include "task/PxCpuDispatcher.h"
 #include "task/PxGpuDispatcher.h"
-#include "foundation/PxAssert.h"
 
 namespace physx
 {
@@ -117,7 +116,7 @@ public:
     //! \brief Release method implementation
     virtual void release()
 	{
-		PX_ASSERT(mTm);
+		NV_CLOTH_ASSERT(mTm);
 
         // clear mTm before calling taskCompleted() for safety
 		PxTaskManager* save = mTm;
@@ -129,7 +128,7 @@ public:
     //         task is allowed to start.
     PX_INLINE void finishBefore( PxTaskID taskID )
 	{
-		PX_ASSERT(mTm);
+		NV_CLOTH_ASSERT(mTm);
 		mTm->finishBefore( *this, taskID);
 	}
 
@@ -137,7 +136,7 @@ public:
     //         task has completed.
     PX_INLINE void startAfter( PxTaskID taskID )
 	{
-		PX_ASSERT(mTm);
+		NV_CLOTH_ASSERT(mTm);
 		mTm->startAfter( *this, taskID );
 	}
 
@@ -147,7 +146,7 @@ public:
      */
     PX_INLINE void addReference()
 	{
-		PX_ASSERT(mTm);
+		NV_CLOTH_ASSERT(mTm);
 		mTm->addReference( mTaskID );
 	}
 
@@ -157,7 +156,7 @@ public:
      */
     PX_INLINE void removeReference()
 	{
-		PX_ASSERT(mTm);
+		NV_CLOTH_ASSERT(mTm);
 		mTm->decrReference( mTaskID );
 	}
 
@@ -244,7 +243,7 @@ public:
 	 */
 	PX_INLINE void setContinuation(PxTaskManager& tm, PxBaseTask* c)
 	{
-		PX_ASSERT( mRefCount == 0 );
+		NV_CLOTH_ASSERT( mRefCount == 0 );
 		mRefCount = 1;
 		mCont = c;
 		mTm = &tm;
@@ -263,15 +262,15 @@ public:
 	 */
 	PX_INLINE void setContinuation( PxBaseTask* c )
 	{
-		PX_ASSERT( c );
-		PX_ASSERT( mRefCount == 0 );
+		NV_CLOTH_ASSERT( c );
+		NV_CLOTH_ASSERT( mRefCount == 0 );
 		mRefCount = 1;
 		mCont = c;
 		if( mCont )
 		{
 			mCont->addReference();
 			mTm = mCont->getTaskManager();
-			PX_ASSERT( mTm );
+			NV_CLOTH_ASSERT( mTm );
 		}
 	}
 

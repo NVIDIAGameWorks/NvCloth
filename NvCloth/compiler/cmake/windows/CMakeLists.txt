@@ -69,12 +69,6 @@ SET(CMAKE_RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}_${LIBPATH_SUFFIX}")
 SET(PX_SELECT_COMPONENTS PxFoundation)
 FIND_PACKAGE(PxShared REQUIRED)
 
-# Include the PxShared-exports.cmake file that PxShared created. There's other ways to do this, but there's a bunch of issues with it in a CI environment
-#  such as - we don't want to be installing any built artifacts on this server, etc. So for now we hack it.
-
-# Add PxShared as a dependency so that we can use project references
-ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/windows "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
-
 # Include all of the projects
 INCLUDE(NvCloth.cmake)
 IF(DEFINED PX_GENERATE_GPU_PROJECTS)

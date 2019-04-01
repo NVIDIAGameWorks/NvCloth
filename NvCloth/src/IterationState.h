@@ -34,9 +34,9 @@
 #include <foundation/PxVec3.h>
 #include <foundation/PxMat44.h>
 #include <foundation/PxMat33.h>
-#include <PsMathUtils.h>
 #include "Vec4T.h"
 #include <algorithm>
+#include "NvCloth/ps/PsMathUtils.h"
 
 namespace nv
 {

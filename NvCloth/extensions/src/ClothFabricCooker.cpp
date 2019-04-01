@@ -30,9 +30,8 @@
 #include "foundation/PxVec4.h"
 #include "foundation/PxIO.h"
 #include "foundation/PxStrideIterator.h"
-#include "PsSort.h"
-#include "PsMathUtils.h"
-
+#include "ps/PsSort.h"
+#include "NvCloth/ps/PsMathUtils.h"
 #include "NvClothExt/ClothFabricCooker.h"
 #include "NvClothExt/ClothTetherCooker.h"
 #include "NvCloth/Fabric.h"

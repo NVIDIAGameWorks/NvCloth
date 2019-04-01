@@ -11,10 +11,11 @@
 
 #include "SkinnedRenderMesh.h"
 #include "Renderer.h"
+#include <NvCloth/Callbacks.h>
 
 SkinnedRenderMesh::SkinnedRenderMesh(const std::vector<const SimpleMesh*>& meshes)
 {
-	PX_ASSERT_WITH_MESSAGE(meshes.size() <= MeshesCountMax, "meshes.size() have to be <= SkinnedRenderMesh::MeshesCountMax");
+	NV_CLOTH_ASSERT_WITH_MESSAGE(meshes.size() <= MeshesCountMax, "meshes.size() have to be <= SkinnedRenderMesh::MeshesCountMax");
 
 	m_device = GetDeviceManager()->GetDevice();
 
@@ -179,7 +180,7 @@ void SkinnedRenderMesh::updateVisibleMeshes(const std::vector<uint32_t>& visible
 		}
 		context->Unmap(m_indexBuffer, 0);
 		m_indexCount = indexCount;
-		PX_ASSERT(m_indexCount % 3 == 0);
+		NV_CLOTH_ASSERT(m_indexCount % 3 == 0);
 	}
 }
 

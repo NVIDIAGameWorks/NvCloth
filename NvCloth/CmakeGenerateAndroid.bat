@@ -2,17 +2,12 @@
 set EXIT_CODE=0
 
 REM Make sure the various variables that we need are set
-CD /D %~dp0
-REM echo "Note: You need to run this with admin rights for the first time to set GW_DEPS_ROOT globally."
-call "./scripts/locate_gw_root.bat" GW_DEPS_ROOT_F
-@echo on
-set GW_DEPS_ROOT=%GW_DEPS_ROOT_F%
+echo "Note: You need to run this with admin rights for the first time to set GW_DEPS_ROOT globally."
+REM single " is not a mistake
+setx GW_DEPS_ROOT "%GW_DEPS_ROOT%
+REM this one is for local use
+set GW_DEPS_ROOT=%GW_DEPS_ROOT%
 echo GW_DEPS_ROOT = %GW_DEPS_ROOT%
-
-@echo off
-IF EXIST %~dp0..\Externals\CMakeModules (
-	set GW_DEPS_ROOT=%~dp0..\
-)
 
 IF NOT DEFINED GW_DEPS_ROOT GOTO GW_DEPS_ROOT_UNDEFINED
 
@@ -86,7 +81,7 @@ REM Toolchain dependent cmd line params
 REM set CMAKE_TOOLCHAIN_PARAMS=-DCMAKE_TOOLCHAIN_FILE=C:\Users\lpanov\projects\nvidia\NvCloth\Externals\CMakeModules\Android\android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=android-%ANDROID_API% -DANDROID_ABI=%ANDROID_ABI% -DANDROID_STL="gnustl_static" -DTARGET_BUILD_PLATFORM=android
 set CMAKE_TOOLCHAIN_PARAMS=-DCMAKE_SYSTEM_NAME=Android -DCMAKE_ANDROID_API_MIN=%ANDROID_API% -DCMAKE_ANDROID_API=%ANDROID_API%
 
-cmake ..\cmake\android %CMAKE_COMPILER_PARAMS%  %CMAKE_TOOLCHAIN_PARAMS%  %CMAKE_COMMON_PARAMS%
+%CMAKE% ..\cmake\android %CMAKE_COMPILER_PARAMS%  %CMAKE_TOOLCHAIN_PARAMS%  %CMAKE_COMMON_PARAMS%
 IF %ERRORLEVEL% NEQ 0 (
 	set EXIT_CODE=%ERRORLEVEL%
 	GOTO :End

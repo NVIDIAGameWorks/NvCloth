@@ -36,7 +36,7 @@
 #include "CuContextLock.h"
 #include "CuCheckSuccess.h"
 #include "../IterationState.h"
-#include <PsSort.h>
+#include "../Ps/PsSort.h"
 #include <foundation/PxProfiler.h>
 
 #if NV_NVTX
@@ -489,8 +489,9 @@ void cloth::CuSolver::beginFrame()
 		uint32_t numThreadsPerBlock = mFactory.mMaxThreadsPerBlock / numClothsPerSM & ~31;
 		if (mFactory.mNumThreadsPerBlock != numThreadsPerBlock)
 		{
-			checkSuccess(
-			    cuFuncSetBlockShape(mKernelFunction, int(mFactory.mNumThreadsPerBlock = numThreadsPerBlock), 1, 1));
+			mFactory.mNumThreadsPerBlock = numThreadsPerBlock;
+			//checkSuccess(
+			//    cuFuncSetBlockShape(mKernelFunction, int(mFactory.mNumThreadsPerBlock = numThreadsPerBlock), 1, 1));
 		}
 
 		// remember num cloths per SM in terms of max shared memory per block

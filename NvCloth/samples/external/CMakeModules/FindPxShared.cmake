@@ -10,7 +10,7 @@ FIND_PATH(		PXSHARED_ROOT_DIR include/foundation/Px.h
 				${GW_DEPS_ROOT}/sw/physx/PxShared/1.0/trunk
 				NO_DEFAULT_PATH
 				NO_CMAKE_FIND_ROOT_PATH)
-			
+		
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(PxShared DEFAULT_MSG PXSHARED_ROOT_DIR)
 

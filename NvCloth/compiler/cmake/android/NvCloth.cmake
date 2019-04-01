@@ -7,6 +7,11 @@ SET(GW_DEPS_ROOT $ENV{GW_DEPS_ROOT})
 SET(NVCLOTH_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../../../)
 
 SET(NVCLOTH_PLATFORM_SOURCE_FILES
+	${PROJECT_ROOT_DIR}/src/ps/unix/PsUnixAtomic.cpp
+	${PROJECT_ROOT_DIR}/src/ps/unix/PsUnixFPU.h
+	${PROJECT_ROOT_DIR}/src/ps/android/cpu-features.c
+	${PROJECT_ROOT_DIR}/src/ps/android/cpu-features.h
+
 	${PROJECT_ROOT_DIR}/src/neon/NeonCollision.cpp
 	${PROJECT_ROOT_DIR}/src/neon/NeonSelfCollision.cpp
 	${PROJECT_ROOT_DIR}/src/neon/NeonSolverKernel.cpp

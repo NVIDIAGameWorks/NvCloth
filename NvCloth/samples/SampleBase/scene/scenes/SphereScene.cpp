@@ -84,7 +84,9 @@ void SphereScene::initializeCloth(int index, physx::PxVec3 offset)
 
 	physx::PxVec4 spheres[1] = {physx::PxVec4(physx::PxVec3(0.f, 10.f, -1.f) + offset,1.5)};
 
-	mClothActor[index]->mCloth->setSpheres(nv::cloth::Range<physx::PxVec4>(spheres, spheres + 1), 0, mClothActor[index]->mCloth->getNumSpheres());
+	//mClothActor[index]->mCloth->setSpheres(nv::cloth::Range<physx::PxVec4>(spheres, spheres + 1), 0, mClothActor[index]->mCloth->getNumSpheres());
+	mClothActor[index]->mCloth->setSpheres(nv::cloth::Range<physx::PxVec4>(spheres, spheres + 1), nv::cloth::Range<physx::PxVec4>(spheres, spheres + 1));
+	
 
 	// Setup phase configs
 	std::vector<nv::cloth::PhaseConfig> phases(mFabric[index]->getNumPhases());

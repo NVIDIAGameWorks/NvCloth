@@ -1,20 +1,5 @@
 #Platform specific compile flags and project includes
 
-SET(GW_DEPS_ROOT $ENV{GW_DEPS_ROOT})
-
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/sw/physx/tools/CMakeModules)
-
-IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-ENDIF()
-
-
-IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-ENDIF()
-
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/../..")
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/external/CMakeModules")
 MESSAGE("CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
 
 #NOTE: Warnings lowered on the sample projects as it's got a lot of warnings. Defines below hide more.
@@ -67,11 +52,6 @@ SET(PX_SELECT_COMPONENTS PxFoundation)
 FIND_PACKAGE(PxShared REQUIRED)
 FIND_PACKAGE(NvCloth REQUIRED)
 
-# Include the PxShared-exports.cmake file that PxShared created. There's other ways to do this, but there's a bunch of issues with it in a CI environment
-#  such as - we don't want to be installing any built artifacts on this server, etc. So for now we hack it.
-
-# Add PxShared as a dependency so that we can use project references
-#ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/windows "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
 #MESSAGE("NVCLOTH_ROOT_DIR = ${NVCLOTH_ROOT_DIR}")
 ADD_SUBDIRECTORY(${NVCLOTH_ROOT_DIR}/compiler/cmake/windows "${CMAKE_CURRENT_BINARY_DIR}/NvCloth_bin")
 

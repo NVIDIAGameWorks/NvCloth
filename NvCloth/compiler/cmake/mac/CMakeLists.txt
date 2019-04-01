@@ -45,12 +45,6 @@ SET(PHYSX_MAC_RELEASE_COMPILE_DEFS NDEBUG;PX_SUPPORT_PVD=0)
 SET(PX_SELECT_COMPONENTS PxFoundation)
 FIND_PACKAGE(PxShared REQUIRED)
 
-# Include the PxShared-exports.cmake file that PxShared created. There's other ways to do this, but there's a bunch of issues with it in a CI environment
-#  such as - we don't want to be installing any built artifacts on this server, etc. So for now we hack it.
-
-# Add PxShared as a dependency so that we can use project references
-ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/mac "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
-
 # Include all of the projects
 INCLUDE(NvCloth.cmake)
 

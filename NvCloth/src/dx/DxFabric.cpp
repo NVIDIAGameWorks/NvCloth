@@ -31,7 +31,7 @@
 #include "DxContextLock.h"
 #include "DxFactory.h"
 #include <algorithm>
-#include <PsUtilities.h>
+#include "ps/PsUtilities.h"
 
 #if NV_CLOTH_ENABLE_DX11
 

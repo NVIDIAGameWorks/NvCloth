@@ -33,7 +33,7 @@
 
 #include "SwSolverKernel.cpp"
 
-#include <cpu-features.h>
+#include "../ps/android/cpu-features.h"
 
 namespace
 {

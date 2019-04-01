@@ -4,30 +4,42 @@ NvCloth Release notes.
 Release Notes 
 ***************************
 
-1.1.5
+1.1.6
 ===========================================================================================
-Supported platforms:
+Compatible platforms:
 
 * Windows (CPU, CUDA, DX11)
 * Mac (tested on Sierra)
-* iOS (tested on iOS 11)
 * Linux (tested on Ubuntu 16.04.1 LTS x64)
-* PlayStation 4 with PS4 SDK 4.5
-* Xbox one (CPU, DX11, beta)
+* PlayStation 4 with PS4 SDK 6.5
+* Xbox one (CPU, DX11)
 * Android (arm64-v8a, API >= 21), tested on Shield TV
-* Switch (SDK 3.5.0)
+* Switch (SDK 8.0.0)
 
-Supported compilers (via cmake 3.7)
+Compatible compilers (via cmake 3.7)
 
 * Windows: Visual Studio 12, 14 (2013, 2015)
 * Linux: gcc 5.4 (only x64)
-* Mac: xcode 
-* iOS: tested with XCode 9 (Apple LLVM)
+* Mac: XCode 10.1 
+* iOS: tested with XCode 10.1 (Apple LLVM)
 * PlayStation 4: Visual studio 14 (2015)
 * Xbox one: Visual studio 14 (2015)
-* Android: NDK r12b and above
+* Android: NDK r15c
 * Switch: Visual studio 14 (2015)
 
+
+Fixed:
+
+- Now compatible with the same PxShared version as PhysX 4.0
+
+New:
+- New setPlanes and setSpheres API.
+
+Known issues:
+- None
+
+1.1.5
+===========================================================================================
 
 Fixed:
 

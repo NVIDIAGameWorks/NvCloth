@@ -20,6 +20,21 @@ SET( NV_CLOTH_SOURCE_LIST
 	${PROJECT_ROOT_DIR}/include/NvCloth/Range.h
 	${PROJECT_ROOT_DIR}/include/NvCloth/Solver.h
 	
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/Ps.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsAtomic.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsAlignedMalloc.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsAllocator.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsAllocator.cpp
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsArray.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsBasicTemplates.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsBitUtils.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsHash.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsHashInternals.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsHashMap.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsIntrinsics.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsUserAllocated.h
+	${PROJECT_ROOT_DIR}/include/NvCloth/ps/PsMathUtils.h
+	
 	${PROJECT_ROOT_DIR}/src/Allocator.cpp
 	${PROJECT_ROOT_DIR}/src/BoundingBox.h
 	${PROJECT_ROOT_DIR}/src/Callbacks.cpp
@@ -118,6 +133,13 @@ SET( NV_CLOTH_SOURCE_LIST
 	${PROJECT_ROOT_DIR}/src/scalar/SwCollisionHelpers.h
 	${PROJECT_ROOT_DIR}/src/sse2/SwCollisionHelpers.h
 	${PROJECT_ROOT_DIR}/src/sse2/SwSolveConstraints.h
+	
+	${PROJECT_ROOT_DIR}/src/ps/PsAlloca.h
+	${PROJECT_ROOT_DIR}/src/ps/PsFPU.h
+	${PROJECT_ROOT_DIR}/src/ps/PsSort.h
+	${PROJECT_ROOT_DIR}/src/ps/PsSortInternals.h
+	${PROJECT_ROOT_DIR}/src/ps/PsUtilities.h
+	${PROJECT_ROOT_DIR}/src/ps/PxIntrinsics.h
 	
 	${PROJECT_ROOT_DIR}/extensions/include/NvClothExt/ClothFabricCooker.h
 	${PROJECT_ROOT_DIR}/extensions/include/NvClothExt/ClothMeshDesc.h

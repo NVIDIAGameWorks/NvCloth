@@ -34,7 +34,7 @@
 #include <foundation/PxMat44.h>
 #include <foundation/PxBounds3.h>
 #include <algorithm>
-#include <PsSort.h>
+#include "ps/PsSort.h"
 #include "NvCloth/Allocator.h"
 
 using namespace nv;

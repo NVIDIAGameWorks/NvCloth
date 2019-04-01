@@ -29,7 +29,7 @@ if (CMAKE_CL_64)
 
 	SET(D3DCOMPILER_DLL "\"$(VC_ExecutablePath_x64_x64)/d3dcompiler_47.dll\"")
 	
-	SET(ASSIMP_DLLS ${ASSIMP_DLL_PATH}/Release/assimp-vc140-mt.dll)
+#	SET(ASSIMP_DLLS ${ASSIMP_DLL_PATH}/Release/assimp-vc140-mt.dll)
 else()
 	SET(SHADOW_LIB ${NVCLOTH_ROOT_DIR}/samples/external/shadow_lib/GFSDK_ShadowLib_DX11.win32.lib)
 	SET(SHADOW_DLLS ${NVCLOTH_ROOT_DIR}/samples/external/shadow_lib/GFSDK_ShadowLib_DX11.win32.dll)
@@ -39,6 +39,6 @@ else()
 
 	SET(D3DCOMPILER_DLL "\"$(VC_ExecutablePath_x86_x86)/d3dcompiler_47.dll\"")
 	
-	SET(ASSIMP_DLLS ${ASSIMP_DLL_PATH}/Release/assimp-vc140-mt.dll)
+#	SET(ASSIMP_DLLS ${ASSIMP_DLL_PATH}/Release/assimp-vc140-mt.dll)
 endif()
 

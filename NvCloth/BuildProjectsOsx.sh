@@ -2,11 +2,7 @@
 
 # Make sure the various variables that we need are set
 
-export GW_DEPS_ROOT="$PWD""/../../../../../../"
-
-if [ -e $PWD"/../../Externals/CMakeModules" ]; then
-	export GW_DEPS_ROOT="$PWD""/../../"
-fi
+export GW_DEPS_ROOT="$PWD""/../"
 
 [ -z "$GW_DEPS_ROOT" ] && echo "GW_DEPS_ROOT not defined." && exit 1;
 
@@ -21,10 +17,6 @@ export CMAKE="$PM_cmake_PATH/bin/cmake"
 
 
 # Build projects here
-cd compiler/osx32-cmake/
-$CMAKE --build . --target ALL_BUILD --clean-first --config release -- -parallelizeTargets -jobs 5 || exit 1
-cd ../../
-
 cd compiler/osx64-cmake/
 $CMAKE --build . --target ALL_BUILD --clean-first --config release -- -parallelizeTargets -jobs 5 || exit 1
 cd ../../

@@ -12,7 +12,6 @@
 #include <NvCloth/Callbacks.h>
 #include <foundation/PxAllocatorCallback.h>
 #include <foundation/PxErrorCallback.h>
-#include <foundation/PxAssert.h>
 #include <foundation/PxProfiler.h>
 
 #include <vector>

@@ -3,17 +3,26 @@
 MESSAGE("Windows/CMakeLists.txt [begin]")
 SET(GW_DEPS_ROOT $ENV{GW_DEPS_ROOT})
 
+SET(CMAKE_MODULE_PATH $ENV{GW_DEPS_ROOT}NvCloth/Externals/CMakeModules)
 
-
-IF(EXISTS $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/Externals/CMakeModules)
-ELSE()
-	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; $ENV{GW_DEPS_ROOT}/sw/physx/tools/CMakeModules)
+# Add find modules to the path
+IF(NOT EXISTS ${CMAKE_MODULE_PATH})
+	MESSAGE(FATAL_ERROR "Could not find CMakeModules at ${CMAKE_MODULE_PATH}")
 ENDIF()
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/..")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/external/CMakeModules")
-MESSAGE("CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
+
+IF(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/CMakeModules")
+	MESSAGE(FATAL_ERROR "Could not find CMakeModules at ${CMAKE_CURRENT_SOURCE_DIR}/external/CMakeModules")
+ENDIF()
+
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "$ENV{GW_DEPS_ROOT}/NvCloth")
+
+IF(NOT EXISTS "$ENV{GW_DEPS_ROOT}/NvCloth")
+	MESSAGE(FATAL_ERROR "Could not find CMakeModules for FindNvCloth.cmake at $ENV{GW_DEPS_ROOT}/NvCloth")
+ENDIF()
+
+MESSAGE( "[samples]windows/CMakeLists.txt CMAKE_MODULE_PATH = ${CMAKE_MODULE_PATH}")
 
 #NOTE: Warnings lowered on the sample projects as it's got a lot of warnings. Defines below hide more.
 SET(CMAKE_CXX_FLAGS "/GR- /GF /MP /Gy /EHsc /d2Zi+ /errorReport:prompt /fp:fast /Gd /Gm- /GS- /nologo /W3 /WX /Zc:forScope /Zc:inline /Zc:wchar_t /Zi")
@@ -59,20 +68,12 @@ SET(CMAKE_PROFILE_POSTFIX "${CMAKE_PROFILE_POSTFIX}_${LIBPATH_SUFFIX}")
 SET(CMAKE_CHECKED_POSTFIX "${CMAKE_CHECKED_POSTFIX}_${LIBPATH_SUFFIX}")
 SET(CMAKE_RELEASE_POSTFIX "${CMAKE_RELEASE_POSTFIX}_${LIBPATH_SUFFIX}")
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/../../../..")
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}; "${CMAKE_CURRENT_SOURCE_DIR}/../../../../..")
 
 SET(PX_SELECT_COMPONENTS PxFoundation)
 FIND_PACKAGE(PxShared REQUIRED)
 FIND_PACKAGE(NvCloth REQUIRED)
-
-# Include the PxShared-exports.cmake file that PxShared created. There's other ways to do this, but there's a bunch of issues with it in a CI environment
-#  such as - we don't want to be installing any built artifacts on this server, etc. So for now we hack it.
-
-# Add PxShared as a dependency so that we can use project references
-#ADD_SUBDIRECTORY(${PXSHARED_ROOT_DIR}/src/compiler/cmake/windows "${CMAKE_CURRENT_BINARY_DIR}/pxshared_bin")
-#MESSAGE("NVCLOTH_ROOT_DIR = ${NVCLOTH_ROOT_DIR}")
 ADD_SUBDIRECTORY(${NVCLOTH_ROOT_DIR}/compiler/cmake/windows "${CMAKE_CURRENT_BINARY_DIR}/NvCloth_bin")
-
 
 # Include all of the projects
 INCLUDE(${PROJECT_CMAKE_FILES_DIR}/SampleBase.cmake)
