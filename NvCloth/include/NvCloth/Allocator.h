@@ -48,41 +48,25 @@ namespace cloth
 void* allocate(size_t);
 void deallocate(void*);
 
-class NonTrackingAllocator
-{
-public:
-	PX_FORCE_INLINE NonTrackingAllocator(const char* = 0)
-	{
-	}
-	PX_FORCE_INLINE void* allocate(size_t size, const char* file, int line)
-	{
-		return !size ? 0 : GetNvClothAllocator()->allocate(size, "NonTrackedAlloc", file, line);
-	}
-	PX_FORCE_INLINE void deallocate(void* ptr)
-	{
-		if (ptr)
-			GetNvClothAllocator()->deallocate(ptr);
-	}
-};
 
 /* templated typedefs for convenience */
 
 template <typename T>
 struct Vector
 {
-	typedef physx::shdfnd::Array<T, NonTrackingAllocator> Type;
+	typedef ps::Array<T, ps::NonTrackingAllocator> Type;
 };
 
 template <typename T, size_t alignment>
 struct AlignedVector
 {
-	typedef physx::shdfnd::Array<T, physx::shdfnd::AlignedAllocator<alignment, NonTrackingAllocator> > Type;
+	typedef ps::Array<T, ps::AlignedAllocator<alignment, ps::NonTrackingAllocator> > Type;
 };
 
-template <class Key, class Value, class HashFn = physx::shdfnd::Hash<Key> >
+template <class Key, class Value, class HashFn = ps::Hash<Key> >
 struct HashMap
 {
-	typedef physx::shdfnd::HashMap<Key, Value, HashFn, NonTrackingAllocator> Type;
+	typedef ps::HashMap<Key, Value, HashFn, ps::NonTrackingAllocator> Type;
 };
 
 struct NvClothOverload{};
@@ -97,7 +81,7 @@ struct NvClothOverload{};
 //new/delete operators need to be declared in global scope
 template <typename T>
 PX_INLINE void* operator new(size_t size, const char* fileName,
-                             typename physx::shdfnd::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
+                             typename nv::cloth::ps::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
 {
 	PX_UNUSED(overload);
 	return GetNvClothAllocator()->allocate(size, "<TypeName Unknown>", fileName, line);
@@ -105,7 +89,7 @@ PX_INLINE void* operator new(size_t size, const char* fileName,
 
 template <typename T>
 PX_INLINE void* operator new [](size_t size, const char* fileName,
-                                typename physx::shdfnd::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
+                                typename nv::cloth::ps::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
 {
 	PX_UNUSED(overload);
 	return GetNvClothAllocator()->allocate(size, "<TypeName Unknown>", fileName, line);
@@ -114,7 +98,7 @@ PX_INLINE void* operator new [](size_t size, const char* fileName,
 // If construction after placement new throws, this placement delete is being called.
 template <typename T>
 PX_INLINE void operator delete(void* ptr, const char* fileName,
-                               typename physx::shdfnd::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
+                               typename nv::cloth::ps::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
 {
 	PX_UNUSED(fileName);
 	PX_UNUSED(line);
@@ -126,7 +110,7 @@ PX_INLINE void operator delete(void* ptr, const char* fileName,
 // If construction after placement new throws, this placement delete is being called.
 template <typename T>
 PX_INLINE void operator delete [](void* ptr, const char* fileName,
-                                  typename physx::shdfnd::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
+                                  typename nv::cloth::ps::EnableIfPod<T, int>::Type line, nv::cloth::NvClothOverload overload)
 {
 	PX_UNUSED(fileName);
 	PX_UNUSED(line);

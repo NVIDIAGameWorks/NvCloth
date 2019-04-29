@@ -35,9 +35,13 @@
 #include "PsBasicTemplates.h"
 #include "NvCloth/ps/PsAllocator.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 template <class Serializer>
 void exportArray(Serializer& stream, const void* data, uint32_t size, uint32_t sizeOfElement, uint32_t capacity);
@@ -60,7 +64,7 @@ class Array : protected Alloc
 	typedef T* Iterator;
 	typedef const T* ConstIterator;
 
-	explicit Array(const PxEMPTY v) : Alloc(v)
+	explicit Array(const physx::PxEMPTY v) : Alloc(v)
 	{
 		if(mData)
 			mCapacity |= PX_SIGN_BITMASK;
@@ -507,9 +511,9 @@ class Array : protected Alloc
 	//////////////////////////////////////////////////////////////////////////
 	PX_INLINE void swap(Array<T, Alloc>& other)
 	{
-		shdfnd::swap(mData, other.mData);
-		shdfnd::swap(mSize, other.mSize);
-		shdfnd::swap(mCapacity, other.mCapacity);
+		ps::swap(mData, other.mData);
+		ps::swap(mSize, other.mSize);
+		ps::swap(mCapacity, other.mCapacity);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -715,7 +719,8 @@ PX_INLINE void swap(Array<T, Alloc>& x, Array<T, Alloc>& y)
 	x.swap(y);
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSARRAY_H

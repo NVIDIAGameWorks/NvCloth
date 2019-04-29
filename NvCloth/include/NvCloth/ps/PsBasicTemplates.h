@@ -32,9 +32,13 @@
 
 #include "Ps.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 template <typename A>
 struct Equal
@@ -78,7 +82,7 @@ class Pair
 	Pair(const Pair& p) : first(p.first), second(p.second)
 	{
 	}
-	// CN - fix for /.../PsBasicTemplates.h(61) : warning C4512: 'physx::shdfnd::Pair<F,S>' : assignment operator could
+	// CN - fix for /.../PsBasicTemplates.h(61) : warning C4512: 'nv::cloth::Pair<F,S>' : assignment operator could
 	// not be generated
 	Pair& operator=(const Pair& p)
 	{
@@ -140,7 +144,8 @@ PX_CUDA_CALLABLE PX_INLINE void swap(T& x, T& y)
 	y = tmp;
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSBASICTEMPLATES_H

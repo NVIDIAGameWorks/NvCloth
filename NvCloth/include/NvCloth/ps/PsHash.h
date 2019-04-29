@@ -46,9 +46,13 @@
 Central definition of hash functions
 */
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 // Hash functions
 
@@ -152,8 +156,9 @@ struct Hash<const char*>
 	}
 };
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #if PX_VC
 #pragma warning(pop)

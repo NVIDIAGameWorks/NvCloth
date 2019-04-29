@@ -73,7 +73,7 @@ class CuDeviceVector
 	}
 
 	template <typename Alloc>
-	CuDeviceVector(const physx::shdfnd::Array<T, Alloc>& other)
+	CuDeviceVector(const ps::Array<T, Alloc>& other)
 	{
 		operator=(other);
 	}
@@ -91,7 +91,7 @@ class CuDeviceVector
 	}
 
 	template <typename Alloc>
-	CuDeviceVector& operator = (const physx::shdfnd::Array<T, Alloc>& other)
+	CuDeviceVector& operator = (const ps::Array<T, Alloc>& other)
 	{
 		const T* first = other.empty() ? 0 : &other.front();
 		assign(first, first + other.size());

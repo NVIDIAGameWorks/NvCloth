@@ -36,10 +36,15 @@
 #include "NvCloth/ps/PsBasicTemplates.h"
 #include "NvCloth/Callbacks.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
 {
+namespace ps
+{
+
 PX_INLINE char littleEndian()
 {
 	int i = 1;
@@ -47,36 +52,36 @@ PX_INLINE char littleEndian()
 }
 
 // PT: checked casts
-PX_CUDA_CALLABLE PX_FORCE_INLINE PxU32 to32(PxU64 value)
+PX_CUDA_CALLABLE PX_FORCE_INLINE physx::PxU32 to32(physx::PxU64 value)
 {
 	NV_CLOTH_ASSERT(value <= 0xffffffff);
-	return PxU32(value);
+	return physx::PxU32(value);
 }
-PX_CUDA_CALLABLE PX_FORCE_INLINE PxU16 to16(PxU32 value)
+PX_CUDA_CALLABLE PX_FORCE_INLINE physx::PxU16 to16(physx::PxU32 value)
 {
 	NV_CLOTH_ASSERT(value <= 0xffff);
-	return PxU16(value);
+	return physx::PxU16(value);
 }
-PX_CUDA_CALLABLE PX_FORCE_INLINE PxU8 to8(PxU16 value)
+PX_CUDA_CALLABLE PX_FORCE_INLINE physx::PxU8 to8(physx::PxU16 value)
 {
 	NV_CLOTH_ASSERT(value <= 0xff);
-	return PxU8(value);
+	return physx::PxU8(value);
 }
-PX_CUDA_CALLABLE PX_FORCE_INLINE PxU8 to8(PxU32 value)
+PX_CUDA_CALLABLE PX_FORCE_INLINE physx::PxU8 to8(physx::PxU32 value)
 {
 	NV_CLOTH_ASSERT(value <= 0xff);
-	return PxU8(value);
+	return physx::PxU8(value);
 }
-PX_CUDA_CALLABLE PX_FORCE_INLINE PxU8 to8(PxI32 value)
+PX_CUDA_CALLABLE PX_FORCE_INLINE physx::PxU8 to8(physx::PxI32 value)
 {
 	NV_CLOTH_ASSERT(value <= 0xff);
 	NV_CLOTH_ASSERT(value >= 0);
-	return PxU8(value);
+	return physx::PxU8(value);
 }
-PX_CUDA_CALLABLE PX_FORCE_INLINE PxI8 toI8(PxU32 value)
+PX_CUDA_CALLABLE PX_FORCE_INLINE physx::PxI8 toI8(physx::PxU32 value)
 {
 	NV_CLOTH_ASSERT(value <= 0x7f);
-	return PxI8(value);
+	return physx::PxI8(value);
 }
 
 /*!
@@ -84,7 +89,7 @@ Get number of elements in array
 */
 template <typename T, size_t N>
 char (&ArraySizeHelper(T (&array)[N]))[N];
-#define PX_ARRAY_SIZE(_array) (sizeof(physx::shdfnd::ArraySizeHelper(_array)))
+#define PX_ARRAY_SIZE(_array) (sizeof(nv::cloth::ps::ArraySizeHelper(_array)))
 
 /*!
 Sort two elements using operator<
@@ -100,10 +105,10 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE void order(T& x, T& y)
 
 // most architectures can do predication on real comparisons, and on VMX, it matters
 
-PX_CUDA_CALLABLE PX_FORCE_INLINE void order(PxReal& x, PxReal& y)
+PX_CUDA_CALLABLE PX_FORCE_INLINE void order(physx::PxReal& x, physx::PxReal& y)
 {
-	PxReal newX = PxMin(x, y);
-	PxReal newY = PxMax(x, y);
+	physx::PxReal newX = physx::PxMin(x, y);
+	physx::PxReal newY = physx::PxMax(x, y);
 	x = newX;
 	y = newY;
 }
@@ -145,10 +150,10 @@ __attribute__((noreturn))
 }
 
 bool checkValid(const float&);
-bool checkValid(const PxVec3&);
-bool checkValid(const PxQuat&);
-bool checkValid(const PxMat33&);
-bool checkValid(const PxTransform&);
+bool checkValid(const physx::PxVec3&);
+bool checkValid(const physx::PxQuat&);
+bool checkValid(const physx::PxMat33&);
+bool checkValid(const physx::PxTransform&);
 bool checkValid(const char*);
 
 // equivalent to std::max_element
@@ -163,7 +168,8 @@ inline const T* maxElement(const T* first, const T* last)
 	return m;
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif

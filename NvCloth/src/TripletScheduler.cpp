@@ -250,7 +250,7 @@ public:
 			}
 			//adjacentcyCount[i] now holds the number of triplets referring to particle i
 
-			mMaxAdjacentCount = *physx::shdfnd::maxElement(adjacencyCount.begin(), adjacencyCount.end());
+			mMaxAdjacentCount = *nv::cloth::ps::maxElement(adjacencyCount.begin(), adjacencyCount.end());
 
 			// compute in place prefix sum (inclusive)
 			prefixSum(adjacencyCount.begin(), adjacencyCount.end(), mAdjacencyIndecies.begin());

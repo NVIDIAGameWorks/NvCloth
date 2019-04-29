@@ -146,7 +146,7 @@ namespace
 			if (!(begin[parent] < begin[current]))
 				break;
 
-			shdfnd::swap(begin[parent], begin[current]);
+			ps::swap(begin[parent], begin[current]);
 			current = parent;
 		}
 	}
@@ -158,7 +158,7 @@ namespace
 		T* begin = heap.begin();
 		T* end = heap.end();
 
-		shdfnd::swap(begin[0], end[-1]); // exchange elements
+		ps::swap(begin[0], end[-1]); // exchange elements
 
 		// shift down
 		end--;
@@ -173,7 +173,7 @@ namespace
 			if (!(begin[current] < begin[child]))
 				break;
 
-			shdfnd::swap(begin[current], begin[child]);
+			ps::swap(begin[current], begin[child]);
 			current = child;
 		}
 
@@ -237,7 +237,7 @@ namespace
 			: mFromVertIndex(v0), mToVertIndex(v1), mHalfEdgeIndex(halfEdgeIndex)
 		{
 			if(mFromVertIndex > mToVertIndex)
-				shdfnd::swap(mFromVertIndex, mToVertIndex);
+				ps::swap(mFromVertIndex, mToVertIndex);
 		}
 
 		bool operator<(const MeshEdge& e) const
@@ -635,7 +635,7 @@ PxU32 ClothGeodesicTetherCooker::findTriNeighbors()
 		edges.pushBack(MeshEdge(int(i2), int(i0), int(3*i+2)));
 	}
 
-	shdfnd::sort(edges.begin(), edges.size(), shdfnd::Less<MeshEdge>(), NonTrackingAllocator());
+	ps::sort(edges.begin(), edges.size(), ps::Less<MeshEdge>(), ps::NonTrackingAllocator());
 
 	int numEdges = int(edges.size());
 	for(int i=0; i < numEdges; )
@@ -680,7 +680,7 @@ void ClothGeodesicTetherCooker::findVertTriNeighbors()
 		vertTriangles.pushBack(VertTriangle(int(mIndices[PxU32(3*i+2)]), i));
 	}
 
-	shdfnd::sort(vertTriangles.begin(), vertTriangles.size(), shdfnd::Less<VertTriangle>(), NonTrackingAllocator());
+	ps::sort(vertTriangles.begin(), vertTriangles.size(), ps::Less<VertTriangle>(), ps::NonTrackingAllocator());
 	mFirstVertTriAdj.resize(mNumParticles);
 	mVertTriAdjs.reserve(mIndices.size());
 

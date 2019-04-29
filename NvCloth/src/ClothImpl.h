@@ -340,7 +340,7 @@ inline physx::PxVec3 ClothImpl<T>::getGravity() const
 inline float safeLog2(float x)
 {
 	NV_CLOTH_ASSERT_WITH_MESSAGE("safeLog2",x >= 0.0f);
-	return x > 0 ? physx::shdfnd::log2(x) : -FLT_MAX_EXP;
+	return x > 0 ? ps::log2(x) : -FLT_MAX_EXP;
 }
 
 inline physx::PxVec3 safeLog2(const physx::PxVec3& v)
@@ -353,7 +353,7 @@ inline float safeExp2(float x)
 	if (x <= -FLT_MAX_EXP)
 		return 0.0f;
 	else
-		return physx::shdfnd::exp2(x);
+		return ps::exp2(x);
 }
 
 inline physx::PxVec3 safeExp2(const physx::PxVec3& v)
@@ -1228,7 +1228,7 @@ inline void ClothImpl<T>::clearInterpolation()
 	if (!getChildCloth()->mTargetCollisionSpheres.empty())
 	{
 		ContextLockType contextLock(getChildCloth()->mFactory);
-		physx::shdfnd::swap(getChildCloth()->mStartCollisionSpheres, getChildCloth()->mTargetCollisionSpheres);
+		ps::swap(getChildCloth()->mStartCollisionSpheres, getChildCloth()->mTargetCollisionSpheres);
 		getChildCloth()->mTargetCollisionSpheres.resize(0);
 	}
 	getChildCloth()->mMotionConstraints.pop();

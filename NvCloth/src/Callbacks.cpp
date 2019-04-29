@@ -34,8 +34,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-using namespace physx;
-
 namespace nv
 {
 namespace cloth
@@ -43,15 +41,15 @@ namespace cloth
 
 struct NvClothContext
 {
-	PxAllocatorCallback* mAllocator;
-	PxErrorCallback* mErrorCallback;
-	PxAssertHandler* mAssertHandler;
-	PxProfilerCallback* mProfilerCallback;
+	physx::PxAllocatorCallback* mAllocator;
+	physx::PxErrorCallback* mErrorCallback;
+	physx::PxAssertHandler* mAssertHandler;
+	physx::PxProfilerCallback* mProfilerCallback;
 };
 
 static NvClothContext sContext;
 
-NV_CLOTH_API(void) InitializeNvCloth(PxAllocatorCallback* allocatorCallback, PxErrorCallback* errorCallback, PxAssertHandler* assertHandler, PxProfilerCallback* profilerCallback, int autoDllIDCheck)
+NV_CLOTH_API(void) InitializeNvCloth(physx::PxAllocatorCallback* allocatorCallback, physx::PxErrorCallback* errorCallback, physx::PxAssertHandler* assertHandler, physx::PxProfilerCallback* profilerCallback, int autoDllIDCheck)
 {
 	PX_UNUSED(autoDllIDCheck);
 	NV_CLOTH_ASSERT_WITH_MESSAGE("NvCloth dll id mismatch, ensure you compile with matching headers/run with matching dll.", NV_CLOTH_DLL_ID == autoDllIDCheck);
@@ -65,7 +63,7 @@ NV_CLOTH_API(void) InitializeNvCloth(PxAllocatorCallback* allocatorCallback, PxE
 }
 }
 
-PxAllocatorCallback* GetNvClothAllocator()
+physx::PxAllocatorCallback* GetNvClothAllocator()
 {
 	NV_CLOTH_ASSERT_WITH_MESSAGE("NvCloth used before calling InitializeNvCloth", nv::cloth::sContext.mAllocator != nullptr);
 	return nv::cloth::sContext.mAllocator;
@@ -76,7 +74,7 @@ namespace nv
 {
 namespace cloth
 {
-void LogFn(PxErrorCode::Enum errorLevel, const char* fileName, int lineNumber, const char* msg, va_list additionalArguments)
+void LogFn(physx::PxErrorCode::Enum errorLevel, const char* fileName, int lineNumber, const char* msg, va_list additionalArguments)
 {
 	if (!sContext.mErrorCallback)
 		return;
@@ -94,37 +92,37 @@ void LogErrorFn(const char* fileName, int lineNumber, const char* msg, ...)
 {
 	va_list args;
 	va_start(args, msg);
-	LogFn(::PxErrorCode::eINTERNAL_ERROR, fileName, lineNumber, msg, args);
+	LogFn(physx::PxErrorCode::eINTERNAL_ERROR, fileName, lineNumber, msg, args);
 	va_end(args);
 }
 void LogInvalidParameterFn(const char* fileName, int lineNumber, const char* msg, ...)
 {
 	va_list args;
 	va_start(args, msg);
-	LogFn(::PxErrorCode::eINVALID_PARAMETER, fileName, lineNumber, msg, args);
+	LogFn(physx::PxErrorCode::eINVALID_PARAMETER, fileName, lineNumber, msg, args);
 	va_end(args);
 }
 void LogWarningFn(const char* fileName, int lineNumber, const char* msg, ...)
 {
 	va_list args;
 	va_start(args, msg);
-	LogFn(::PxErrorCode::eDEBUG_WARNING, fileName, lineNumber, msg, args);
+	LogFn(physx::PxErrorCode::eDEBUG_WARNING, fileName, lineNumber, msg, args);
 	va_end(args);
 }
 void LogInfoFn(const char* fileName, int lineNumber, const char* msg, ...)
 {
 	va_list args;
 	va_start(args, msg);
-	LogFn(::PxErrorCode::eDEBUG_INFO, fileName, lineNumber, msg, args);
+	LogFn(physx::PxErrorCode::eDEBUG_INFO, fileName, lineNumber, msg, args);
 	va_end(args);
 }
 
-NV_CLOTH_API(PxAssertHandler*) GetNvClothAssertHandler()
+NV_CLOTH_API(physx::PxAssertHandler*) GetNvClothAssertHandler()
 {
 	return sContext.mAssertHandler;
 }
 
-PxProfilerCallback* GetNvClothProfiler()
+physx::PxProfilerCallback* GetNvClothProfiler()
 {
 	return sContext.mProfilerCallback;
 }

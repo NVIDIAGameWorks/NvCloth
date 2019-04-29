@@ -38,9 +38,13 @@
 #include "NvCloth/ps/PsBasicTemplates.h"
 #include "NvCloth/ps/PsUserAllocated.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 namespace internal
 {
@@ -152,7 +156,7 @@ class Stack
 		mCapacity *= 2;
 		int32_t* newMem =
 		    reinterpret_cast<int32_t*>(mAllocator.allocate(sizeof(int32_t) * mCapacity, __FILE__, __LINE__));
-		intrinsics::memCopy(newMem, mMemory, mSize * sizeof(int32_t));
+		physx::intrinsics::memCopy(newMem, mMemory, mSize * sizeof(int32_t));
 		if(mRealloc)
 			mAllocator.deallocate(mMemory);
 		mRealloc = true;
@@ -180,8 +184,8 @@ class Stack
 	}
 };
 } // namespace internal
-
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSSORTINTERNALS_H

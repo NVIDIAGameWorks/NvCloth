@@ -30,11 +30,14 @@
 #include "PsAllocator.h"
 #include "NvCloth/Callbacks.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
 {
-
+namespace ps
+{
 void* Allocator::allocate(size_t size, const char* file, int line)
 {
 	if(!size)
@@ -47,5 +50,6 @@ void Allocator::deallocate(void* ptr)
 		GetNvClothAllocator()->deallocate(ptr);
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv

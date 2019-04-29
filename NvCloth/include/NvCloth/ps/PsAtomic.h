@@ -33,9 +33,13 @@
 #include "NvCloth/ps/Ps.h"
 #include "NvCloth/Callbacks.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 /* set *dest equal to val. Return the old value of *dest */
 NV_CLOTH_IMPORT int32_t atomicExchange(volatile int32_t* dest, int32_t val);
@@ -58,7 +62,8 @@ NV_CLOTH_IMPORT int32_t atomicAdd(volatile int32_t* val, int32_t delta);
 /* compute the maximum of dest and val. Return the new value */
 NV_CLOTH_IMPORT int32_t atomicMax(volatile int32_t* val, int32_t val2);
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSATOMIC_H

@@ -67,7 +67,7 @@ cloth::CuFabric::CuFabric(CuFactory& factory, uint32_t numParticles, Range<const
 	NV_CLOTH_ASSERT(sets.back() == restvalues.size());
 	NV_CLOTH_ASSERT(restvalues.size() * 2 == indices.size());
 	NV_CLOTH_ASSERT(restvalues.size() == stiffnessValues.size() || stiffnessValues.size() == 0);
-	NV_CLOTH_ASSERT(mNumParticles > *shdfnd::maxElement(indices.begin(), indices.end()));
+	NV_CLOTH_ASSERT(mNumParticles > *ps::maxElement(indices.begin(), indices.end()));
 
 	// copy to device, add leading zero
 	mSets.reserve(sets.size() + 1);
@@ -106,7 +106,7 @@ cloth::CuFabric::CuFabric(CuFactory& factory, uint32_t numParticles, Range<const
 	// tethers
 	NV_CLOTH_ASSERT(anchors.size() == tetherLengths.size());
 	mTetherLengthScale =
-	    tetherLengths.empty() ? 1.0f : *shdfnd::maxElement(tetherLengths.begin(), tetherLengths.end()) / USHRT_MAX;
+	    tetherLengths.empty() ? 1.0f : *ps::maxElement(tetherLengths.begin(), tetherLengths.end()) / USHRT_MAX;
 	float inverseScale = 1 / (mTetherLengthScale + FLT_EPSILON);
 	Vector<CuTether>::Type tethers;
 	tethers.reserve(anchors.size());

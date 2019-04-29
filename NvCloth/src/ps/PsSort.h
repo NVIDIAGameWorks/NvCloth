@@ -52,10 +52,15 @@ that the predicate implements the < operator:
 // this was intentional.
 #endif
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
 {
+namespace ps
+{
+
 template <class T, class Predicate, class Allocator>
 void sort(T* elements, uint32_t count, const Predicate& compare, const Allocator& inAllocator,
           const uint32_t initialStackSize = 32)
@@ -111,17 +116,18 @@ void sort(T* elements, uint32_t count, const Predicate& compare, const Allocator
 template <class T, class Predicate>
 void sort(T* elements, uint32_t count, const Predicate& compare)
 {
-	sort(elements, count, compare, typename shdfnd::AllocatorTraits<T>::Type());
+	sort(elements, count, compare, typename ps::AllocatorTraits<T>::Type());
 }
 
 template <class T>
 void sort(T* elements, uint32_t count)
 {
-	sort(elements, count, shdfnd::Less<T>(), typename shdfnd::AllocatorTraits<T>::Type());
+	sort(elements, count, ps::Less<T>(), typename ps::AllocatorTraits<T>::Type());
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #if PX_VC
 #pragma warning(pop)

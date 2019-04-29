@@ -105,7 +105,7 @@ public:
 
 	void incRefCount()
 	{
-		physx::shdfnd::atomicIncrement(&mRefCount);
+		ps::atomicIncrement(&mRefCount);
 		NV_CLOTH_ASSERT(mRefCount > 0);
 	}
 
@@ -113,7 +113,7 @@ public:
 	bool decRefCount()
 	{
 		NV_CLOTH_ASSERT(mRefCount > 0);
-		int result = physx::shdfnd::atomicDecrement(&mRefCount);
+		int result = ps::atomicDecrement(&mRefCount);
 		if (result == 0)
 		{
 			delete this;

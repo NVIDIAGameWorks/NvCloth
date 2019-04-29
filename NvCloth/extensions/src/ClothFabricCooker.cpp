@@ -208,13 +208,13 @@ namespace
 			mBending += PxMax(0.0f, 0.1f - ratio) * 3;
 		}
 
-		PxReal mStretching;
-		PxReal mBending;
-		PxReal mShearing;
+		physx::PxReal mStretching;
+		physx::PxReal mBending;
+		physx::PxReal mShearing;
 	};
 
-	typedef shdfnd::Pair<PxU32, PxU32> Pair;
-	typedef shdfnd::Pair<Pair, ClothFabricPhaseType::Enum> Entry;
+	typedef ps::Pair<PxU32, physx::PxU32> Pair;
+	typedef ps::Pair<Pair, ClothFabricPhaseType::Enum> Entry;
 
 	// maintain heap status after elements have been pushed (heapify)
 	template<typename T>
@@ -234,7 +234,7 @@ namespace
 			if (!(begin[parent] < begin[current]))
 				break;
 
-			shdfnd::swap(begin[parent], begin[current]);
+			ps::swap(begin[parent], begin[current]);
 			current = parent;
 		}
 	}
@@ -246,7 +246,7 @@ namespace
 		T* begin = heap.begin();
 		T* end = heap.end();
 
-		shdfnd::swap(begin[0], end[-1]); // exchange elements
+		ps::swap(begin[0], end[-1]); // exchange elements
 
 		// shift down
 		end--;
@@ -261,7 +261,7 @@ namespace
 			if (!(begin[current] < begin[child]))
 				break;
 
-			shdfnd::swap(begin[current], begin[child]);
+			ps::swap(begin[current], begin[child]);
 			current = child;
 		}
 
@@ -546,7 +546,7 @@ bool FabricCookerImpl::cook(const ClothMeshDesc& desc, PxVec3 gravity, bool useG
 		const PxU32 restOffset = mSets[i];
 
 		ConstraintSorter predicate(&mIndices[indicesOffset]);
-		shdfnd::sort(&reorder[0], reorder.size(), predicate, nv::cloth::NonTrackingAllocator());
+		ps::sort(&reorder[0], reorder.size(), predicate, nv::cloth::ps::NonTrackingAllocator());
 		
 		for (PxU32 r=0; r < reorder.size(); ++r)
 		{

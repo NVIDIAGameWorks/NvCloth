@@ -85,9 +85,9 @@ bool clothSizeGreater(const T& t0, const T& t1)
 }
 
 template <typename T>
-void sortTasks(shdfnd::Array<T, cloth::NonTrackingAllocator>& tasks)
+void sortTasks(ps::Array<T, nv::cloth::ps::NonTrackingAllocator>& tasks)
 {
-	shdfnd::sort(tasks.begin(), tasks.size(), &clothSizeGreater<T>, nv::cloth::NonTrackingAllocator());
+	ps::sort(tasks.begin(), tasks.size(), &clothSizeGreater<T>, nv::cloth::ps::NonTrackingAllocator());
 }
 }
 
@@ -295,7 +295,7 @@ void cloth::SwSolver::SimulatedCloth::Simulate()
 	IterationStateFactory factory(*mCloth, mParent->mCurrentDt);
 	mInvNumIterations = factory.mInvNumIterations;
 
-	shdfnd::SIMDGuard simdGuard;
+	ps::SIMDGuard simdGuard;
 
 	SwClothData data(*mCloth, mCloth->mFabric);
 	SwKernelAllocator allocator(mScratchMemory, uint32_t(mScratchMemorySize));

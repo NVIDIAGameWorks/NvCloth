@@ -30,9 +30,13 @@
 #include "PsWindowsInclude.h"
 #include "NvCloth/ps/PsAtomic.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 
 int32_t atomicExchange(volatile int32_t* val, int32_t val2)
@@ -92,5 +96,6 @@ int32_t atomicMax(volatile int32_t* val, int32_t val2)
 	return newValue;
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv

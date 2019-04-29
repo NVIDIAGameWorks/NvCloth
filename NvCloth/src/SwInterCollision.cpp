@@ -253,7 +253,7 @@ uint32_t calculatePotentialColliders(const cloth::SwInterCollisionData* cBegin, 
 
 	// sort indices by their minimum extent on the sweep axis
 	ClothSorter<T4f> predicate(clothBounds, numCloths, sweepAxis);
-	shdfnd::sort(sortedIndices, numCloths, predicate, nv::cloth::NonTrackingAllocator());
+	ps::sort(sortedIndices, numCloths, predicate, nv::cloth::ps::NonTrackingAllocator());
 
 	for (uint32_t i = 0; i < numCloths; ++i)
 	{

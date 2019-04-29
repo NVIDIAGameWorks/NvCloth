@@ -257,7 +257,7 @@ class DxDeviceVector
 	}
 
 	template <typename Alloc>
-	DxDeviceVector& operator = (const physx::shdfnd::Array<T, Alloc>& other)
+	DxDeviceVector& operator = (const ps::Array<T, Alloc>& other)
 	{
 		assign(other.begin(), other.end());
 		return *this;
@@ -316,8 +316,8 @@ class DxDeviceVector
 
 	void swap(DxDeviceVector& other)
 	{
-		physx::shdfnd::swap(mBuffer, other.mBuffer);
-		physx::shdfnd::swap(mSize, other.mSize);
+		nv::cloth::swap(mBuffer, other.mBuffer);
+		nv::cloth::swap(mSize, other.mSize);
 	}
 
 	T* map(D3D11_MAP mapType)

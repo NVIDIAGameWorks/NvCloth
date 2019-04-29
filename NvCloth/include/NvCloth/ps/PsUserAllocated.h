@@ -32,9 +32,13 @@
 
 #include "PsAllocator.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 /**
 Provides new and delete using a UserAllocator.
@@ -86,7 +90,8 @@ class UserAllocated
 	PX_INLINE void operator delete [](void* ptr)
 	{ NonTrackingAllocator().deallocate(ptr); }
 };
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSUSERALLOCATED_H

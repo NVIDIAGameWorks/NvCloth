@@ -62,7 +62,7 @@ cloth::SwFabric::SwFabric(SwFactory& factory, uint32_t numParticles, Range<const
 	NV_CLOTH_ASSERT(sets.back() == restvalues.size());
 	NV_CLOTH_ASSERT(restvalues.size() * 2 == indices.size());
 	NV_CLOTH_ASSERT(restvalues.size() == stiffnessValues.size() || stiffnessValues.size() == 0);
-	NV_CLOTH_ASSERT(mNumParticles > *shdfnd::maxElement(indices.begin(), indices.end()));
+	NV_CLOTH_ASSERT(mNumParticles > *ps::maxElement(indices.begin(), indices.end()));
 	NV_CLOTH_ASSERT(mNumParticles + kSimdWidth - 1 <= USHRT_MAX);
 
 	mPhases.assign(phaseIndices.begin(), phaseIndices.end());

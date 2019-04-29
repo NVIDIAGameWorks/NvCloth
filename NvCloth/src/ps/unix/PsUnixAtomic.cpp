@@ -35,9 +35,13 @@
 #define PAUSE()
 #endif
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 
 void* atomicCompareExchangePointer(volatile void** dest, void* exch, void* comp)
@@ -97,6 +101,6 @@ int32_t atomicExchange(volatile int32_t* val, int32_t val2)
 
 	return oldVal;
 }
-
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv

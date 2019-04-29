@@ -32,10 +32,15 @@
 
 #include "NvCloth/Allocator.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
 {
+namespace ps
+{
+
 template <typename T, typename Unused = void>
 class ScopedPointer
 {
@@ -55,15 +60,16 @@ class ScopedPointer
 	bool mOwned;
 };
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 /*! Stack allocation for \c count instances of \c type. Falling back to temp allocator if using more than 1kB. */
 #ifdef __SPU__
 #define PX_ALLOCA(var, type, count) type* var = reinterpret_cast<type*>(PxAlloca(sizeof(type) * (count)))
 #else
 #define PX_ALLOCA(var, type, count)                                                                                    \
-	physx::shdfnd::ScopedPointer<type> var;                                                                            \
+	nv::cloth::ps::ScopedPointer<type> var;                                                                            \
 	{                                                                                                                  \
 		uint32_t size = sizeof(type) * (count);                                                                        \
 		var.mOwned = size > 1024;                                                                                      \

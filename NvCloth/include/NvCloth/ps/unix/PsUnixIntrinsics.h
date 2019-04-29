@@ -49,10 +49,15 @@
 #error "This file should only be included by unix builds!!"
 #endif
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
 {
+namespace ps
+{
+
 
 PX_FORCE_INLINE void memoryBarrier()
 {
@@ -146,8 +151,8 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE float floatFloor(float x)
 
 #define NS_EXPECT_TRUE(x) x
 #define NS_EXPECT_FALSE(x) x
-
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSUNIXINTRINSICS_H

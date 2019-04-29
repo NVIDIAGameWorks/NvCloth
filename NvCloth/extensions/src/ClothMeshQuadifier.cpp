@@ -133,7 +133,7 @@ namespace
 
 		PxU32 indexMap[3][3] = { { 0, 1, 2 }, { 1, 2, 0 }, { 0, 2, 1 } };
 
-		const PxF32 rightAngle = PxCos(shdfnd::degToRad(85.0f));
+		const PxF32 rightAngle = PxCos(ps::degToRad(85.0f));
 
 		for(PxU32 i=0; i<triangles.size(); i+=3)
 		{
@@ -166,7 +166,7 @@ namespace
 				uniqueEdges.pushBack(edges[j]);
 		}
 
-		shdfnd::sort(uniqueEdges.begin(), uniqueEdges.size(), UniqueEdge(0, 0, 0), NonTrackingAllocator());
+		ps::sort(uniqueEdges.begin(), uniqueEdges.size(), UniqueEdge(0, 0, 0), ps::NonTrackingAllocator());
 
 		PxU32 writeIndex = 0, readStart = 0, readEnd = 0;
 		PxU32 numQuadEdges = 0;
@@ -259,9 +259,9 @@ namespace
 			}
 		}
 
-		shdfnd::sort(hideEdges.begin(), hideEdges.size(), SortHiddenEdges(uniqueEdges), NonTrackingAllocator());
+		ps::sort(hideEdges.begin(), hideEdges.size(), SortHiddenEdges(uniqueEdges), ps::NonTrackingAllocator());
 
-		const PxF32 maxAngle = PxSin(shdfnd::degToRad(60.0f));
+		const PxF32 maxAngle = PxSin(ps::degToRad(60.0f));
 
 		PxU32 numHiddenEdges = 0;
 

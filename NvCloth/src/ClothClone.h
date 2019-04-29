@@ -46,14 +46,14 @@ class CuFactory;
 
 // make range from vector
 template <typename T, typename A>
-Range<T> makeRange(physx::shdfnd::Array<T, A>& vec)
+Range<T> makeRange(ps::Array<T, A>& vec)
 {
 	T* ptr = vec.empty() ? 0 : vec.begin();
 	return Range<T>(ptr, ptr + vec.size());
 }
 
 template <typename T, typename A>
-Range<const T> makeRange(const physx::shdfnd::Array<T, A>& vec)
+Range<const T> makeRange(const ps::Array<T, A>& vec)
 {
 	const T* ptr = vec.empty() ? 0 : vec.begin();
 	return Range<const T>(ptr, ptr + vec.size());

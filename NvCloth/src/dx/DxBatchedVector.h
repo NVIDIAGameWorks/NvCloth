@@ -146,7 +146,7 @@ class DxBatchedStorage
 				                                         &box);
 			}
 
-			physx::shdfnd::swap(mBuffer, buffer);
+			ps::swap(mBuffer, buffer);
 		}
 
 		if (begin && end > begin)
@@ -216,7 +216,7 @@ class DxBatchedVector
 	}
 
 	template <typename Alloc>
-	DxBatchedVector& operator = (const physx::shdfnd::Array<T, Alloc>& other)
+	DxBatchedVector& operator = (const ps::Array<T, Alloc>& other)
 	{
 		assign(other.begin(), other.end());
 		return *this;
@@ -298,9 +298,9 @@ class DxBatchedVector
 	void swap(DxBatchedVector<T>& other)
 	{
 		NV_CLOTH_ASSERT(&mStorage == &other.mStorage);
-		physx::shdfnd::swap(mOffset, other.mOffset);
-		physx::shdfnd::swap(mSize, other.mSize);
-		physx::shdfnd::swap(mCapacity, other.mCapacity);
+		ps::swap(mOffset, other.mOffset);
+		ps::swap(mSize, other.mSize);
+		ps::swap(mCapacity, other.mCapacity);
 		// alternative to running through all elements in DxBatchedStorage::update()
 		// however, swap should be O(1) and is used more frequently than reserve/add/remove
 		// nvidia::swap(*mStorage.mViews.find(&left), *other.mStorage.mViews.find(&right));

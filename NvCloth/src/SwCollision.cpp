@@ -331,7 +331,7 @@ void cloth::SwCollision<T4f>::operator()(const IterationState<T4f>& state)
 	}
 
 	if (mPrevData.mSpheres)
-		shdfnd::swap(mCurData, mPrevData);
+		ps::swap(mCurData, mPrevData);
 }
 
 template <typename T4f>

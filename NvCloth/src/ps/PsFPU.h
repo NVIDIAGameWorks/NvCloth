@@ -48,10 +48,15 @@
 
 #define PX_SUPPORT_GUARDS (PX_WINDOWS_FAMILY || PX_XBOXONE || (PX_LINUX && (PX_X86 || PX_X64)) || PX_PS4 || PX_OSX)
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
 {
+namespace ps
+{
+
 // sets the default SDK state for scalar and SIMD units
 class NV_CLOTH_IMPORT FPUGuard
 {
@@ -84,18 +89,19 @@ NV_CLOTH_IMPORT void enableFPExceptions();
 */
 NV_CLOTH_IMPORT void disableFPExceptions();
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #if PX_WINDOWS_FAMILY || PX_XBOXONE
 #include "windows/PsWindowsFPU.h"
 #elif (PX_LINUX && PX_SSE2) || PX_PS4 || PX_OSX
 #include "unix/PsUnixFPU.h"
 #else
-PX_INLINE physx::shdfnd::SIMDGuard::SIMDGuard()
+PX_INLINE nv::cloth::ps::SIMDGuard::SIMDGuard()
 {
 }
-PX_INLINE physx::shdfnd::SIMDGuard::~SIMDGuard()
+PX_INLINE nv::cloth::ps::SIMDGuard::~SIMDGuard()
 {
 }
 #endif

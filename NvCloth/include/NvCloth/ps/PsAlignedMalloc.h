@@ -38,9 +38,13 @@ Alignment must be a power of 2!
 -- should be templated by a base allocator
 */
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 /**
 Allocator, which is used to access the global PxAllocatorCallback instance
@@ -82,7 +86,8 @@ class AlignedAllocator : public BaseAllocator
 	}
 };
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSALIGNEDMALLOC_H

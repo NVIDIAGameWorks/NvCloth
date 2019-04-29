@@ -47,13 +47,7 @@
 #define NV_CLOTH_CALL_CONV PX_CALL_CONV
 #define NV_CLOTH_API(ret_type) NV_CLOTH_LINKAGE ret_type NV_CLOTH_CALL_CONV
 
-namespace physx
-{
-	class PxAllocatorCallback;
-	class PxErrorCallback;
-	class PxProfilerCallback;
-	class PxAssertHandler;
-}
+
 
 /** \brief NVidia namespace */
 namespace nv
@@ -61,6 +55,11 @@ namespace nv
 /** \brief nvcloth namespace */
 namespace cloth
 {
+	class PxAllocatorCallback;
+	class PxErrorCallback;
+	class PxProfilerCallback;
+	class PxAssertHandler;
+
 /** \brief Initialize the library by passing in callback functions.
 	This needs to be called before using any other part of the library.
 	@param allocatorCallback Callback interface for memory allocations. Needs to return 16 byte aligned memory.

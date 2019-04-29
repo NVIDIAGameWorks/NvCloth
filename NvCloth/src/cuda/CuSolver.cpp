@@ -617,19 +617,19 @@ void cloth::CuSolver::endFrame()
 
 		if (!cloth.mTargetCollisionSpheres.empty())
 		{
-			shdfnd::swap(cloth.mStartCollisionSpheres, cloth.mTargetCollisionSpheres);
+			ps::swap(cloth.mStartCollisionSpheres, cloth.mTargetCollisionSpheres);
 			cloth.mTargetCollisionSpheres.resize(0);
 		}
 
 		if (!cloth.mTargetCollisionPlanes.empty())
 		{
-			shdfnd::swap(cloth.mStartCollisionPlanes, cloth.mTargetCollisionPlanes);
+			ps::swap(cloth.mStartCollisionPlanes, cloth.mTargetCollisionPlanes);
 			cloth.mTargetCollisionPlanes.resize(0);
 		}
 
 		if (!cloth.mTargetCollisionTriangles.empty())
 		{
-			shdfnd::swap(cloth.mStartCollisionTriangles, cloth.mTargetCollisionTriangles);
+			ps::swap(cloth.mStartCollisionTriangles, cloth.mTargetCollisionTriangles);
 			cloth.mTargetCollisionTriangles.resize(0);
 		}
 

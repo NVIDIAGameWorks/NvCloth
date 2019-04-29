@@ -69,9 +69,13 @@
 // for(HashMap::Iterator iter = test.getIterator(); !iter.done(); ++iter)
 //			myFunction(iter->first, iter->second);
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 template <class Key, class Value, class HashFn = Hash<Key>, class Allocator = NonTrackingAllocator>
 class HashMap : public internal::HashMapBase<Key, Value, HashFn, Allocator>
@@ -112,7 +116,8 @@ class CoalescedHashMap : public internal::HashMapBase<Key, Value, HashFn, Alloca
 	}
 };
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSHASHMAP_H

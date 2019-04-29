@@ -35,9 +35,13 @@
 #include "PsIntrinsics.h"
 #include "Ps.h"
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 PX_INLINE uint32_t bitCount(uint32_t v)
 {
@@ -103,7 +107,8 @@ PX_INLINE uint32_t ilog2(uint32_t num)
 	return uint32_t(-1);
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSBITUTILS_H

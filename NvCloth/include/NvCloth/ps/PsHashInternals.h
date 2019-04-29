@@ -40,9 +40,13 @@
 #pragma warning(push)
 #pragma warning(disable : 4127) // conditional expression is constant
 #endif
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 namespace internal
 {
@@ -190,7 +194,7 @@ class HashBase : private Allocator
 
 		destroy();
 
-		intrinsics::memSet(mHash, EOL, mHashSize * sizeof(uint32_t));
+		physx::intrinsics::memSet(mHash, EOL, mHashSize * sizeof(uint32_t));
 
 		const uint32_t sizeMinus1 = mEntriesCapacity - 1;
 		for(uint32_t i = 0; i < sizeMinus1; i++)
@@ -378,7 +382,7 @@ class HashBase : private Allocator
 		}
 
 		// initialize new hash table
-		intrinsics::memSet(newHash, uint32_t(EOL), newHashSize * sizeof(uint32_t));
+		physx::intrinsics::memSet(newHash, uint32_t(EOL), newHashSize * sizeof(uint32_t));
 
 		// iterate over old entries, re-hash and create new entries
 		if(resizeCompact)
@@ -399,7 +403,7 @@ class HashBase : private Allocator
 		else
 		{
 			// copy old free list, only required for non compact resizing
-			intrinsics::memCopy(newEntriesNext, mEntriesNext, mEntriesCapacity * sizeof(uint32_t));
+			physx::intrinsics::memCopy(newEntriesNext, mEntriesNext, mEntriesCapacity * sizeof(uint32_t));
 
 			for(uint32_t bucket = 0; bucket < mHashSize; bucket++)
 			{
@@ -786,8 +790,9 @@ class HashMapBase
 };
 }
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #if PX_VC
 #pragma warning(pop)

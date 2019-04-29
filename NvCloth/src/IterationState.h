@@ -346,7 +346,7 @@ cloth::IterationState<T4f> cloth::IterationStateFactory::create(MyCloth const& c
 		float centrifugalSqrLength = array(data)[0] * centrifugalScale;
 
 		T4f coriolisVelocity = centrifugalVelocity * simd4f(centrifugalScale);
-		physx::PxMat33 coriolisMatrix = physx::shdfnd::star(castToPxVec3(coriolisVelocity));
+		physx::PxMat33 coriolisMatrix = ps::star(castToPxVec3(coriolisVelocity));
 
 		const float* dampScalePtr = array(firstDampScale);
 		const float* centrifugalPtr = array(centrifugalVelocity);

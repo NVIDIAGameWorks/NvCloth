@@ -124,12 +124,12 @@ bool operator!=(const CuHostAllocator<T1, Flag1>&, const CuHostAllocator<T2, Fla
 	return false;
 }
 
-//Use CuHostVectorImpl instead of physx::shdfnd::Array<T, CuHostAllocator<T, Flags>> 
+//Use CuHostVectorImpl instead of nv::cloth::Array<T, CuHostAllocator<T, Flags>> 
 //This entire class is just to make sure that the mDevicePtr from the CuHostAllocator is properly swapped together with mData
 template <typename T, unsigned Flags = 0>
-class CuHostVectorImpl : public physx::shdfnd::Array<T, CuHostAllocator<T, Flags>>
+class CuHostVectorImpl : public ps::Array<T, CuHostAllocator<T, Flags>>
 {
-	typedef physx::shdfnd::Array<T, CuHostAllocator<T, Flags>> Super;
+	typedef ps::Array<T, CuHostAllocator<T, Flags>> Super;
 	typedef CuHostAllocator<T, Flags> Alloc;
 public:
 	explicit CuHostVectorImpl(const physx::PxEMPTY v):Super(v){}
@@ -138,7 +138,7 @@ public:
 	PX_INLINE explicit CuHostVectorImpl(uint32_t size, const T& a = T(), const Alloc& alloc = Alloc()):Super(size,a,alloc){}
 
 	template <class A>
-	PX_INLINE explicit CuHostVectorImpl(const physx::shdfnd::Array<T, A>& other, const Alloc& alloc = Alloc()):Super(other,alloc){}
+	PX_INLINE explicit CuHostVectorImpl(const ps::Array<T, A>& other, const Alloc& alloc = Alloc()):Super(other,alloc){}
 
 	PX_INLINE CuHostVectorImpl(const CuHostVectorImpl& other, const Alloc& alloc = Alloc()):Super(other,alloc){}
 
@@ -147,7 +147,7 @@ public:
 	void swap(CuHostVectorImpl<T, Flags>& other)
 	{
 		NV_CLOTH_ASSERT(this->mContext == other.mContext);
-		physx::shdfnd::swap(this->mDevicePtr, other.mDevicePtr);
+		ps::swap(this->mDevicePtr, other.mDevicePtr);
 		Super::swap(other);
 	}
 };
@@ -166,13 +166,7 @@ T* getDevicePointer(nv::cloth::CuHostVectorImpl<T, Flags>& vector)
 	return vector.empty() ? 0 : reinterpret_cast<T*>(vector.getAllocator().mDevicePtr);
 }
 
-} // namespace cloth
-
-} // namespace nv
-
-namespace physx
-{
-namespace shdfnd
+namespace ps
 {
 	//Make sure we call the correct swap function when using the free function swap
 	template <class T, unsigned Flags>
@@ -181,4 +175,7 @@ namespace shdfnd
 		x.swap(y);
 	}
 }
-}
+} // namespace cloth
+
+} // namespace nv
+

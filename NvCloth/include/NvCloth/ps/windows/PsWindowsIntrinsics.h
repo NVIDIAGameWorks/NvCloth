@@ -59,9 +59,13 @@
 #pragma intrinsic(_BitScanForward)
 #pragma intrinsic(_BitScanReverse)
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 
 /*
@@ -183,7 +187,8 @@ PX_CUDA_CALLABLE PX_FORCE_INLINE float floatFloor(float x)
 #define NS_EXPECT_TRUE(x) x
 #define NS_EXPECT_FALSE(x) x
 
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv
 
 #endif // #ifndef PSFOUNDATION_PSWINDOWSINTRINSICS_H

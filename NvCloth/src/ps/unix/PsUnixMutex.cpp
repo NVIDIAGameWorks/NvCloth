@@ -39,9 +39,13 @@
 
 #include <pthread.h>
 
-namespace physx
+/** \brief NVidia namespace */
+namespace nv
 {
-namespace shdfnd
+/** \brief nvcloth namespace */
+namespace cloth
+{
+namespace ps
 {
 
 namespace
@@ -165,6 +169,6 @@ void ReadWriteLock::unlockWriter()
 {
 	mImpl->mutex.unlock();
 }
-
-} // namespace shdfnd
-} // namespace physx
+} // namespace ps
+} // namespace cloth
+} // namespace nv

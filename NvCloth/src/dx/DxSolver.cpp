@@ -268,7 +268,7 @@ void cloth::DxSolver::addClothAppend(Cloth* cloth)
 void cloth::DxSolver::addClothUpdateData()
 {
 	// sort cloth instances by size
-	shdfnd::sort(mCloths.begin(), mCloths.size(), ClothSimCostGreater(), NonTrackingAllocator());
+	ps::sort(mCloths.begin(), mCloths.size(), ClothSimCostGreater(), ps::NonTrackingAllocator());
 
 	DxContextLock contextLock(mFactory);
 
