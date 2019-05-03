@@ -1,4 +1,4 @@
-NvCloth 1.0
+NvCloth 1.1.6
 ===========
 
 Introduction
