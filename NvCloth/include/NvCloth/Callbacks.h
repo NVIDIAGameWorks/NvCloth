@@ -70,7 +70,7 @@ namespace cloth
 	*/
 NV_CLOTH_API(void)
 	InitializeNvCloth(physx::PxAllocatorCallback* allocatorCallback, physx::PxErrorCallback* errorCallback, 
-						physx::PxAssertHandler* assertHandler, physx::PxProfilerCallback* profilerCallback,
+						nv::cloth::PxAssertHandler* assertHandler, physx::PxProfilerCallback* profilerCallback,
 						int autoDllIDCheck = NV_CLOTH_DLL_ID);
 }
 }
@@ -78,10 +78,10 @@ NV_CLOTH_API(void)
 //Allocator
 NV_CLOTH_API(physx::PxAllocatorCallback*) GetNvClothAllocator(); //Only use internally
 
-#if !PX_DOXYGEN
-namespace physx
+namespace nv
 {
-#endif
+namespace cloth
+{
 
 /* Base class to handle assert failures */
 class PxAssertHandler
@@ -93,14 +93,7 @@ public:
 	virtual void operator()(const char* exp, const char* file, int line, bool& ignore) = 0;
 };
 
-#if !PX_DOXYGEN
-} // namespace physx
-#endif
 
-namespace nv
-{
-namespace cloth
-{
 //Logging
 void LogErrorFn  (const char* fileName, int lineNumber, const char* msg, ...);
 void LogInvalidParameterFn  (const char* fileName, int lineNumber, const char* msg, ...);
@@ -113,7 +106,7 @@ void LogInfoFn   (const char* fileName, int lineNumber, const char* msg, ...);
 #define NV_CLOTH_LOG_INFO(...) nv::cloth::LogInfoFn(__FILE__,__LINE__,__VA_ARGS__)
 
 //ASSERT
-NV_CLOTH_API(physx::PxAssertHandler*) GetNvClothAssertHandler(); //This function needs to be exposed to properly inline asserts outside this dll
+NV_CLOTH_API(nv::cloth::PxAssertHandler*) GetNvClothAssertHandler(); //This function needs to be exposed to properly inline asserts outside this dll
 #if !PX_ENABLE_ASSERTS
 #if PX_VC
 #define NV_CLOTH_ASSERT(exp) __noop

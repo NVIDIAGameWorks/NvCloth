@@ -136,7 +136,7 @@ class ErrorCallback : public physx::PxErrorCallback
 };
 
 
-class AssertHandler : public physx::PxAssertHandler
+class AssertHandler : public nv::cloth::PxAssertHandler
 {
 	public:
 		virtual void operator()(const char* exp, const char* file, int line, bool& ignore)

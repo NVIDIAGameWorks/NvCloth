@@ -43,13 +43,13 @@ struct NvClothContext
 {
 	physx::PxAllocatorCallback* mAllocator;
 	physx::PxErrorCallback* mErrorCallback;
-	physx::PxAssertHandler* mAssertHandler;
+	nv::cloth::PxAssertHandler* mAssertHandler;
 	physx::PxProfilerCallback* mProfilerCallback;
 };
 
 static NvClothContext sContext;
 
-NV_CLOTH_API(void) InitializeNvCloth(physx::PxAllocatorCallback* allocatorCallback, physx::PxErrorCallback* errorCallback, physx::PxAssertHandler* assertHandler, physx::PxProfilerCallback* profilerCallback, int autoDllIDCheck)
+NV_CLOTH_API(void) InitializeNvCloth(physx::PxAllocatorCallback* allocatorCallback, physx::PxErrorCallback* errorCallback, nv::cloth::PxAssertHandler* assertHandler, physx::PxProfilerCallback* profilerCallback, int autoDllIDCheck)
 {
 	PX_UNUSED(autoDllIDCheck);
 	NV_CLOTH_ASSERT_WITH_MESSAGE("NvCloth dll id mismatch, ensure you compile with matching headers/run with matching dll.", NV_CLOTH_DLL_ID == autoDllIDCheck);
@@ -117,7 +117,7 @@ void LogInfoFn(const char* fileName, int lineNumber, const char* msg, ...)
 	va_end(args);
 }
 
-NV_CLOTH_API(physx::PxAssertHandler*) GetNvClothAssertHandler()
+NV_CLOTH_API(nv::cloth::PxAssertHandler*) GetNvClothAssertHandler()
 {
 	return sContext.mAssertHandler;
 }
