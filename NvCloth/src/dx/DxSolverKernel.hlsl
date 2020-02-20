@@ -174,18 +174,18 @@ void accelerateParticles(IParticles curParticles, uint32_t threadIdx)
 	// might be better to move this into integrate particles
 	uint32_t accelerationsOffset = gFrameData.mParticleAccelerationsOffset;
 
-	GroupMemoryBarrierWithGroupSync(); // looping with 4 instead of 1 thread per particle
+	GroupMemoryBarrierWithGroupSync();
 
-	float sqrIterDt = ~threadIdx & 0x3 ? gFrameData.mIterDt * gFrameData.mIterDt : 0.0f;
-	for (uint32_t i = threadIdx; i < gClothData.mNumParticles * 4; i += blockDim)
+	float sqrIterDt = gFrameData.mIterDt * gFrameData.mIterDt;
+
+	for (uint32_t i = threadIdx; i < gClothData.mNumParticles; i += blockDim)
 	{
 		float4 acceleration = bParticleAccelerations[accelerationsOffset + i];
-
-		float4 curPos = curParticles.get(i / 4);
+		float4 curPos = curParticles.get(i);
 		if (curPos.w > 0.0f)
 		{
-			curPos += acceleration * sqrIterDt;
-			curParticles.set(i / 4, curPos);
+			curPos.xyz += acceleration.xyz * sqrIterDt;
+			curParticles.set(i, curPos);
 		}
 	}
 
