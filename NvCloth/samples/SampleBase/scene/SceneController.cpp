@@ -111,6 +111,7 @@ void SceneController::onInitialize()
 	mFactories[(int)nv::cloth::Platform::CUDA] = nullptr;
 	mFactories[(int)nv::cloth::Platform::DX11] = nullptr;
 	
+#if NV_CLOTH_ENABLE_CUDA
 	//CUDA
 	do
 	{
@@ -128,7 +129,9 @@ void SceneController::onInitialize()
 
 		mFactories[(int)nv::cloth::Platform::CUDA] = NvClothCreateFactoryCUDA(mCUDAContext);
 	} while(false);
+#endif
 
+#if NV_CLOTH_ENABLE_DX11
 	//DX11
 	do
 	{
@@ -144,6 +147,7 @@ void SceneController::onInitialize()
 		mFactories[(int)nv::cloth::Platform::DX11] = NvClothCreateFactoryDX11(mGraphicsContextManager);
 		mDXInitialized &= mFactories[(int)nv::cloth::Platform::DX11] != nullptr;
 	} while(false);
+#endif
 
 	mDebugLineRenderBuffer = new DebugLineRenderBuffer;
 }
@@ -266,9 +270,13 @@ void SceneController::drawUI()
 
 	bool pressed = false;
 
-	pressed = pressed | ImGui::RadioButton("CPU", &mActivePlatform, (int)nv::cloth::Platform::CPU); ImGui::SameLine();
-	pressed = pressed | ImGui::RadioButton("DX11", &mActivePlatform, (int)nv::cloth::Platform::DX11); ImGui::SameLine();
-	pressed = pressed | ImGui::RadioButton("CUDA", &mActivePlatform, (int)nv::cloth::Platform::CUDA);
+	pressed = pressed | ImGui::RadioButton("CPU", &mActivePlatform, (int)nv::cloth::Platform::CPU);
+#if NV_CLOTH_ENABLE_DX11
+	ImGui::SameLine(); pressed = pressed | ImGui::RadioButton("DX11", &mActivePlatform, (int)nv::cloth::Platform::DX11);
+#endif
+#if NV_CLOTH_ENABLE_CUDA
+	ImGui::SameLine(); pressed = pressed | ImGui::RadioButton("CUDA", &mActivePlatform, (int)nv::cloth::Platform::CUDA);
+#endif
 
 	if(!getFactory())
 		mActivePlatform = (int)nv::cloth::Platform::CPU;
