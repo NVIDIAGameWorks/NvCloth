@@ -16,7 +16,6 @@
 class SimpleScene : public Scene
 {
 public:
-
 	SimpleScene(SceneController* sceneController):Scene(sceneController) {}
 
 	virtual void onInitialize() override;
