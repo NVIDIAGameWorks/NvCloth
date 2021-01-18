@@ -15,15 +15,24 @@ SET(NVCLOTH_PLATFORM_INCLUDES
 )
 
 SET(NVCLOTH_PLATFORM_SOURCE_FILES
-	#${PROJECT_ROOT_DIR}/src/neon/NeonCollision.cpp
-	#${PROJECT_ROOT_DIR}/src/neon/NeonSelfCollision.cpp
-	#${PROJECT_ROOT_DIR}/src/neon/NeonSolverKernel.cpp
-	#${PROJECT_ROOT_DIR}/src/neon/SwCollisionHelpers.h
+	${PROJECT_ROOT_DIR}/src/ps/unix/PsUnixAtomic.cpp
+	${PROJECT_ROOT_DIR}/src/ps/unix/PsUnixFPU.h
+
+	${PROJECT_ROOT_DIR}/src/neon/NeonCollision.cpp
+	${PROJECT_ROOT_DIR}/src/neon/NeonSelfCollision.cpp
+	${PROJECT_ROOT_DIR}/src/neon/NeonSolverKernel.cpp
+	${PROJECT_ROOT_DIR}/src/neon/SwCollisionHelpers.h
 )
+
+IF(PX_STATIC_LIBRARIES)
+	SET(NVCLOTH_API_COMPILE_DEFS NV_CLOTH_IMPORT=;PX_CALL_CONV=;)
+ELSE()
+	SET(NVCLOTH_API_COMPILE_DEFS NV_CLOTH_IMPORT=PX_DLL_EXPORT;)
+ENDIF()
 
 # Use generator expressions to set config specific preprocessor definitions
 SET(NVCLOTH_COMPILE_DEFS
-	NV_CLOTH_IMPORT=PX_DLL_EXPORT
+	${NVCLOTH_API_COMPILE_DEFS}
 	NV_CLOTH_ENABLE_DX11=0
 	NV_CLOTH_ENABLE_CUDA=0
 
@@ -36,7 +45,11 @@ SET(NVCLOTH_COMPILE_DEFS
 	$<$<CONFIG:release>:${PHYSX_IOS_RELEASE_COMPILE_DEFS};>
 )
 
-SET(NVCLOTH_LIBTYPE STATIC)
+IF(PX_STATIC_LIBRARIES)
+	SET(NVCLOTH_LIBTYPE STATIC)
+ELSE()
+	SET(NVCLOTH_LIBTYPE SHARED)
+ENDIF()
 
 # include common PhysX settings
 INCLUDE(../common/NvCloth.cmake)

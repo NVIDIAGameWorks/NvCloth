@@ -301,11 +301,16 @@ void cloth::SwSolver::SimulatedCloth::Simulate()
 	SwKernelAllocator allocator(mScratchMemory, uint32_t(mScratchMemorySize));
 
 	// construct kernel functor and execute
-#if NV_ANDROID
+#ifdef __ARM_NEON__
 	if (!neonSolverKernel(*mCloth, data, allocator, factory))
 	{
-		//NV_CLOTH_LOG_WARNING("No NEON CPU support detected. Falling back to scalar types.");
-		SwSolverKernel<Scalar4f>(*mCloth, data, allocator, factory)();
+		#if NV_SIMD_SCALAR
+			//NV_CLOTH_LOG_WARNING("No NEON CPU support detected. Falling back to scalar types.");
+			SwSolverKernel<Scalar4f>(*mCloth, data, allocator, factory)();
+		#else
+			NV_CLOTH_LOG_ERROR("Error creating NEON solver kernel.");
+			NV_CLOTH_ASSERT(0);
+		#endif
 	}
 #else
 	SwSolverKernel<Simd4fType>(*mCloth, data, allocator, factory)();

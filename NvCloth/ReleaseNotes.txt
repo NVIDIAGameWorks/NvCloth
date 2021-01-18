@@ -4,6 +4,25 @@ NvCloth Release notes.
 Release Notes 
 ***************************
 
+1.1.6.lumberyard_1
+===========================================================================================
+Lumberyard changes MR#58 Contributed by moraaar
+
+- Added support to build both share & static libraries on all platforms (pc, mac, ios, android, linux)
+    + Modified cmake files to be able to choose between static or dynamic libraries
+    + Predefined NvCloth API macros when building staticly so it doesn't include any export/import code.
+- Fixed linking error on iOS as it didn't include any implementation for Atomics (using unix version as Mac does)
+- Fixed Windows cmake bug when choosing between /MT and /MD.
+- Fixed linking error when NEON is enabled caused by compiling SwCollision.cpp, SwSelfCollision.cpp and SwSolverKernel.cpp content twice.
+- Enabled NEON SIMD instructions on all platforms that supports it:
+    + Modified NEON code to be platform agnostic using macros, not Android only.
+    + Enbled NEON instructions on iOS
+    + Modified Android cmake files to use the right macros depending on ABI being built.
+- Fixed compilation error when client app uses NvCloth library and the app compiles with Visual Studio 2019.
+    + Microsoft removed <typeinfo.h> from VS2019 16.3 and that header is used by NvCloth library. Fixed nVidia's NvCloth library to use <typeinfo> instead from that version.
+- Fixed unstable cloth simulation on Android (armv8).
+    + Cloth particles during simulation were very unstable on Android (armv8), their location gets out of control really quickly with very unpredictable behaviour. After many attempts to find the source of the problem debugging the library, the solution came by adding the flag "-ffast-math" in the compilation of the library for Android (armv8).
+
 1.1.6
 ===========================================================================================
 Compatible platforms:
