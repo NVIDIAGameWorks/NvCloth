@@ -31,4 +31,4 @@
 #error This file needs to be compiled with NEON support!
 #endif
 
-#include "SwCollision.cpp"
+// SwCollision.cpp is compiled already using Neon implementation when Neon macros are found

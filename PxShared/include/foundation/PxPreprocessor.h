@@ -53,7 +53,9 @@ All definitions have a value of 1 or 0, use '#if' instead of '#ifdef'.
 Compiler defines, see http://sourceforge.net/p/predef/wiki/Compilers/
 */
 #if defined(_MSC_VER)
-#if _MSC_VER >= 1910
+#if _MSC_VER >= 1923
+#define PX_VC 16
+#elif _MSC_VER >= 1910
 #define PX_VC 15
 #elif _MSC_VER >= 1900
 #define PX_VC 14
@@ -292,7 +294,7 @@ DLL export macros
 #define PX_UNIX_EXPORT
 #endif
 
-#if PX_WINDOWS_FAMILY
+#if (PX_WINDOWS_FAMILY || PX_XBOXONE || PX_PS4)
 #define PX_DLL_EXPORT __declspec(dllexport)
 #define PX_DLL_IMPORT __declspec(dllimport)
 #else

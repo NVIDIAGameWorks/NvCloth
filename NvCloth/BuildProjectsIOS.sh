@@ -25,3 +25,11 @@ cd compiler/ios-cmake/
 $CMAKE --build . --target ALL_BUILD --clean-first --config debug -- -parallelizeTargets -jobs 5 || exit 1
 cd ../../
 
+cd compiler/ios-cmake/
+$CMAKE --build . --target ALL_BUILD --clean-first --config profile -- -parallelizeTargets -jobs 5 || exit 1
+cd ../../
+
+cd compiler/ios-cmake/
+$CMAKE --build . --target ALL_BUILD --clean-first --config checked -- -parallelizeTargets -jobs 5 || exit 1
+cd ../../
+

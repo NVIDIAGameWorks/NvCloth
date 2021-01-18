@@ -37,7 +37,11 @@
 
 #if(PX_WINDOWS_FAMILY || PX_XBOXONE)
 #include <exception>
-#include <typeinfo.h>
+	#if PX_VC >= 16
+		#include <typeinfo>
+	#else
+		#include <typeinfo.h>
+	#endif
 #endif
 #if(PX_APPLE_FAMILY)
 #include <typeinfo>
