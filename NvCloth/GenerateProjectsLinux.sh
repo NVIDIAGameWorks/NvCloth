@@ -43,23 +43,23 @@ export USE_CUDA=0
 rm -r -f compiler/linux64-debug-cmake/
 mkdir compiler/linux64-debug-cmake/
 cd compiler/linux64-debug-cmake/
-$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=debug -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
+$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=debug -DPX_STATIC_LIBRARIES=1 -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
 cd ../../
 
 rm -r -f compiler/linux64-checked-cmake/
 mkdir compiler/linux64-checked-cmake/
 cd compiler/linux64-checked-cmake/
-$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=checked -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
+$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=checked -DPX_STATIC_LIBRARIES=1 -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
 cd ../../
 
 rm -r -f compiler/linux64-profile-cmake/
 mkdir compiler/linux64-profile-cmake/
 cd compiler/linux64-profile-cmake/
-$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=profile -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
+$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=profile -DPX_STATIC_LIBRARIES=1 -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
 cd ../../
 
 rm -r -f compiler/linux64-release-cmake/
 mkdir compiler/linux64-release-cmake/
 cd compiler/linux64-release-cmake/
-$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=release -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
+$CMAKE ../cmake/linux -G "Unix Makefiles" -DTARGET_BUILD_PLATFORM=linux -DCMAKE_BUILD_TYPE=release -DPX_STATIC_LIBRARIES=1 -DNV_CLOTH_ENABLE_CUDA=$USE_CUDA -DPX_GENERATE_GPU_PROJECTS=0 -DPX_OUTPUT_DLL_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake -DPX_OUTPUT_LIB_DIR=$PX_OUTPUT_ROOT/lib/linux64-cmake -DPX_OUTPUT_EXE_DIR=$PX_OUTPUT_ROOT/bin/linux64-cmake || exit 1
 cd ../../

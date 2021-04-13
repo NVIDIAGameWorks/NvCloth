@@ -31,14 +31,23 @@
 #error This file needs to be compiled with NEON support!
 #endif
 
-#include "SwSolverKernel.cpp"
+// SwSolverKernel.cpp is compiled already using Neon implementation when Neon macros are found
+#include "SwSolverKernel.h"
 
+// On Android armeabi-v7a (32-bits) NEON support is not guaranteed, so there must be an additional runtime check.
+#if NV_ANDROID && defined __arm__
 #include "../ps/android/cpu-features.h"
 
 namespace
 {
 	const bool sNeonSupport = ANDROID_CPU_ARM_FEATURE_NEON & android_getCpuFeatures();
 }
+#else
+namespace
+{
+	const bool sNeonSupport = true;
+}
+#endif
 
 namespace nv
 {

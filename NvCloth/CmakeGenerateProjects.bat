@@ -38,7 +38,7 @@ IF %ERRORLEVEL% NEQ 0 (
 set CMAKE=%PM_cmake_PATH%/bin/cmake.exe
 
 REM Common for all generators
-set CMAKE_COMMON_PARAMS=-DTARGET_BUILD_PLATFORM=windows -DNV_CLOTH_ENABLE_DX11=%USE_DX11% -DNV_CLOTH_ENABLE_CUDA=%USE_CUDA% -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DWIN8SDK_PATH="%WIN8SDK_PATH%" -DSTATIC_WINCRT=1
+set CMAKE_COMMON_PARAMS=-DTARGET_BUILD_PLATFORM=windows -DNV_CLOTH_ENABLE_DX11=%USE_DX11% -DNV_CLOTH_ENABLE_CUDA=%USE_CUDA% -DPX_GENERATE_GPU_PROJECTS=1 -DCUDA_TOOLKIT_ROOT_DIR="%CUDA_PATH_%" -DWIN8SDK_PATH="%WIN8SDK_PATH%" -DSTATIC_WINCRT=1 -DPX_STATIC_LIBRARIES=1
 
 REM Generate projects here
 
@@ -71,6 +71,12 @@ rmdir /s /q compiler\vc14win64-cmake\
 mkdir compiler\vc14win64-cmake\
 pushd compiler\vc14win64-cmake\
 %CMAKE% ..\cmake\windows -G "Visual Studio 14 2015" -Ax64 %CMAKE_COMMON_PARAMS% -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\bin\vc14win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\lib\vc14win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\bin\vc14win64-cmake
+popd
+
+rmdir /s /q compiler\vc141win64-cmake\
+mkdir compiler\vc141win64-cmake\
+pushd compiler\vc141win64-cmake\
+%CMAKE% ..\cmake\windows -G "Visual Studio 15 2017" -Ax64 %CMAKE_COMMON_PARAMS% -DPX_OUTPUT_DLL_DIR=%PX_OUTPUT_ROOT%\bin\vc141win64-cmake -DPX_OUTPUT_LIB_DIR=%PX_OUTPUT_ROOT%\lib\vc141win64-cmake -DPX_OUTPUT_EXE_DIR=%PX_OUTPUT_ROOT%\bin\vc141win64-cmake
 popd
 
 goto End
