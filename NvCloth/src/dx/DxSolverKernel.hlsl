@@ -1399,6 +1399,9 @@ void selfCollideParticles(IParticles curParticles, uint32_t threadIdx)
 	const int32_t numIndices = gClothData.mNumSelfCollisionIndices;
 	const int32_t numParticles = gClothData.mNumParticles;
 
+	const int32_t cellStartOffset = gClothData.mSelfCollisionDataOffset + numIndices * 2;
+	const int32_t cellStartSize = (129 + 128 * 128 + 130);
+
 #if USE_SELF_COLLISION_SORT
 	float expandedNegativeLower = 0;
 	float expandedEdgeLength = 0;
@@ -1436,8 +1439,6 @@ void selfCollideParticles(IParticles curParticles, uint32_t threadIdx)
 	}
 	GroupMemoryBarrierWithGroupSync();
 
-	const int32_t cellStartOffset = gClothData.mSelfCollisionDataOffset + numIndices * 2;
-	const int32_t cellStartSize = (129 + 128 * 128 + 130);
 	if (gFrameData.mInitSelfCollisionData)
 	{
 		for (int32_t i = threadIdx; i < cellStartSize; i += BlockSize)
@@ -1549,6 +1550,9 @@ void selfCollideParticles(IParticles curParticles, uint32_t threadIdx)
 #endif
 	//GroupMemoryBarrierWithGroupSync();
 
+	const float cdist = gClothData.mSelfCollisionDistance;
+	const float cdistSq = cdist * cdist;
+
 #if USE_SELF_COLLISION_SORT
 	// copy only sorted (indexed) particles to shared mem
 	for (i = threadIdx.x; i < numIndices; i += blockDim)
@@ -1558,12 +1562,9 @@ void selfCollideParticles(IParticles curParticles, uint32_t threadIdx)
 	}
 	GroupMemoryBarrierWithGroupSync();
 
-	const float cdist = gClothData.mSelfCollisionDistance;
-	const float cdistSq = cdist * cdist;
-
 	for (i = threadIdx; i < numIndices; i += blockDim)
 #else
-	for (i = threadIdx; i < numParticles; i += blockDim)
+	for (int32_t i = threadIdx; i < numParticles; i += blockDim)
 #endif
 	{
 #if USE_SELF_COLLISION_SORT
