@@ -20,7 +20,9 @@
 #include "JobManager.h"
 
 #include "ClothRenderMesh.h"
+#if NV_CLOTH_ENABLE_CUDA
 #include <cuda.h>
+#endif
 #include "CallbackImplementations.h"
 
 namespace nv
